@@ -1,0 +1,56 @@
+from django.urls import path
+
+from . import views
+
+from .views import (
+    UserCreateView,
+    CustomAuthToken,
+    DriverCreateView,
+    DriverDetailView,
+    DriverListView,
+    ImportDriver,
+    VehichleCreateView,
+    VehichleDetailView,
+    VehichleListView,
+    MaintenanceCreateView,
+    MaintenanceDetailView,
+    MaintenanceListView,
+    SearchDriver,
+    SearchVehichle,
+    SearchMaintenance,
+    StaffCreateView,
+    ImportVehichle,
+    FuelCreateView,
+    FuelListView,
+    FuelDetailView,
+    FuelEditView,
+)
+
+urlpatterns = [
+    path('auth/register/', UserCreateView.as_view(), name='register'),
+    path('staff/create/', StaffCreateView.as_view(), name='staff-create'),
+    path('auth/login/', CustomAuthToken.as_view(), name='login'),
+    path('drivers/', DriverListView.as_view(), name='driver'),
+    path('driver/<int:pk>/', DriverDetailView.as_view(), name='driver-detail'),
+    path('driver/create/', DriverCreateView.as_view(), name='driver-create'),
+    path('driver/edit/<int:pk>', DriverDetailView.as_view(), name='driver-edit'),
+    path('import/driver/', ImportDriver.as_view(), name='import-driver'),
+    path('vehichles/', VehichleListView.as_view(), name='vehichle'),
+    path('vehichle/<int:pk>/', VehichleDetailView.as_view(), name='vehichle-detail'),
+    path('vehichle/edit/<int:pk>', VehichleDetailView.as_view(), name='vehichle-edit'),
+    path('vehichle/create/', VehichleCreateView.as_view(), name='vehichle-create'),
+    path('vehichle/view/<int:pk>',VehichleDetailView.as_view(), name="vehichle-view"),
+    path('maintenances/', MaintenanceListView.as_view(), name='maintenance'),
+    path('maintenance/<int:pk>/', MaintenanceDetailView.as_view(), name='maintenance-detail'),
+    path('maintenance/edit/<int:pk>', MaintenanceDetailView.as_view(), name='maintenance-edit'),
+    path('maintenance/create/', MaintenanceCreateView.as_view(), name='maintenance-create'),
+    path('search/driver/', SearchDriver.as_view(), name='search-driver'),
+    path('search/vehichle/', SearchVehichle.as_view(), name='search-vehichle'),
+    path('search/maintenance/', SearchMaintenance.as_view(), name='search-maintenance'),
+    path('import/vehichle/', ImportVehichle.as_view(), name='import-vehichle'),
+    path('fuels/',FuelListView.as_view(), name='fuel'),
+    path('fuel/<int:pk>/' ,FuelDetailView.as_view(), name ='fuel-detail'),
+    path('fuel/create/', FuelCreateView.as_view(), name='fuel-create'),
+    path('fuel/edit/<int:pk>', FuelEditView.as_view(), name='fuel-edit'),
+    
+]
