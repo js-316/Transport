@@ -28,7 +28,7 @@ Run the following commands to install the project:
 
 ```bash
 git clone
-cd fleet
+cd Transport
 cd server
 pip install -r requirements.txt
 cd ..
