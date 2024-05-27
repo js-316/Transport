@@ -317,7 +317,7 @@ const Vehichles = () => {
                       </button>
                     </td>
                   </tr>
-                ))};
+                ))}
             </tbody>
           </table>
         </div>

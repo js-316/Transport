@@ -182,7 +182,7 @@ const ViewCosts = () => {
                                         <td>{cost.cost}</td>
                                         <td>{new Date(cost.date).toDateString()}</td>
                                     </tr>
-                                ))};
+                                ))}
                         </tbody>
                     </table>
                 </div>

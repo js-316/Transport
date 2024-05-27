@@ -184,7 +184,7 @@ const ViewFuel = () => {
                                         <td>{fuel.amount}</td>
                                         <td>{new Date(fuel.date_of_fueling).toDateString()}</td>
                                     </tr>
-                                ))};
+                                ))}
                         </tbody>
                     </table>
                 </div>
