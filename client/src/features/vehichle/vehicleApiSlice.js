@@ -54,6 +54,14 @@ export const vehicleApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Vehichles"], // Invalidate cache for the updated driver
     }),
+    viewCosts: builder.query({
+      query: (id) => `/vehichle/costs_view/${vehichleId}`,
+      providesTags: (result, error, vehichleId) => [{ type: "Vehichle", id: vehichleId }],
+    }),
+    viewFuel: builder.query({
+      query: (id) => `/vehichle/fuel_view/${vehichleId}`,
+      providesTags: (result, error, vehichleId) => [{ type: "Vehichle", id: vehichleId }],
+    }),
     getVehichleById: builder.query({
       query: (id) => `/vehichle/${id}`, // Assuming this is the correct endpoint for fetching a single driver by ID
       providesTags: (result, error, id) => [{ type: "Vehichle", id }], // Tags for caching
@@ -86,5 +94,7 @@ export const {
   useEditVehichleMutation,
   useGetVehichleByIdQuery,
   useDeleteVehichleMutation,
+  useViewCostsQuery,
+  useViewFuelQuery,
 
 } = vehicleApiSlice;

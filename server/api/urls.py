@@ -24,6 +24,7 @@ from .views import (
     FuelListView,
     FuelDetailView,
     FuelEditView,
+
 )
 
 urlpatterns = [
@@ -39,7 +40,8 @@ urlpatterns = [
     path('vehichle/<int:pk>/', VehichleDetailView.as_view(), name='vehichle-detail'),
     path('vehichle/edit/<int:pk>', VehichleDetailView.as_view(), name='vehichle-edit'),
     path('vehichle/create/', VehichleCreateView.as_view(), name='vehichle-create'),
-    path('vehichle/view/<int:pk>',VehichleDetailView.as_view(), name="vehichle-view"),
+    path('vehichle/costs_view/<int:pk>',VehichleDetailView.as_view(), name="costs-view"),
+    path('vehichle/fuel_view/<int:pk>', VehichleDetailView.as_view(), name='fuel-view'),
     path('maintenances/', MaintenanceListView.as_view(), name='maintenance'),
     path('maintenance/<int:pk>/', MaintenanceDetailView.as_view(), name='maintenance-detail'),
     path('maintenance/edit/<int:pk>', MaintenanceDetailView.as_view(), name='maintenance-edit'),
@@ -52,5 +54,6 @@ urlpatterns = [
     path('fuel/<int:pk>/' ,FuelDetailView.as_view(), name ='fuel-detail'),
     path('fuel/create/', FuelCreateView.as_view(), name='fuel-create'),
     path('fuel/edit/<int:pk>', FuelEditView.as_view(), name='fuel-edit'),
+    
     
 ]

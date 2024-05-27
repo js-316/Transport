@@ -18,11 +18,11 @@ import Logout from "./pages/Logout";
 import Maintenance from "./pages/Maintenance";
 import AddMaintenance from "./pages/AddMaintenance";
 import EditMaintenance from "./pages/EditMaintenance";
+import ViewCosts from "./pages/ViewCosts";
 import Fuel from "./pages/Fuel";
 import AddFuel from "./pages/AddFuel";
 import EditFuel from "./pages/EditFuel";
-import ViewCosts from "./pages/ViewCosts";
-
+import ViewFuel from "./pages/ViewFuel";
 
 function App() {
 
@@ -67,12 +67,16 @@ function App() {
           element: <AddVehichle />,
         },
         {
-          path: "vehichle/view/:id",
+          path: "vehichles/edit/:id",
+          element: <EditVehichle />,
+        },
+        {
+          path: "vehichles/costs_view/:id",
           element: <ViewCosts />,
         },
         {
-          path: "vehichles/edit/:id",
-          element: <EditVehichle />,
+          path:"vehichles/fuel_view/:id",
+          element: <ViewFuel />,
         },
         {
           path: "maintenance",
@@ -98,6 +102,7 @@ function App() {
           path: "fuel/edit/:id",
           element: <EditFuel />,
         },
+        
         {
           path: "logout",
           element: <Logout />,
