@@ -23,14 +23,10 @@ import ViewCosts from "./pages/ViewCosts";
 import Fuel from "./pages/Fuel";
 import AddFuel from "./pages/AddFuel";
 import EditFuel from "./pages/EditFuel";
-<<<<<<< HEAD
-import ViewCosts from "./pages/ViewCosts";
 import ServiceReminders from "./pages/ServiceReminders";
 import VehicleReminders from "./pages/VehicleReminders";
 import ContactReminders from "./pages/ContactReminders";
-=======
 import ViewFuel from "./pages/ViewFuel";
->>>>>>> 725110f76328bdca0119ad427ec1ce95241c1a01
 
 function App() {
 
