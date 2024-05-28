@@ -20,13 +20,13 @@ import ServiceChart from "../components/ServiceChart"
 const Dashboard = () => {
   const { isLoading, data } = useGetVehichlesQuery();
   const { data: drivers } = useGetDriversQuery();
-  const {data: maintenanceData} = useGetMaintenanceQuery()
-  const{data: fuelData} = useGetFuelQuery()
+  const { data: maintenanceData } = useGetMaintenanceQuery()
+  const { data: fuelData } = useGetFuelQuery()
 
   const { ids, entities } = data || {};
-  const {ids: driverIds, entities: driverEntities} = drivers || {}
-  const {ids: maintenanceIds, entities:maintenancesEntities} = maintenanceData || {}
-  const {ids: fuelIds, entities:fuelEntities} = fuelData || {}
+  const { ids: driverIds, entities: driverEntities } = drivers || {}
+  const { ids: maintenanceIds, entities: maintenancesEntities } = maintenanceData || {}
+  const { ids: fuelIds, entities: fuelEntities } = fuelData || {}
 
   const vehichlesArray = ids?.map((id) => entities[id]);
   const driversArray = driverIds?.map((id) => driverEntities[id])
@@ -38,12 +38,12 @@ const Dashboard = () => {
       <div className="content-header">
         <div>
           <h2 className="content-title card-title">My Dashboard </h2>
-          
+
         </div>
         <div>
           <a href="#" className="btn btn-primary">
             <i className="text-muted material-icons md-post_add">Create
-            report</i>
+              report</i>
           </a>
         </div>
       </div>
@@ -63,13 +63,44 @@ const Dashboard = () => {
       </div>
       <div className="row">
         <div className="col-md-6">
-          <div className="card mb-4">
-            <article className="card-body">
-              <h5 className="card-title">Statistics</h5>
-              <Charts />
-            </article>
-            
+
+          <div className="row">
+            <div className="col-md-6">
+              <div className="card mb-4">
+                <article className="card-body">
+                  <h5 className="card-title">Records Statistics</h5>
+                  <Charts />
+                </article>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="card mb-4">
+                <article className="card-body">
+                  <h5 className="card-title">Repair Priority Class Trends</h5>
+                  <PriorityChart />
+                </article>
+              </div>
+            </div>
           </div>
+          <div className="row">
+            <div className="col-md-6">
+              <div className="card mb-4">
+                <article className="card-body">
+                  <h5 className="card-title">Fuel Costs</h5>
+                  <FuelChart />
+                </article>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="card mb-4">
+                <article className="card-body">
+                  <h5 className="card-title">Service Costs</h5>
+                  <ServiceChart />
+                </article>
+              </div>
+            </div>
+          </div>
+
           <div className="row">
             <div className="col-lg-5">
               <div className="card mb-4">
@@ -129,26 +160,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div className="col-xl-4 col-lg-12">
-          <div className="card mb-4">
-            <article className="card-body">
-              <h5 className="card-title">Repair Priority Class Trends</h5>
-              <PriorityChart />
-            </article>
-          </div>
-          <div className="card mb-4">
-            <article className="card-body">
-              <h5 className="card-title">Fuel Costs</h5>
-              <FuelChart />
-            </article>
-          </div>
-          <div className="card mb-4">
-            <article className="card-body">
-              <h5 className="card-title">Service Costs</h5>
-              <ServiceChart />
-            </article>
-          </div>
-        </div>
+
       </div>
       <div className="card mb-4">
         <header className="card-header" data-select2-id="11">
@@ -176,30 +188,30 @@ const Dashboard = () => {
                 <tbody>
                   {isLoading
                     ? [...Array(5)].map((_, i) => (
-                        <TableLoader key={i} count={6} />
-                      ))
+                      <TableLoader key={i} count={6} />
+                    ))
                     : vehichlesArray?.map((v, index) => (
-                        <tr key={index}>
-                          <td>{v.number_plate}</td>
-                          <td>{v.driver.name}</td>
-                          <td>{v.mileage}</td>
-                          <td>{v.manufacturer}</td>
-                          <td>{v.date_of_purchase}</td>
-                          <td className="text-end">
-                            <Link
-                              to={`/vehichles/${v.id}`}
-                              className="btn btn-sm font-sm rounded btn-brand mx-4"
-                            >
-                              <i className="material-icons md-edit"></i>
-                              Edit
-                            </Link>
-                            <button className="btn btn-sm font-sm rounded btn-danger">
-                              <i className="material-icons md-delete"></i>
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
+                      <tr key={index}>
+                        <td>{v.number_plate}</td>
+                        <td>{v.driver.name}</td>
+                        <td>{v.mileage}</td>
+                        <td>{v.manufacturer}</td>
+                        <td>{v.date_of_purchase}</td>
+                        <td className="text-end">
+                          <Link
+                            to={`/vehichles/${v.id}`}
+                            className="btn btn-sm font-sm rounded btn-brand mx-4"
+                          >
+                            <i className="material-icons md-edit"></i>
+                            Edit
+                          </Link>
+                          <button className="btn btn-sm font-sm rounded btn-danger">
+                            <i className="material-icons md-delete"></i>
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
