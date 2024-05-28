@@ -6,7 +6,7 @@ import {
     useGetVehichleByIdQuery,
     useGetVehichlesQuery,
     useImportVehichlesMutation,
-    useViewCostsQuery,
+   
 } from "../features/vehichle/vehicleApiSlice";
 import { useGetMaintenanceQuery } from "../features/maintenance/maintenanceApiSlice";
 import TableLoader from "../components/TableLoader";
@@ -190,7 +190,7 @@ const ViewCosts = () => {
             <div className="pagination-area mt-30 mb-50">
                 <nav aria-label="Page navigation example">
                     <Pagination
-                        totalData={filteredData?.length}
+                        totalData={currentData?.length}
                         dataPerPage={dataPerPage}
                         paginate={paginate}
                         currentPage={currentPage}

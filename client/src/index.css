@@ -692,7 +692,26 @@ b {
   background-color: #088178;
   border-radius: 4px;
 }
+_submenu {
+  display: none;
+}
 
+.menu-item:hover .submenu {
+  display: block;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: none;
+}
+
+.menu-item:hover .dropdown-menu {
+  display: block;
+}
 .btn.btn-primary i {
   color: #fff !important;
   margin-right: 5px;

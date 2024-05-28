@@ -54,10 +54,6 @@ export const vehicleApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Vehichles"], // Invalidate cache for the updated driver
     }),
-    viewCosts: builder.query({
-      query: (id) => `/vehichle/costs_view/${vehichleId}`,
-      providesTags: (result, error, vehichleId) => [{ type: "Vehichle", id: vehichleId }],
-    }),
     viewFuel: builder.query({
       query: (id) => `/vehichle/fuel_view/${vehichleId}`,
       providesTags: (result, error, vehichleId) => [{ type: "Vehichle", id: vehichleId }],
@@ -94,7 +90,6 @@ export const {
   useEditVehichleMutation,
   useGetVehichleByIdQuery,
   useDeleteVehichleMutation,
-  useViewCostsQuery,
-  useViewFuelQuery,
+ 
 
 } = vehicleApiSlice;

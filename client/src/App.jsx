@@ -18,6 +18,7 @@ import Logout from "./pages/Logout";
 import Maintenance from "./pages/Maintenance";
 import AddMaintenance from "./pages/AddMaintenance";
 import EditMaintenance from "./pages/EditMaintenance";
+import WorkOrder from "./pages/WorkOrder";
 import ViewCosts from "./pages/ViewCosts";
 import Fuel from "./pages/Fuel";
 import AddFuel from "./pages/AddFuel";
@@ -89,6 +90,10 @@ function App() {
         {
           path: "maintenance/add",
           element: <AddMaintenance />,
+        },
+        {
+          path: "maintenance/work_order",
+          element: <WorkOrder />,
         },
         {
           path: "fuel",

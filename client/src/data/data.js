@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCar, faUser, faWrench, faTint } from '@fortawesome/free-solid-svg-icons';
+
 export const cardsData = [
   {
     id: 1,

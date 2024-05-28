@@ -46,6 +46,7 @@ urlpatterns = [
     path('maintenance/<int:pk>/', MaintenanceDetailView.as_view(), name='maintenance-detail'),
     path('maintenance/edit/<int:pk>', MaintenanceDetailView.as_view(), name='maintenance-edit'),
     path('maintenance/create/', MaintenanceCreateView.as_view(), name='maintenance-create'),
+    path('maintenance/work_order', MaintenanceDetailView.as_view(), name='work-order'),
     path('search/driver/', SearchDriver.as_view(), name='search-driver'),
     path('search/vehichle/', SearchVehichle.as_view(), name='search-vehichle'),
     path('search/maintenance/', SearchMaintenance.as_view(), name='search-maintenance'),
