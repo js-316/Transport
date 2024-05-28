@@ -28,6 +28,7 @@ from .views import (
 )
 
 urlpatterns = [
+    
     path('auth/register/', UserCreateView.as_view(), name='register'),
     path('staff/create/', StaffCreateView.as_view(), name='staff-create'),
     path('auth/login/', CustomAuthToken.as_view(), name='login'),
