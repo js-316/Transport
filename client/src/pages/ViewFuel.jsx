@@ -5,10 +5,9 @@ import { toast } from "react-hot-toast";
 import {
     useGetVehichleByIdQuery,
     useGetVehichlesQuery,
-    useImportVehichlesMutation,
-   
+
 } from "../features/vehichle/vehicleApiSlice";
-import { useGetMaintenanceQuery } from "../features/maintenance/maintenanceApiSlice";
+import { useGetFuelQuery } from "../features/fuel/fuelApiSlice";
 import TableLoader from "../components/TableLoader";
 import errorParser from "../util/errorParser";
 import Pagination from "../components/Pagination";
@@ -18,46 +17,44 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 
-const ViewCosts = () => {
+const ViewFuel = () => {
     const { id } = useParams();
 
     const { data: vehichleData } = useGetVehichleByIdQuery(id);
     const numberPlate = vehichleData?.number_plate;
 
-    const { data: maintenanceData, isLoading } = useGetMaintenanceQuery(numberPlate)
-    const { ids, entities } = maintenanceData || {};
-    const maintenancesArray = ids?.map((id) => entities[id]);
-
-    //const { data: maintenanceData } = useGetMaintenanceQuery(numberPlate);
+    const { data: fuelData, isLoading } = useGetFuelQuery(numberPlate)
+    const { ids, entities } = fuelData || {};
+    const fuelArray = ids?.map((id) => entities[id]);
 
     console.log('Number Plate', numberPlate)
-    //console.log('Maintenance Data',maintenancesArray)
 
     if (isLoading) {
         return <div>Loading...</div>;
     }
 
-    if (!maintenanceData) {
+    if (!fuelData) {
         return <div>No data found</div>;
     }
 
-    console.log("Maintenances array:", maintenancesArray)
-    const costs = maintenancesArray?.filter((maintenance) => maintenance.fleet.number_plate === numberPlate);
+    console.log("Fuel array:", fuelArray)
+    const fuelList = fuelArray?.filter((fuel) => fuel.fuel_plate.number_plate === numberPlate);
 
-    console.log("costs:", costs)
 
-    const costsPerVehicle = {};
-    if (maintenanceData) {
-        Object.values(maintenanceData.entities).forEach((entity) => {
-            const numberPlate = entity.fleet.number_plate;
-            if (!costsPerVehicle[numberPlate]) {
-                costsPerVehicle[numberPlate] = 0;
+    console.log("Fuel List:", fuelList)
+
+    const fuelPerVehicle = {};
+    if (fuelData) {
+        Object.values(fuelData.entities).forEach((entity) => {
+            const numberPlate = entity.fuel_plate.number_plate;
+            if (!fuelPerVehicle[numberPlate]) {
+                fuelPerVehicle[numberPlate] = 0;
             }
-            costsPerVehicle[numberPlate] += entity.cost;
-            console.log(`Costs For ${numberPlate} :`, costsPerVehicle[numberPlate]);
+            fuelPerVehicle[numberPlate] += entity.amount;
+            console.log(`Fuel For ${numberPlate} :`, fuelPerVehicle[numberPlate]);
         });
     } else {
-        console.log("maintenanceData is undefined");
+        console.log("fuelData is undefined");
     }
 
 
@@ -67,21 +64,26 @@ const ViewCosts = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
 
-    const filteredData = maintenancesArray?.filter((maintenance) => {
-        const cost = maintenance.cost;
-        const description = maintenance.description.toLowerCase();
-        const date = maintenance.date.toLowerCase()
-        const search = searchQuery.toLowerCase();
-
+    const filteredData = fuelArray?.filter((fuel) => {
+        const fuel_type = fuel.fuel_type.toLowerCase()
+        const fuel_plate = fuel.fuel_plate.number_plate.toLowerCase()
+        const mileage = fuel.mileage
+        const amount = fuel.amount
+        const date_of_fueling = fuel.date_of_fueling.toLowerCase()
+        const search = searchQuery.toLowerCase()
 
         if (search) {
             return (
-                (cost && cost.toString().includes(search)) ||
-                description.includes(search) ||
-                date.includes(search)
-            )
+                fuel_type.includes(search) ||
+                fuel_plate.includes(search) ||
+                (mileage && mileage.toString().includes(search)) ||
+                (amount && amount.toString().includes(search)) ||
+                date_of_fueling.includes(search)
+            );
+
         } else {
-            return maintenancesArray;
+            return fuelArray;
+
         }
     });
 
@@ -124,10 +126,8 @@ const ViewCosts = () => {
     return (
         <Layout>
             <div className="content-header">
-                <h2 className="content-title">Total Costs For {numberPlate}  {costsPerVehicle[numberPlate]}
-                </h2>
+                <h2 className="content-title">Total Fuel For {numberPlate}  {fuelPerVehicle[numberPlate]}</h2>
                 <div>
-
                     <button onClick={exportToPDF} className="btn btn-success mx-2">
                         Export to PDF
                     </button>
@@ -167,20 +167,22 @@ const ViewCosts = () => {
                     <table className="table table-hover">
                         <thead>
                             <tr>
-                                <th>Description</th>
-                                <th>Cost</th>
+                                <th>Fuel Type</th>
+                                <th>Mileage</th>
+                                <th>Amount</th>
                                 <th>Date </th>
                             </tr>
                         </thead>
                         <tbody>
                             {isLoading
                                 ? [...Array(5)].map((_, i) => <TableLoader key={i} count={6} />)
-                                : costs?.map((cost, index) => (
+                                : fuelList?.map((fuel, index) => (
 
                                     <tr key={index}>
-                                        <td>{cost.description}</td>
-                                        <td>{cost.cost}</td>
-                                        <td>{new Date(cost.date).toDateString()}</td>
+                                        <td>{fuel.fuel_type}</td>
+                                        <td>{fuel.mileage}</td>
+                                        <td>{fuel.amount}</td>
+                                        <td>{new Date(fuel.date_of_fueling).toDateString()}</td>
                                     </tr>
                                 ))}
                         </tbody>
@@ -201,6 +203,6 @@ const ViewCosts = () => {
     );
 };
 
-export default ViewCosts;
+export default ViewFuel;
 
 

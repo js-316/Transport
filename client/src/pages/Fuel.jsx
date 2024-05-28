@@ -224,7 +224,7 @@ const [searchQuery, setSearchQuery] = useState('')
                 <th>Number Plate</th>
                 <th>Mileage</th>
                 <th>Amount</th>
-                <th>Date of Fueling</th>
+                <th>Date</th>
                 <th className="text-end"> Action </th>
               </tr>
             </thead>

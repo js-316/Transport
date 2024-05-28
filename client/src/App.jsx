@@ -18,13 +18,19 @@ import Logout from "./pages/Logout";
 import Maintenance from "./pages/Maintenance";
 import AddMaintenance from "./pages/AddMaintenance";
 import EditMaintenance from "./pages/EditMaintenance";
+import WorkOrder from "./pages/WorkOrder";
+import ViewCosts from "./pages/ViewCosts";
 import Fuel from "./pages/Fuel";
 import AddFuel from "./pages/AddFuel";
 import EditFuel from "./pages/EditFuel";
+<<<<<<< HEAD
 import ViewCosts from "./pages/ViewCosts";
 import ServiceReminders from "./pages/ServiceReminders";
 import VehicleReminders from "./pages/VehicleReminders";
 import ContactReminders from "./pages/ContactReminders";
+=======
+import ViewFuel from "./pages/ViewFuel";
+>>>>>>> 725110f76328bdca0119ad427ec1ce95241c1a01
 
 function App() {
 
@@ -69,14 +75,22 @@ function App() {
           element: <AddVehichle />,
         },
         {
-          path: "vehichle/view/:id",
-          element: <ViewCosts />,
-        },
-        {
           path: "vehichles/edit/:id",
           element: <EditVehichle />,
         },
+        {
+          path: "vehichles/costs_view/:id",
+          element: <ViewCosts />,
+        },
+        {
+          path:"vehichles/fuel_view/:id",
+          element: <ViewFuel />,
+        },
         
+        {
+          path: "maintenance/work_order",
+          element: <WorkOrder />,
+        },
         {
           path: "fuel",
           element: <Fuel />,
@@ -89,6 +103,7 @@ function App() {
           path: "fuel/edit/:id",
           element: <EditFuel />,
         },
+        
         {
           path: "logout",
           element: <Logout />,

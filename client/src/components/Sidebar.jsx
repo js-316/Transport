@@ -37,25 +37,10 @@ const Sidebar = () => {
       active: location.pathname === "/dashboard/drivers",
     },
     {
-      name: "Reminders",
+      name: "Maintenance",
+      path: "/dashboard/maintenance",
       icon: "icon material-icons md-home_repair_service",
-      submenu: [
-        {
-          name: "Service",
-          path: "/dashboard/servicereminders",
-          active: location.pathname === "/dashboard/servicereminders",
-        },
-        {
-          name: "Vehicle Reminders",
-          path: "/dashboard/vehiclereminders",
-          active: location.pathname === "/dashboard/vehiclereminders",
-        },
-        {
-          name: "Contact Reminders",
-          path: "/dashboard/contactreminders",
-          active: location.pathname === "/dashboard/contactreminders",
-        },
-      ],
+      active: location.pathname === "/dashboard/maintenance",
     },
     {
       name: "Staff",

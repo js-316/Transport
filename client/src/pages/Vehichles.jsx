@@ -7,7 +7,7 @@ import {
   useImportVehichlesMutation,
   useDeleteVehichleMutation,
 } from "../features/vehichle/vehicleApiSlice";
-import { useGetMaintenanceQuery} from "../features/maintenance/maintenanceApiSlice";
+import { useGetMaintenanceQuery } from "../features/maintenance/maintenanceApiSlice";
 import TableLoader from "../components/TableLoader";
 import errorParser from "../util/errorParser";
 import Pagination from "../components/Pagination";
@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { useGetFuelQuery } from "../features/fuel/fuelApiSlice";
 
 
 const Vehichles = () => {
@@ -27,19 +28,15 @@ const Vehichles = () => {
   const [importVehichles, { isLoading: isImporting }] =
     useImportVehichlesMutation();
 
-  const {data: maintenanceData} = useGetMaintenanceQuery()
-  
-  
-
-  console.log("Vehicles data:", data);
-  //console.log("Maintenance data:", maintenanceData);
+  const { data: maintenanceData } = useGetMaintenanceQuery()
+  const { data: fuelData } = useGetFuelQuery()
 
   const navigate = useNavigate();
   const [AppError, setAppError] = useState(null);
-  
-  const[searchQuery, setSearchQuery] = useState('');
 
-  const[deleteVehichle , {isLoading : isDeleting}] = useDeleteVehichleMutation();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const [deleteVehichle, { isLoading: isDeleting }] = useDeleteVehichleMutation();
 
   const handleDeleteVehichle = async (id) => {
     setAppError(null);
@@ -55,10 +52,10 @@ const Vehichles = () => {
       });
       if (result.isConfirmed) {
         console.log("Deleting Vehichle with ID:", id);
-        const res = await deleteVehichle( id ).unwrap();
-        
+        const res = await deleteVehichle(id).unwrap();
+
         refetch();
-      
+
       }
     } catch (err) {
       console.error("Error deleting Vehichle:", err);
@@ -71,14 +68,14 @@ const Vehichles = () => {
     }
   };
 
-  const filteredData = vehichlesArray?.filter((vehichle) =>{
+  const filteredData = vehichlesArray?.filter((vehichle) => {
     const number_plate = vehichle.number_plate.toLowerCase();
     const driver = vehichle.driver.name.toLowerCase();
     const mileage = vehichle.mileage
     const vehichle_type = vehichle.vehichle_type.toLowerCase()
     const manufacturer = vehichle.manufacturer.toLowerCase()
     const search = searchQuery.toLowerCase();
-  
+
     if (search) {
       return (
         number_plate.includes(search) ||
@@ -105,7 +102,7 @@ const Vehichles = () => {
     setDataPerPage(parseInt(e.target.value));
   };
 
-  
+
 
   const uploadRef = useRef(null);
 
@@ -156,31 +153,44 @@ const Vehichles = () => {
       ]);
     });
     doc.autoTable({
-      head: [["Number Plate", "Driver", "Mileage", "Vehichle Type","Manufacturer","Total Maintenance","Date of Purchase"]],
+      head: [["Number Plate", "Driver", "Mileage", "Vehichle Type", "Manufacturer", "Total Maintenance", "Date of Purchase"]],
       body: tableData,
     });
     doc.save("vehicles.pdf");
   };
 
 
-console.log(maintenanceData);
+  console.log(maintenanceData);
 
 
 
-const costsPerVehicle = {};
-if (maintenanceData) {
-  Object.values(maintenanceData.entities).forEach((entity) => {
-    const numberPlate = entity.fleet.number_plate;
-    if (!costsPerVehicle[numberPlate]) {
-      costsPerVehicle[numberPlate] = 0;
-    }
-    costsPerVehicle[numberPlate] += entity.cost;
-    console.log(`Costs For ${numberPlate} :`, costsPerVehicle[numberPlate]);
-  });
-} else {
-  console.log("maintenanceData is undefined");
-}
+  const costsPerVehicle = {};
+  if (maintenanceData) {
+    Object.values(maintenanceData.entities).forEach((entity) => {
+      const numberPlate = entity.fleet.number_plate;
+      if (!costsPerVehicle[numberPlate]) {
+        costsPerVehicle[numberPlate] = 0;
+      }
+      costsPerVehicle[numberPlate] += entity.cost;
+      console.log(`Costs For ${numberPlate} :`, costsPerVehicle[numberPlate]);
+    });
+  } else {
+    console.log("maintenanceData is undefined");
+  }
 
+  const fuelPerVehicle = {};
+  if (fuelData) {
+    Object.values(fuelData.entities).forEach((entity) => {
+      const numberPlate = entity.fuel_plate.number_plate;
+      if (!fuelPerVehicle[numberPlate]) {
+        fuelPerVehicle[numberPlate] = 0;
+      }
+      fuelPerVehicle[numberPlate] += entity.amount;
+      console.log(`Fuel For ${numberPlate} :`, fuelPerVehicle[numberPlate]);
+    });
+  } else {
+    console.log("fuelData is undefined");
+  }
 
 
   return (
@@ -189,7 +199,7 @@ if (maintenanceData) {
         <h2 className="content-title">Vehicles</h2>
         <div>
           <Link
-            // while uploading a file, disable the import button
+
             onClick={() => uploadRef.current.click()}
             to="#"
             className={
@@ -212,7 +222,7 @@ if (maintenanceData) {
             onChange={handleFileUpload}
           />
           <button onClick={exportToPDF} className="btn btn-success mx-2">
-          Export to PDF
+            Export to PDF
           </button>
         </div>
       </div>
@@ -220,16 +230,16 @@ if (maintenanceData) {
         <header className="card-header">
           <div className="row gx-3">
             <div className="col-lg-4 col-md-6 me-auto">
-            <div className="input-group">
-                  <span className="input-group-text">
+              <div className="input-group">
+                <span className="input-group-text">
                   <FontAwesomeIcon icon={faSearch} />
-                  </span>
-              <input
-                type="text"
-                placeholder="Search..."
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="form-control"
-              />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="form-control"
+                />
               </div>
             </div>
             <div className="col-lg-2 col-md-3 col-6">
@@ -250,12 +260,13 @@ if (maintenanceData) {
           <table className="table table-hover">
             <thead>
               <tr>
-                <th>Number Plate</th>
+                <th>Vehicle</th>
                 <th>Driver</th>
                 <th>Mileage</th>
-                <th>Vehichle Type</th>
+                <th>Type</th>
                 <th>Manufacturer</th>
-                <th>Total Maintenance</th>
+                <th>Total Service</th>
+                <th>Total Fuel</th>
                 <th>Date Purchased</th>
                 <th className="text-end"> Action </th>
               </tr>
@@ -264,41 +275,49 @@ if (maintenanceData) {
               {isLoading
                 ? [...Array(5)].map((_, i) => <TableLoader key={i} count={6} />)
                 : currentData?.map((d, index) => (
-                    
-                    <tr key={index}>
-                      <td>{d.number_plate}</td>
-                      <td>{d.driver.name}</td>
-                      <td>{d.mileage}</td>
-                      <td>{d.vehichle_type}</td>
-                      <td>{d.manufacturer}</td>
-                      <td>
-                        <Link
-                          to={`/dashboard/vehichle/view/${d.id}` } state={{ vehicleId: d.id }}
-                       
-                        >
-                          {costsPerVehicle[d.number_plate] || 'N/A'}
-                        </Link>
-                      </td>
-                      <td>{new Date(d.date_of_purchase).toDateString()}</td>
-                      <td className="text-end">
-                        <Link
-                          to={`edit/${d.id}`}
-                          className="btn btn-sm font-sm rounded btn-brand mx-4"
-                        >
-                          <i className="material-icons md-edit"></i>
-                          Edit
-                        </Link>
-                        <button 
+
+                  <tr key={index}>
+                    <td>{d.number_plate}</td>
+                    <td>{d.driver.name}</td>
+                    <td>{d.mileage}</td>
+                    <td>{d.vehichle_type}</td>
+                    <td>{d.manufacturer}</td>
+                    <td>
+                      <Link
+                        to={`costs_view/${d.id}`}
+
+                      >
+                        {costsPerVehicle[d.number_plate] || 0}
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        to={`fuel_view/${d.id}`}
+
+                      >
+                        {fuelPerVehicle[d.number_plate] || 0}
+                      </Link>
+                    </td>
+                    <td>{new Date(d.date_of_purchase).toDateString()}</td>
+                    <td className="text-end">
+                      <Link
+                        to={`edit/${d.id}`}
+                        className="btn btn-sm font-sm rounded btn-brand mx-4"
+                      >
+                        <i className="material-icons md-edit"></i>
+                        Edit
+                      </Link>
+                      <button
                         onClick={() => handleDeleteVehichle(d.id)}
                         className="btn btn-sm font-sm rounded btn-danger"
-                        
-                        >
-                          <i className="material-icons md-delete"></i>
-                          Delete
-                        </button>
-                      </td> 
-                    </tr>
-                ))};
+
+                      >
+                        <i className="material-icons md-delete"></i>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
