@@ -26,9 +26,29 @@ const Sidebar = () => {
     },
     {
       name: "Vehicles",
-      path: "/dashboard/vehichles",
       icon: "icon material-icons md-directions_car",
-      active: location.pathname === "/dashboard/vehichles",
+      submenu: [
+        {
+          name: "Vehicles List",
+          path: "/dashboard/vehichles",
+          active: location.pathname === "/dashboard/vehichles"
+        },
+        {
+          name: "Meter History",
+          path: "/dashboard/vehichles/meter_history",
+          active: location.pathname === "/dashboard/vehichles/meter_history"
+        },
+        {
+          name: "Expense History",
+          path: "/dashboard/vehichles/expense_history",
+          active: location.pathname === "/dashboard/vehichles/expense_history"
+        },
+        {
+          name: "Replacement Analysis",
+          path: "/dashboard/vehichles/replacement_analysis",
+          active: location.pathname === "/dashboard/vehichles/replacement_analysis"
+        },
+      ],
     },
     {
       name: "Drivers",
@@ -70,6 +90,44 @@ const Sidebar = () => {
           name: "Contact Renewals",
           path: "/dashboard/contact_reminders",
           active: location.pathname === "/dashboard/contact_reminders",
+        },
+      ],
+    },
+    {
+      name: "Equipment",
+      path: "/dashboard/equipment",
+      icon: "icon material-icons md-handyman",
+      active: location.pathname === "/dashboard/drivers",
+    },
+    {
+      name: "Inspections",
+      icon: "icon material-icons md-hourglass_bottom",
+      submenu: [
+        {
+          name: "Item failures",
+          path: "/dashboard/inspections/item_failures",
+          active: location.pathname === "/dashboard/inspections/item_failures"
+        },
+        {
+          name: "Schedules",
+          path: "/dashboard/inspections/schedules",
+          active: location.pathname === "/dashboard/inspections/schedules"
+        },
+      ],
+    },
+    {
+      name: "Issues",
+      icon: "icon material-icons md-warning",
+      submenu: [
+        {
+          name: "Issues",
+          path: "/dashboard/issues",
+          active: location.pathname === "/dashboard/issues"
+        },
+        {
+          name: "Faults",
+          path: "/dashboard/issues/faults",
+          active: location.pathname === "/dashboard/issues/faults"
         },
       ],
     },
