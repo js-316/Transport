@@ -22,7 +22,9 @@ import Fuel from "./pages/Fuel";
 import AddFuel from "./pages/AddFuel";
 import EditFuel from "./pages/EditFuel";
 import ViewCosts from "./pages/ViewCosts";
-
+import ServiceReminders from "./pages/ServiceReminders";
+import VehicleReminders from "./pages/VehicleReminders";
+import ContactReminders from "./pages/ContactReminders";
 
 function App() {
 
@@ -74,18 +76,7 @@ function App() {
           path: "vehichles/edit/:id",
           element: <EditVehichle />,
         },
-        {
-          path: "maintenance",
-          element: <Maintenance />,
-        },
-        {
-          path: "maintenance/edit/:id",
-          element: <EditMaintenance />,
-        },
-        {
-          path: "maintenance/add",
-          element: <AddMaintenance />,
-        },
+        
         {
           path: "fuel",
           element: <Fuel />,
@@ -101,6 +92,18 @@ function App() {
         {
           path: "logout",
           element: <Logout />,
+        },
+        {
+          path: "servicereminders",
+          element: <ServiceReminders />,
+        },
+        {
+          path: "contactreminders",
+          element: <ContactReminders />,
+        },
+        {
+          path: "vehiclereminders",
+          element: <VehicleReminders />,
         },
       ],
     },

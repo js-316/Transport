@@ -37,10 +37,25 @@ const Sidebar = () => {
       active: location.pathname === "/dashboard/drivers",
     },
     {
-      name: "Maintenance",
-      path: "/dashboard/maintenance",
+      name: "Reminders",
       icon: "icon material-icons md-home_repair_service",
-      active: location.pathname === "/dashboard/maintenance",
+      submenu: [
+        {
+          name: "Service",
+          path: "/dashboard/servicereminders",
+          active: location.pathname === "/dashboard/servicereminders",
+        },
+        {
+          name: "Vehicle Reminders",
+          path: "/dashboard/vehiclereminders",
+          active: location.pathname === "/dashboard/vehiclereminders",
+        },
+        {
+          name: "Contact Reminders",
+          path: "/dashboard/contactreminders",
+          active: location.pathname === "/dashboard/contactreminders",
+        },
+      ],
     },
     {
       name: "Staff",
@@ -88,6 +103,17 @@ const Sidebar = () => {
                 <i className={link.icon}></i>
                 <span className="text">{link.name}</span>
               </Link>
+              {link.submenu && (
+                <ul className="submenu">
+                  {link.submenu.map((submenuItem, submenuIndex) => (
+                    <li key={submenuIndex}>
+                      <Link to={submenuItem.path} className="menu-link">
+                        <span className="text">{submenuItem.name}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
