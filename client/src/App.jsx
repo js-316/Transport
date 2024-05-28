@@ -23,10 +23,10 @@ import ViewCosts from "./pages/ViewCosts";
 import Fuel from "./pages/Fuel";
 import AddFuel from "./pages/AddFuel";
 import EditFuel from "./pages/EditFuel";
-import ServiceReminders from "./pages/ServiceReminders";
-import VehicleReminders from "./pages/VehicleReminders";
-import ContactReminders from "./pages/ContactReminders";
 import ViewFuel from "./pages/ViewFuel";
+import Service_Reminders from "./pages/Service_Reminders";
+import Contact_Reminders from "./pages/Contact_Reminders";
+import Vehicle_Reminder from "./pages/Vehicle_Reminder";
 
 function App() {
 
@@ -79,10 +79,21 @@ function App() {
           element: <ViewCosts />,
         },
         {
-          path:"vehichles/fuel_view/:id",
+          path: "vehichles/fuel_view/:id",
           element: <ViewFuel />,
         },
-        
+        {
+          path: "maintenance",
+          element: <Maintenance />,
+        },
+        {
+          path: "maintenance/edit/:id",
+          element: <EditMaintenance />,
+        },
+        {
+          path: "maintenance/add",
+          element: <AddMaintenance />,
+        },
         {
           path: "maintenance/work_order",
           element: <WorkOrder />,
@@ -99,22 +110,25 @@ function App() {
           path: "fuel/edit/:id",
           element: <EditFuel />,
         },
-        
+
         {
           path: "logout",
           element: <Logout />,
         },
+
         {
-          path: "servicereminders",
-          element: <ServiceReminders />,
+          path: "service_reminders",
+          element: <Service_Reminders />,
         },
+
         {
-          path: "contactreminders",
-          element: <ContactReminders />,
+          path: "contact_reminders",
+          element: < Contact_Reminders/>,
         },
+
         {
-          path: "vehiclereminders",
-          element: <VehicleReminders />,
+          path: "vehicle_reminders",
+          element: <Vehicle_Reminder />,
         },
       ],
     },

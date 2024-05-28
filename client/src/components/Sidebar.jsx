@@ -38,9 +38,40 @@ const Sidebar = () => {
     },
     {
       name: "Maintenance",
-      path: "/dashboard/maintenance",
       icon: "icon material-icons md-home_repair_service",
-      active: location.pathname === "/dashboard/maintenance",
+      submenu: [
+        {
+          name: "Service",
+          path: "/dashboard/maintenance",
+          active: location.pathname === "/dashboard/maintenance",
+        },
+        {
+          name: "Work Orders",
+          path: "/dashboard/maintenance/work_order",
+          active: location.pathname === "/dashboard/maintenance/work_order",
+        },
+      ],
+    },
+    {
+      name: "Reminders",
+      icon: "icon material-icons md-home_repair_service",
+      submenu: [
+        {
+          name: "Service  Reminders",
+          path: "/dashboard/service_reminders",
+          active: location.pathname === "/dashboard/service_reminders",
+        },
+        {
+          name: "Vehicle Renewals",
+          path: "/dashboard/vehicle_reminders",
+          active: location.pathname === "/dashboard/vehicle_reminders",
+        },
+        {
+          name: "Contact Renewals",
+          path: "/dashboard/contact_reminders",
+          active: location.pathname === "/dashboard/contact_reminders",
+        },
+      ],
     },
     {
       name: "Staff",
