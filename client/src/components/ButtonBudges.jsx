@@ -2,7 +2,7 @@ import React from "react";
 
 const ButtonBudges = () => {
   return (
-    <div className="card ">
+    <div className="card">
       <div className="card-body d-flex justify-content-between">
         <h5 className="card-title mb-6">Status</h5>
         <button type="button" className="btn btn-primary mb-2 ">
