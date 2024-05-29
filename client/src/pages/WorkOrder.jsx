@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import ButtonBudges from "../components/ButtonBudges";
 
 
 const WorkOrder = () => {
@@ -175,6 +176,7 @@ const WorkOrder = () => {
           </button>
         </div>
       </div>
+      <ButtonBudges/>
       <div className="card mb-4">
         <header className="card-header">
           <div className="row gx-3">
