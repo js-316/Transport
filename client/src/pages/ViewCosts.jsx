@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-
+import { DatePicker } from '@material-ui/pickers';
 
 const ViewCosts = () => {
     const { id } = useParams();
@@ -28,10 +28,9 @@ const ViewCosts = () => {
     const { ids, entities } = maintenanceData || {};
     const maintenancesArray = ids?.map((id) => entities[id]);
 
-    //const { data: maintenanceData } = useGetMaintenanceQuery(numberPlate);
 
     console.log('Number Plate', numberPlate)
-    //console.log('Maintenance Data',maintenancesArray)
+
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -41,8 +40,21 @@ const ViewCosts = () => {
         return <div>No data found</div>;
     }
 
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+
+    const handleStartDateChange = (date) => {
+        setStartDate(date);
+    };
+
+    const handleEndDateChange = (date) => {
+        setEndDate(date);
+    };
+
     console.log("Maintenances array:", maintenancesArray)
     const costs = maintenancesArray?.filter((maintenance) => maintenance.fleet.number_plate === numberPlate);
+    const date = new Date(date);
+    date >= startDate && date <= endDate;
 
     console.log("costs:", costs)
 
@@ -70,15 +82,15 @@ const ViewCosts = () => {
     const filteredData = maintenancesArray?.filter((maintenance) => {
         const cost = maintenance.cost;
         const description = maintenance.description.toLowerCase();
-        const date = maintenance.date.toLowerCase()
+        
+        
         const search = searchQuery.toLowerCase();
-
 
         if (search) {
             return (
                 (cost && cost.toString().includes(search)) ||
-                description.includes(search) ||
-                date.includes(search)
+                description.includes(search) 
+                
             )
         } else {
             return maintenancesArray;
@@ -161,6 +173,18 @@ const ViewCosts = () => {
                                 <option value="40">Show 40</option>
                             </select>
                         </div>
+                        <div className="date-range-picker">
+                            <DatePicker
+                                value={startDate}
+                                onChange={handleStartDateChange}
+                                label="Start Date"
+                            />
+                            <DatePicker
+                                value={endDate}
+                                onChange={handleEndDateChange}
+                                label="End Date"
+                            />
+                        </div>
                     </div>
                 </header>
                 <div className="card-body">
@@ -185,6 +209,7 @@ const ViewCosts = () => {
                                 ))}
                         </tbody>
                     </table>
+                    
                 </div>
             </div>
             <div className="pagination-area mt-30 mb-50">
