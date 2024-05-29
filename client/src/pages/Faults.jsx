@@ -165,10 +165,10 @@ const WorkOrder = () => {
   return (
     <Layout>
       <div className="content-header">
-        <h2 className="content-title">Work Orders</h2>
+        <h2 className="content-title">Faults</h2>
         <div>
           <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Add Work Order
+            <i className="material-icons md-plus"></i> Add Faults
           </Link>
 
           <button onClick={exportToPDF} className="btn btn-success mx-2">
@@ -214,11 +214,11 @@ const WorkOrder = () => {
               <tr>
                 <th>Vehichle</th>
                 <th>Status</th>
-                <th>Repair Priority</th>
-                <th>Issue Date</th>
-                <th>Start Date</th>
-                <th>Closing date</th>
-                <td>Assigned To</td>
+                <th>Description</th>
+                <th>Last Occured Date</th>
+                <th>Issue</th>
+                <th>Code</th>
+             
               </tr>
             </thead>
             <tbody>

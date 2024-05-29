@@ -1,23 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation();
   const [toggleMenu, setToggleMenu] = useState(false);
-
-  // to toggle the menu, add aside-mini class to the body
-  const toggleAside = () => {
-    setToggleMenu(!toggleMenu);
-    document.body.classList.toggle("aside-mini");
-  };
-
-  useEffect(() => {
-    // to close the menu when the route changes
-    document.body.classList.remove("aside-mini");
-    setToggleMenu(false);
-  }, [location]);
-
-  const menuLinks = [
+  const [menuLinks, setMenuLinks] = useState([
     {
       name: "Dashboard",
       path: "/dashboard",
@@ -92,7 +79,7 @@ const Sidebar = () => {
       name: "Equipment",
       path: "/dashboard/equipment",
       icon: "icon material-icons md-handyman",
-      active: location.pathname === "/dashboard/drivers",
+      active: location.pathname === "/dashboard/equipment",
     },
     {
       name: "Inspections",
@@ -144,12 +131,26 @@ const Sidebar = () => {
       icon: "icon material-icons md-log_out",
       active: location.pathname === "/dashboard/logout",
     },
-  ];
+  ]);
+  const [currentMenuItem, setCurrentMenuItem] = useState(null);
+
+  const toggleAside = () => {
+    setToggleMenu(!toggleMenu);
+    document.body.classList.toggle("aside-mini");
+  };
+
+  useEffect(() => {
+    document.body.classList.remove("aside-mini");
+    setToggleMenu(false);
+  }, [location]);
 
   const toggleSubMenu = (link) => {
     const updatedMenuLinks = menuLinks.map((menuLink) => {
       if (menuLink === link) {
-        menuLink.active = !menuLink.active;
+        menuLink.active = true;
+        setCurrentMenuItem(link);
+      } else {
+        menuLink.active = false;
       }
       return menuLink;
     });
@@ -163,10 +164,7 @@ const Sidebar = () => {
           Fleet Management
         </Link>
         <div>
-          <button
-            onClick={toggleAside}
-            className="btn btn-icon btn-aside-minimize"
-          >
+          <button onClick={toggleAside} className="btn btn-icon btn-aside-minimize">
             <i className="text-muted material-icons md-menu_open"></i>
           </button>
         </div>
@@ -177,11 +175,11 @@ const Sidebar = () => {
             <li
               key={index}
               className={`${link.active ? "menu-item active" : "menu-item"}`}
-              onClick={() => toggleSubMenu(link)}
             >
               <Link to={link.path} className="menu-link">
                 <i className={link.icon}></i>
                 <span className="text">{link.name}</span>
+                {link.submenu && <i className="material-icons md-arrow_drop_down"></i>}
               </Link>
               {link.submenu && (
                 <ul className="submenu">
@@ -194,14 +192,20 @@ const Sidebar = () => {
                   ))}
                 </ul>
               )}
+              {currentMenuItem === link && (
+                <div className="scrollbar">
+                  <div className="scrollbar-inner">
+                    {/* Add scrollbar content here */}
+                  </div>
+                </div>
+              )}
             </li>
           ))}
         </ul>
-      </nav>
-    </div>
+
+      </nav >
+    </div >
   );
 };
 
-export default Sidebar;
-
-
+export default Sidebar

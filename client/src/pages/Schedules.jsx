@@ -196,7 +196,7 @@ const Vehichles = () => {
   return (
     <Layout>
       <div className="content-header">
-        <h2 className="content-title">Vehicles</h2>
+        <h2 className="content-title">Inspection Schedules</h2>
         <div>
           <Link
 
@@ -212,7 +212,7 @@ const Vehichles = () => {
             Import
           </Link>
           <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Add Vehicle
+            <i className="material-icons md-plus"></i> Start Inspection
           </Link>
           <input
             type="file"
@@ -261,14 +261,13 @@ const Vehichles = () => {
             <thead>
               <tr>
                 <th>Vehicle</th>
-                <th>Driver</th>
-                <th>Mileage</th>
+                <th>Status</th>
+                <th>Next Due</th>
                 <th>Type</th>
-                <th>Manufacturer</th>
-                <th>Total Service</th>
-                <th>Total Fuel</th>
-                <th>Date Purchased</th>
-                <th className="text-end"> Action </th>
+                <th>Last Inspected</th>
+                <th>Schedule</th>
+                <th>Frequency</th>
+                
               </tr>
             </thead>
             <tbody>
@@ -290,32 +289,7 @@ const Vehichles = () => {
                         {costsPerVehicle[d.number_plate] || 0}
                       </Link>
                     </td>
-                    <td>
-                      <Link
-                        to={`fuel_view/${d.id}`}
-
-                      >
-                        {fuelPerVehicle[d.number_plate] || 0}
-                      </Link>
-                    </td>
-                    <td>{new Date(d.date_of_purchase).toDateString()}</td>
-                    <td className="text-end">
-                      <Link
-                        to={`edit/${d.id}`}
-                        className="btn btn-sm font-sm rounded btn-brand mx-4"
-                      >
-                        <i className="material-icons md-edit"></i>
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDeleteVehichle(d.id)}
-                        className="btn btn-sm font-sm rounded btn-danger"
-
-                      >
-                        <i className="material-icons md-delete"></i>
-                        Delete
-                      </button>
-                    </td>
+                    
                   </tr>
                 ))}
             </tbody>
