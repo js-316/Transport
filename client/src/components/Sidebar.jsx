@@ -43,11 +43,6 @@ const Sidebar = () => {
           path: "/dashboard/vehichles/expense_history",
           active: location.pathname === "/dashboard/vehichles/expense_history"
         },
-        {
-          name: "Replacement Analysis",
-          path: "/dashboard/vehichles/replacement_analysis",
-          active: location.pathname === "/dashboard/vehichles/replacement_analysis"
-        },
       ],
     },
     {

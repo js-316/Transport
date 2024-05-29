@@ -199,7 +199,7 @@ const Dashboard = () => {
                         <td>{v.date_of_purchase}</td>
                         <td className="text-end">
                           <Link
-                            to={`/vehichles/${v.id}`}
+                            to={`vehichles/edit/${v.id}`}
                             className="btn btn-sm font-sm rounded btn-brand mx-4"
                           >
                             <i className="material-icons md-edit"></i>
