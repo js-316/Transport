@@ -61,12 +61,7 @@ const Dashboard = () => {
         <div>
           <h2 className="content-title card-title">My Dashboard </h2>
         </div>
-        <div>
-          <a href="#" className="btn btn-primary">
-            <i className="text-muted material-icons md-post_add">Create
-              report</i>
-          </a>
-        </div>
+        
       </div>
       <div className="row">
         {cardsData.map((cd, index) => (
@@ -127,7 +122,7 @@ const Dashboard = () => {
         </div>
         <div className="col-md-2">
           <div className="card mb-3">
-            <Listgroups title="Remiders" items={items} />
+            <Listgroups title="Reminders" items={items} />
           </div>
           <div className="card mb-3">
             <Listgroups title="Issues" items={issues} />

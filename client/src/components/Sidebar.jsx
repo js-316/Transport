@@ -5,10 +5,6 @@ const Sidebar = () => {
   const location = useLocation();
   const [toggleMenu, setToggleMenu] = useState(false);
 
-  const toggleMenus = (link) => {
-    link.active = !link.active;
-  }
-
   // to toggle the menu, add aside-mini class to the body
   const toggleAside = () => {
     setToggleMenu(!toggleMenu);
@@ -168,7 +164,7 @@ const Sidebar = () => {
         </Link>
         <div>
           <button
-            onClick={() => setToggleMenu(!toggleMenu)}
+            onClick={toggleAside}
             className="btn btn-icon btn-aside-minimize"
           >
             <i className="text-muted material-icons md-menu_open"></i>
@@ -207,3 +203,5 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
+

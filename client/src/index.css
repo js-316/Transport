@@ -516,7 +516,34 @@ b {
   margin: 1rem;
   padding: 0;
 }
+.menu-item.active .submenu {
+  display: block;
+}
+_submenu {
+  display: none;
+}
 
+.menu-item:hover .submenu {
+  display: block;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: none;
+}
+
+.menu-item:hover .dropdown-menu {
+  display: block;
+}
+
+.menu-aside {
+  max-height: calc(100vh - 3.5rem); /* adjust the height based on your layout */
+  overflow-y: auto;
+}
 .menu-aside a {
   display: block;
   text-decoration: none;
@@ -691,36 +718,8 @@ b {
   border: none;
   background-color: #088178;
   border-radius: 4px;
-
-}
-.menu-item.active .submenu {
-  display: block;
-}
-_submenu {
-  display: none;
 }
 
-.menu-item:hover .submenu {
-  display: block;
-}
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  padding: 10px;
-  display: none;
-}
-
-.menu-item:hover .dropdown-menu {
-  display: block;
-}
-
-.menu-aside {
-  max-height: calc(100vh - 3.5rem); /* adjust the height based on your layout */
-  overflow-y: auto;
-}
 .btn.btn-primary i {
   color: #fff !important;
   margin-right: 5px;
