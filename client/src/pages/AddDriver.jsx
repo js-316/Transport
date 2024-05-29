@@ -169,6 +169,27 @@ const AddDriver = () => {
                       </div>
                     </div>
                   </div>
+                  <div className="col-lg-6">
+                    <div className="mb-4">
+                      <label className="form-label">Date Hired</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="2022-02-02"
+                          type="date"
+                          max={new Date().toISOString().split("T")[0]}
+                          className={`form-control ${
+                            errors.date_hired ? "is-invalid" : ""
+                          }`}
+                          {...register("date_hired")}
+                        />
+                        {errors.date_hired && (
+                          <div className="invalid-feedback">
+                            {errors.date_hired?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <button class="btn btn-primary" type="submit">
                   {isLoading ? "Adding..." : "Add Driver"}

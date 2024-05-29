@@ -31,17 +31,22 @@ const Sidebar = () => {
         {
           name: "Vehicles List",
           path: "/dashboard/vehichles",
-          active: location.pathname === "/dashboard/vehichles"
+          active: location.pathname === "/dashboard/vehichles",
         },
         {
           name: "Meter History",
           path: "/dashboard/vehichles/meter_history",
-          active: location.pathname === "/dashboard/vehichles/meter_history"
+          active: location.pathname === "/dashboard/vehichles/meter_history",
         },
         {
           name: "Expense History",
           path: "/dashboard/vehichles/expense_history",
-          active: location.pathname === "/dashboard/vehichles/expense_history"
+          active: location.pathname === "/dashboard/vehichles/expense_history",
+        },
+        {
+          name: "Replacement Analysis",
+          path: "/dashboard/vehichles/replacement_analysis",
+          active: location.pathname === "/dashboard/vehichles/replacement_analysis"
         },
       ],
     },
@@ -69,7 +74,7 @@ const Sidebar = () => {
     },
     {
       name: "Reminders",
-      icon: "icon material-icons md-home_repair_service",
+      icon: "icon material-icons md-notification_important",
       submenu: [
         {
           name: "Service  Reminders",
@@ -101,12 +106,12 @@ const Sidebar = () => {
         {
           name: "Item failures",
           path: "/dashboard/inspections/item_failures",
-          active: location.pathname === "/dashboard/inspections/item_failures"
+          active: location.pathname === "/dashboard/inspections/item_failures",
         },
         {
           name: "Schedules",
           path: "/dashboard/inspections/schedules",
-          active: location.pathname === "/dashboard/inspections/schedules"
+          active: location.pathname === "/dashboard/inspections/schedules",
         },
       ],
     },
@@ -117,12 +122,12 @@ const Sidebar = () => {
         {
           name: "Issues",
           path: "/dashboard/issues",
-          active: location.pathname === "/dashboard/issues"
+          active: location.pathname === "/dashboard/issues",
         },
         {
           name: "Faults",
           path: "/dashboard/issues/faults",
-          active: location.pathname === "/dashboard/issues/faults"
+          active: location.pathname === "/dashboard/issues/faults",
         },
       ],
     },
@@ -173,7 +178,9 @@ const Sidebar = () => {
                 <span className="text">{link.name}</span>
               </Link>
               {link.submenu && (
-                <ul className="submenu">
+                <ul
+                  className="submenu"
+                >
                   {link.submenu.map((submenuItem, submenuIndex) => (
                     <li key={submenuIndex}>
                       <Link to={submenuItem.path} className="menu-link">
