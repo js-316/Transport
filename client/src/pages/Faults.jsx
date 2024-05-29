@@ -1,47 +1,47 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout";
-import {
-  useGetMaintenanceQuery,
-  useDeleteMaintenanceMutation,
-} from "../features/maintenance/maintenanceApiSlice";
+import { useGetMaintenanceQuery, useDeleteMaintenanceMutation } from "../features/maintenance/maintenanceApiSlice";
 import { Link, useNavigate } from "react-router-dom";
 import TableLoader from "../components/TableLoader";
 import Pagination from "../components/Pagination";
 import errorParser from "../util/errorParser";
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import ButtonBudges from "../components/ButtonBudges";
 
-const Service_Reminders = () => {
+
+const WorkOrder = () => {
   const { isLoading, data, refetch } = useGetMaintenanceQuery();
 
   const { ids, entities } = data || {};
-  const maintenancesArray = ids?.map((id) => entities[id]);
+  const maintenancesArray = ids?.map((id) => entities[id])
   const [AppError, setAppError] = useState(null);
 
-  const [deleteMaintenance, { isLoading: isDeleting }] =
-    useDeleteMaintenanceMutation();
+  const [deleteMaintenance, { isLoading: isDeleting }] = useDeleteMaintenanceMutation();
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('')
 
   const handleDeleteMaintenance = async (id) => {
     setAppError(null);
     try {
       const result = await Swal.fire({
-        title: "Are you sure?",
+        title: 'Are you sure?',
         text: "You won't be able to revert this!",
-        icon: "warning",
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
       });
       if (result.isConfirmed) {
+
         const res = await deleteMaintenance(id).unwrap();
 
+
         refetch();
+
       }
     } catch (err) {
       console.error("Error deleting Maintenance:", err);
@@ -58,8 +58,9 @@ const Service_Reminders = () => {
     const fleet = maintenance.fleet.number_plate.toLowerCase();
     const cost = maintenance.cost;
     const description = maintenance.description.toLowerCase();
-    const date = maintenance.date.toLowerCase();
+    const date = maintenance.date.toLowerCase()
     const search = searchQuery.toLowerCase();
+
 
     if (search) {
       return (
@@ -67,17 +68,15 @@ const Service_Reminders = () => {
         (cost && cost.toString().includes(search)) ||
         description.includes(search) ||
         date.includes(search)
-      );
+      )
     } else {
       return maintenancesArray;
     }
   });
 
-  console.log("Filtered Maintenance Data:", maintenancesArray);
+  console.log('Filtered Maintenance Data:', maintenancesArray);
 
-  const uniqueVehicles = [
-    ...new Set(maintenancesArray?.map((m) => m.fleet.number_plate)),
-  ];
+  const uniqueVehicles = [...new Set(maintenancesArray?.map(m => m.fleet.number_plate))];
 
   const [dataPerPage, setDataPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -85,11 +84,14 @@ const Service_Reminders = () => {
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
 
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleDataPerPage = (e) => {
     setDataPerPage(parseInt(e.target.value));
   };
+
+
 
   const exportToPDF = () => {
     const doc = new jsPDF();
@@ -111,44 +113,31 @@ const Service_Reminders = () => {
   };
 
   const costsExportToPDF = (fleetNumberPlate) => {
-    console.log("Selected Fleet Number Plate:", fleetNumberPlate);
-    console.log("All Maintenance Records:", maintenancesArray);
+    console.log('Selected Fleet Number Plate:', fleetNumberPlate);
+    console.log('All Maintenance Records:', maintenancesArray);
 
     // Filter maintenance records for the selected fleet number plate
     const vehicleMaintenances = maintenancesArray.filter((maintenance) => {
       const maintenanceFleetNumberPlate = maintenance.fleet.number_plate;
-      console.log(
-        "Maintenance Fleet Number Plate:",
-        maintenanceFleetNumberPlate
-      );
-      console.log(
-        "Comparison:",
-        maintenanceFleetNumberPlate === fleetNumberPlate
-      );
+      console.log('Maintenance Fleet Number Plate:', maintenanceFleetNumberPlate);
+      console.log('Comparison:', maintenanceFleetNumberPlate === fleetNumberPlate);
       return maintenanceFleetNumberPlate === fleetNumberPlate;
     });
 
-    console.log("Maintenance Records for Selected Fleet:", vehicleMaintenances);
+    console.log('Maintenance Records for Selected Fleet:', vehicleMaintenances);
 
     // Check if there are any maintenance records for the selected fleet
     if (vehicleMaintenances.length === 0) {
-      console.error("No maintenance records found for the selected fleet.");
+      console.error('No maintenance records found for the selected fleet.');
       return;
     }
 
     // Calculate the total cost
-    const totalCost = vehicleMaintenances.reduce(
-      (acc, maintenance) => acc + maintenance.cost,
-      0
-    );
+    const totalCost = vehicleMaintenances.reduce((acc, maintenance) => acc + maintenance.cost, 0);
 
     // Create and configure the PDF
     const doc = new jsPDF();
-    doc.text(
-      `Vehicle Maintenance Report For- ${vehicleMaintenances[0].fleet.number_plate}`,
-      10,
-      10
-    );
+    doc.text(`Vehicle Maintenance Report For- ${vehicleMaintenances[0].fleet.number_plate}`, 10, 10);
     doc.text(`Total Cost: ${totalCost}`, 10, 20);
 
     // Prepare table data
@@ -156,6 +145,7 @@ const Service_Reminders = () => {
       record.date,
       record.description,
       record.cost,
+
     ]);
 
     // Generate the table in the PDF
@@ -169,13 +159,16 @@ const Service_Reminders = () => {
     doc.save("vehicle_maintenance_report.pdf");
   };
 
+
+
+
   return (
     <Layout>
       <div className="content-header">
-        <h2 className="content-title">Service Reminders</h2>
+        <h2 className="content-title">Work Orders</h2>
         <div>
           <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Add Reminders
+            <i className="material-icons md-plus"></i> Add Work Order
           </Link>
 
           <button onClick={exportToPDF} className="btn btn-success mx-2">
@@ -183,7 +176,7 @@ const Service_Reminders = () => {
           </button>
         </div>
       </div>
-      <ButtonBudges />
+      <ButtonBudges/>
       <div className="card mb-4">
         <header className="card-header">
           <div className="row gx-3">
@@ -212,60 +205,33 @@ const Service_Reminders = () => {
                 <option value="40">Show 40</option>
               </select>
             </div>
-            <div className="col-lg-2 col-md-3 col-6">
-              <select
-                id="vehicle-select"
-                className="form-select"
-                onChange={(e) => costsExportToPDF(e.target.value)}
-              >
-                <option>Calculate Cost</option>
-                {uniqueVehicles.map((number_plate, index) => (
-                  <option key={index} value={number_plate}>
-                    {number_plate}
-                  </option>
-                ))}
-              </select>
-            </div>
+            
           </div>
         </header>
         <div className="card-body">
           <table className="table table-hover">
             <thead>
               <tr>
-                <th>Contact</th>
-                <th>Renewal-Type</th>
-                <th>Renewal Status</th>
-                <th>Due-Date</th>
-                <th className="text-end">Watcher</th>
+                <th>Vehichle</th>
+                <th>Status</th>
+                <th>Repair Priority</th>
+                <th>Issue Date</th>
+                <th>Start Date</th>
+                <th>Closing date</th>
+                <td>Assigned To</td>
               </tr>
             </thead>
             <tbody>
               {isLoading
                 ? [...Array(5)].map((_, i) => <TableLoader key={i} count={5} />)
                 : currentData.map((d, index) => (
-                    <tr key={index}>
-                      <td>{d.fleet.number_plate}</td>
-                      <td>{d.description}</td>
-                      <td>{d.cost}</td>
-                      <td>{new Date(d.date).toDateString()}</td>
-                      <td className="text-end">
-                        <Link
-                          to={`edit/${d.id}`}
-                          className="btn btn-sm font-sm rounded btn-brand mx-4"
-                        >
-                          <i className="material-icons md-edit"></i>
-                          Edit
-                        </Link>
-                        <button
-                          onClick={() => handleDeleteMaintenance(d.id)}
-                          className="btn btn-sm font-sm rounded btn-danger"
-                        >
-                          <i className="material-icons md-delete"></i>
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  <tr key={index}>
+                    <td>{d.fleet.number_plate}</td>
+                    <td>{d.description}</td>
+                    <td>{d.cost}</td>
+                    <td>{new Date(d.date).toDateString()}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -284,4 +250,4 @@ const Service_Reminders = () => {
   );
 };
 
-export default Service_Reminders;
+export default WorkOrder;

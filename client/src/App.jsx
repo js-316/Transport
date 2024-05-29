@@ -14,6 +14,8 @@ import EditDriver from "./pages/EditDriver";
 import Vehichles from "./pages/Vehichles";
 import AddVehichle from "./pages/AddVehichle";
 import EditVehichle from "./pages/EditVehichle";
+import MeterHistory from "./pages/MeterHistory"
+import ExpensesHistory from "./pages/ExpensesHistory"
 import Logout from "./pages/Logout";
 import Maintenance from "./pages/Maintenance";
 import AddMaintenance from "./pages/AddMaintenance";
@@ -27,6 +29,12 @@ import ViewFuel from "./pages/ViewFuel";
 import Service_Reminders from "./pages/Service_Reminders";
 import Contact_Reminders from "./pages/Contact_Reminders";
 import Vehicle_Reminder from "./pages/Vehicle_Reminder";
+import Equipment from "./pages/Equipment"
+import ItemFailures from "./pages/ItemFailures"
+import Schedules from "./pages/Schedules"
+import Issues from "./pages/Issues"
+import Faults from "./pages/Faults"
+import Contacts from "./pages/Contacts"
 
 function App() {
 
@@ -83,6 +91,14 @@ function App() {
           element: <ViewFuel />,
         },
         {
+          path: "vehichles/meter_history",
+          element: <MeterHistory />,
+        },
+        {
+          path: "vehichles/expenses_history",
+          element: <ExpensesHistory />,
+        },
+        {
           path: "maintenance",
           element: <Maintenance />,
         },
@@ -97,6 +113,44 @@ function App() {
         {
           path: "maintenance/work_order",
           element: <WorkOrder />,
+        },
+        {
+          path: "service_reminders",
+          element: <Service_Reminders />,
+        },
+
+        {
+          path: "contact_reminders",
+          element: < Contact_Reminders/>,
+        },
+
+        {
+          path: "vehicle_reminders",
+          element: <Vehicle_Reminder />,
+        },
+        {
+          path: "equipment",
+          element: <Equipment/>
+        },
+        {
+          path: "inspections/item_failures",
+          element: <ItemFailures />
+        },
+        {
+          path: "inspections/schedules",
+          element: <Schedules />
+        },
+        {
+          path: "issues",
+          element: <Issues />
+        },
+        {
+          path: "issues/faults",
+          element: <Faults />
+        },
+        {
+          path: "contacts",
+          element: <Contacts />
         },
         {
           path: "fuel",
@@ -114,21 +168,6 @@ function App() {
         {
           path: "logout",
           element: <Logout />,
-        },
-
-        {
-          path: "service_reminders",
-          element: <Service_Reminders />,
-        },
-
-        {
-          path: "contact_reminders",
-          element: < Contact_Reminders/>,
-        },
-
-        {
-          path: "vehicle_reminders",
-          element: <Vehicle_Reminder />,
         },
       ],
     },
