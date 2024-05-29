@@ -12,7 +12,7 @@ const Listgroups = ({ title, items }) => {
               className="list-group-item d-flex justify-content-between align-items-center"
             >
               {item.text}
-              <span className="badge bg-primary rounded-pill">
+              <span className="badge bg-secondary rounded-pill">
                 {item.badge}
               </span>
             </li>

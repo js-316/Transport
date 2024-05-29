@@ -27,6 +27,7 @@ import ViewFuel from "./pages/ViewFuel";
 import Service_Reminders from "./pages/Service_Reminders";
 import Contact_Reminders from "./pages/Contact_Reminders";
 import Vehicle_Reminder from "./pages/Vehicle_Reminder";
+import Staff from "./pages/staff";
 
 function App() {
 
@@ -123,12 +124,16 @@ function App() {
 
         {
           path: "contact_reminders",
-          element: < Contact_Reminders/>,
+          element: <Contact_Reminders />,
         },
 
         {
           path: "vehicle_reminders",
           element: <Vehicle_Reminder />,
+        },
+        {
+          path: "staff",
+          element: <Staff/>,
         },
       ],
     },

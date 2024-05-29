@@ -45,6 +45,7 @@ const FuelChart = () => {
         format: "dd/MM/yy",
       },
     },
+    colors: ["#64CCC5"],
   };
 
   return <Chart options={options} series={series} type="bar" height={350} />;
