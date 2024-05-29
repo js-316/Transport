@@ -712,6 +712,11 @@ _submenu {
 .menu-item:hover .dropdown-menu {
   display: block;
 }
+
+.menu-aside {
+  max-height: calc(100vh - 3.5rem); /* adjust the height based on your layout */
+  overflow-y: auto;
+}
 .btn.btn-primary i {
   color: #fff !important;
   margin-right: 5px;

@@ -46,8 +46,7 @@ const Sidebar = () => {
         {
           name: "Replacement Analysis",
           path: "/dashboard/vehichles/replacement_analysis",
-          active:
-            location.pathname === "/dashboard/vehichles/replacement_analysis",
+          active: location.pathname === "/dashboard/vehichles/replacement_analysis"
         },
       ],
     },
