@@ -196,7 +196,7 @@ const Vehichles = () => {
   return (
     <Layout>
       <div className="content-header">
-        <h2 className="content-title">Vehicles</h2>
+        <h2 className="content-title">Inspection Item Failures</h2>
         <div>
           <Link
 
@@ -212,7 +212,7 @@ const Vehichles = () => {
             Import
           </Link>
           <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Add Vehicle
+            <i className="material-icons md-plus"></i> Start Inspection
           </Link>
           <input
             type="file"
@@ -261,14 +261,15 @@ const Vehichles = () => {
             <thead>
               <tr>
                 <th>Vehicle</th>
-                <th>Driver</th>
-                <th>Mileage</th>
-                <th>Type</th>
-                <th>Manufacturer</th>
-                <th>Total Service</th>
-                <th>Total Fuel</th>
-                <th>Date Purchased</th>
-                <th className="text-end"> Action </th>
+                <th>Engine</th>
+                <th>Oil Left</th>
+                <th>Clutch</th>
+                <th>Fuel Level</th>
+                <th>Steering Mechanism</th>
+                <th>Horn</th>
+                <th>Tires</th>
+                <th>Wheels</th>
+                <th>Vehicle Condition</th>
               </tr>
             </thead>
             <tbody>

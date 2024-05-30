@@ -154,7 +154,7 @@ const [searchQuery, setSearchQuery] = useState('')
   return (
     <Layout>
       <div className="content-header">
-        <h2 className="content-title">Fuel </h2>
+        <h2 className="content-title">Expense Entries </h2>
         <div className="flex">
       
           <Link
@@ -169,10 +169,10 @@ const [searchQuery, setSearchQuery] = useState('')
             <i className="material-icons md-import_export" ></i>
             Import
           </Link>
-          {/* Select dropdown to choose a fuel plate */}
+          
 
           <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Add Fuel
+            <i className="material-icons md-plus"></i> Add Expense Entry
           </Link>
           <input
             type="file"
@@ -220,12 +220,10 @@ const [searchQuery, setSearchQuery] = useState('')
           <table className="table table-hover">
             <thead>
               <tr>
-                <th>Fuel Type</th>
-                <th>Number Plate</th>
-                <th>Mileage</th>
-                <th>Amount</th>
+                <th>Vehicle</th>
                 <th>Date</th>
-                <th className="text-end"> Action </th>
+                <th>Type</th>
+                <th>Amount</th>
               </tr>
             </thead>
             <tbody>
@@ -238,22 +236,7 @@ const [searchQuery, setSearchQuery] = useState('')
                     <td>{d.mileage}</td>
                     <td>{d.amount}</td>
                     <td>{new Date(d.date_of_fueling).toDateString()}</td>
-                    <td className="text-end">
-                      <Link
-                        to={`edit/${d.id}`}
-                        className="btn btn-sm font-sm rounded btn-brand mx-4"
-                      >
-                        <i className="material-icons md-edit"></i>
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDeleteFuel(d.id)}
-                        className="btn btn-sm font-sm rounded btn-danger"
-                      >
-                        <i className="material-icons md-delete"></i>
-                        Delete
-                      </button>
-                    </td>
+                    
                   </tr>
                 ))}
               

@@ -61,13 +61,7 @@ const Dashboard = () => {
         <div>
           <h2 className="content-title card-title">My Dashboard </h2>
         </div>
-        <div>
-          <a href="#" className="btn btn-primary">
-            <i className="text-muted material-icons md-post_add">
-              Create report
-            </i>
-          </a>
-        </div>
+        
       </div>
       <div className="row">
         {cardsData.map((cd, index) => (

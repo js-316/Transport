@@ -1,213 +1,207 @@
-import React from "react";
-import Layout from "../components/Layout";
-import Card from "../components/Card";
-import TableLoader from "../components/TableLoader";
-import { useGetVehichlesQuery } from "../features/vehichle/vehicleApiSlice";
-import { Link } from "react-router-dom";
-import { useGetDriversQuery } from "../features/driver/driverApiSlice";
-import { cardsData } from "../data/data";
-import Charts from "../components/Charts";
-import LetteredAvatar from "react-lettered-avatar";
-import { useGetMaintenanceQuery } from "../features/maintenance/maintenanceApiSlice";
-import { useGetFuelQuery } from "../features/fuel/fuelApiSlice";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCar, faUser, faWrench, faTint } from '@fortawesome/free-solid-svg-icons';
-import PriorityChart from "../components/PriorityChart";
-import FuelChart from "../components/FuelChart";
-import ServiceChart from "../components/ServiceChart"
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
+const Sidebar = () => {
+  const location = useLocation();
+  const [toggleMenu, setToggleMenu] = useState(false);
 
-const Dashboard = () => {
-  const { isLoading, data } = useGetVehichlesQuery();
-  const { data: drivers } = useGetDriversQuery();
-  const {data: maintenanceData} = useGetMaintenanceQuery()
-  const{data: fuelData} = useGetFuelQuery()
+  // to toggle the menu, add aside-mini class to the body
+  const toggleAside = () => {
+    setToggleMenu(!toggleMenu);
+    document.body.classList.toggle("aside-mini");
+  };
 
-  const { ids, entities } = data || {};
-  const {ids: driverIds, entities: driverEntities} = drivers || {}
-  const {ids: maintenanceIds, entities:maintenancesEntities} = maintenanceData || {}
-  const {ids: fuelIds, entities:fuelEntities} = fuelData || {}
+  useEffect(() => {
+    // to close the menu when the route changes
+    document.body.classList.remove("aside-mini");
+    setToggleMenu(false);
+  }, [location]);
 
-  const vehichlesArray = ids?.map((id) => entities[id]);
-  const driversArray = driverIds?.map((id) => driverEntities[id])
-  const maintenancesArray = maintenanceIds?.map((id) => maintenancesEntities[id])
-  const fuelArray = maintenanceIds?.map((id) => fuelEntities[id])
+  const menuLinks = [
+    {
+      name: "Dashboard",
+      path: "/dashboard",
+      icon: "icon material-icons md-home",
+      active: location.pathname === "/dashboard",
+    },
+    {
+      name: "Vehicles",
+      icon: "icon material-icons md-directions_car",
+      submenu: [
+        {
+          name: "Vehicles List",
+          path: "/dashboard/vehichles",
+          active: location.pathname === "/dashboard/vehichles",
+        },
+        {
+          name: "Meter History",
+          path: "/dashboard/vehichles/meter_history",
+          active: location.pathname === "/dashboard/vehichles/meter_history",
+        },
+        {
+          name: "Expense History",
+          path: "/dashboard/vehichles/expenses_history",
+          active: location.pathname === "/dashboard/vehichles/expenses_history",
+        },
+      ],
+    },
+    {
+      name: "Drivers",
+      path: "/dashboard/drivers",
+      icon: "icon material-icons md-person",
+      active: location.pathname === "/dashboard/drivers",
+    },
+    {
+      name: "Maintenance",
+      icon: "icon material-icons md-home_repair_service",
+      submenu: [
+        {
+          name: "Service",
+          path: "/dashboard/maintenance",
+          active: location.pathname === "/dashboard/maintenance",
+        },
+        {
+          name: "Work Orders",
+          path: "/dashboard/maintenance/work_order",
+          active: location.pathname === "/dashboard/maintenance/work_order",
+        },
+      ],
+    },
+    {
+      name: "Reminders",
+      icon: "icon material-icons md-notification_important",
+      submenu: [
+        {
+          name: "Service  Reminders",
+          path: "/dashboard/service_reminders",
+          active: location.pathname === "/dashboard/service_reminders",
+        },
+        {
+          name: "Vehicle Renewals",
+          path: "/dashboard/vehicle_reminders",
+          active: location.pathname === "/dashboard/vehicle_reminders",
+        },
+        {
+          name: "Contact Renewals",
+          path: "/dashboard/contact_reminders",
+          active: location.pathname === "/dashboard/contact_reminders",
+        },
+      ],
+    },
+    {
+      name: "Equipment",
+      path: "/dashboard/equipment",
+      icon: "icon material-icons md-handyman",
+      active: location.pathname === "/dashboard/drivers",
+    },
+    {
+      name: "Inspections",
+      icon: "icon material-icons md-hourglass_bottom",
+      submenu: [
+        {
+          name: "Item failures",
+          path: "/dashboard/inspections/item_failures",
+          active: location.pathname === "/dashboard/inspections/item_failures",
+        },
+        {
+          name: "Schedules",
+          path: "/dashboard/inspections/schedules",
+          active: location.pathname === "/dashboard/inspections/schedules",
+        },
+      ],
+    },
+    {
+      name: "Issues",
+      icon: "icon material-icons md-warning",
+      submenu: [
+        {
+          name: "Issues",
+          path: "/dashboard/issues",
+          active: location.pathname === "/dashboard/issues",
+        },
+        {
+          name: "Faults",
+          path: "/dashboard/issues/faults",
+          active: location.pathname === "/dashboard/issues/faults",
+        },
+      ],
+    },
+    {
+      name: "Contacts",
+      path: "/dashboard/contacts",
+      icon: "icon material-icons md-people",
+      active: location.pathname === "/dashboard/contacts",
+    },
+    {
+      name: "Fuel",
+      path: "/dashboard/fuel",
+      icon: "icon material-icons md-local_gas_station",
+      active: location.pathname === "/dashboard/fuel",
+    },
+    {
+      name: "Logout",
+      path: "/dashboard/logout",
+      icon: "icon material-icons md-log_out",
+      active: location.pathname === "/dashboard/logout",
+    },
+  ];
+
+  const toggleSubMenu = (link) => {
+    const updatedMenuLinks = menuLinks.map((menuLink) => {
+      if (menuLink === link) {
+        menuLink.active = !menuLink.active;
+      }
+      return menuLink;
+    });
+    setMenuLinks(updatedMenuLinks);
+  };
 
   return (
-    <Layout>
-      <div className="content-header">
+    <div className="navbar-aside ps" id="offcanvas_aside">
+      <div className="aside-top">
+        <Link to="/dashboard" className="brand-wrap">
+          Fleet Management
+        </Link>
         <div>
-          <h2 className="content-title card-title">My Dashboard </h2>
-          {/* <p>Whole data about your business here</p> */}
-        </div>
-        <div>
-          <a href="#" className="btn btn-primary">
-            <i className="text-muted material-icons md-post_add">Create
-            report</i>
-          </a>
+          <button
+            onClick={toggleAside}
+            className="btn btn-icon btn-aside-minimize"
+          >
+            <i className="text-muted material-icons md-menu_open"></i>
+          </button>
         </div>
       </div>
-      <div className="row">
-        {cardsData.map((cd, index) => (
-          <div key={index} className="col-lg-3">
-            <Card
-              data={{
-                title: cd.title,
-                text: cd.text,
-                icon: cd.icon,
-                numbers: cd.numbers,
-              }}
-            />
-          </div>
-        ))}
-      </div>
-      <div className="row">
-        <div className="col-md-6">
-          <div className="card mb-4">
-            <article className="card-body">
-              <h5 className="card-title">Statistics</h5>
-              <Charts />
-            </article>
-            
-          </div>
-          <div className="row">
-            <div className="col-lg-5">
-              <div className="card mb-4">
-                <article className="card-body">
-                  <h5 className="card-title">New Drivers</h5>
-                  <div className="new-member-list">
-                    {driversArray?.slice(-3).map((d, index) => (
-                      <div
-                        key={index}
-                        className="d-flex align-items-center justify-content-between mb-4"
-                      >
-                        <div className="d-flex align-items-center">
-                          <LetteredAvatar
-                            name={d.name}
-                            size={50}
-                            className="me-3"
-                          />
-                          <div>
-                            <h6>{d.name}</h6>
-                            <p className="text-muted font-xs">
-                              {new Date(d.date_hired).toLocaleDateString()}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </article>
-              </div>
-            </div>
-            <div className="col-lg-7">
-              <div className="card mb-4">
-                <article className="card-body">
-                  <h5 className="card-title">Recent activities</h5>
-                  <ul className="verti-timeline list-unstyled font-sm">
-                    {[...Array(5)].map((_, index) => (
-                      <li key={index} className="event-list">
-                        <div className="event-timeline-dot">
-                          <i className="material-icons md-play_circle_outline font-xxl"></i>
-                        </div>
-                        <div className="media">
-                          <div className="me-3">
-                            <h6>
-                              <span>Today</span>{" "}
-                              <i className="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i>
-                            </h6>
-                          </div>
-                          <div className="media-body">
-                            <div>More Data</div>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-4 col-lg-12">
-          <div className="card mb-4">
-            <article className="card-body">
-              <h5 className="card-title">Repair Priority Class Trends</h5>
-              <PriorityChart />
-            </article>
-          </div>
-          <div className="card mb-4">
-            <article className="card-body">
-              <h5 className="card-title">Fuel Costs</h5>
-              <FuelChart />
-            </article>
-          </div>
-          <div className="card mb-4">
-            <article className="card-body">
-              <h5 className="card-title">Service Costs</h5>
-              <ServiceChart />
-            </article>
-          </div>
-        </div>
-      </div>
-      <div className="card mb-4">
-        <header className="card-header" data-select2-id="11">
-          <h4 className="card-title">Latest Fleet</h4>
-          <div className="row align-items-center" data-select2-id="10">
-            <div className="col-md-2 col-6">
-              <input type="date" value="02.05.2022" className="form-control" />
-            </div>
-          </div>
-        </header>
-        <div className="card-body">
-          <div className="table-responsive">
-            <div className="table-responsive">
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Number Plate</th>
-                    <th>Drivers</th>
-                    <th>Mileage</th>
-                    <th>Manufacturer</th>
-                    <th>Date of Purchase</th>
-                    <th className="text-end"> Action </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {isLoading
-                    ? [...Array(5)].map((_, i) => (
-                        <TableLoader key={i} count={6} />
-                      ))
-                    : vehichlesArray?.map((v, index) => (
-                        <tr key={index}>
-                          <td>{v.number_plate}</td>
-                          <td>{v.driver.name}</td>
-                          <td>{v.mileage}</td>
-                          <td>{v.manufacturer}</td>
-                          <td>{v.date_of_purchase}</td>
-                          <td className="text-end">
-                            <Link
-                              to={`/vehichles/${v.id}`}
-                              className="btn btn-sm font-sm rounded btn-brand mx-4"
-                            >
-                              <i className="material-icons md-edit"></i>
-                              Edit
-                            </Link>
-                            <button className="btn btn-sm font-sm rounded btn-danger">
-                              <i className="material-icons md-delete"></i>
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Layout>
+      <nav>
+        <ul className="menu-aside">
+          {menuLinks.map((link, index) => (
+            <li
+              key={index}
+              className={`${link.active ? "menu-item active" : "menu-item"}`}
+              onClick={() => toggleSubMenu(link)}
+            >
+              <Link to={link.path} className="menu-link">
+                <i className={link.icon}></i>
+                <span className="text">{link.name}</span>
+              </Link>
+              {link.submenu && (
+                <ul className="submenu">
+                  {link.submenu.map((submenuItem, submenuIndex) => (
+                    <li key={submenuIndex}>
+                      <Link to={submenuItem.path} className="menu-link">
+                        <span className="text">{submenuItem.name}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
   );
 };
 
-export default Dashboard;
+export default Sidebar;
+
+
