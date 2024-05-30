@@ -22,7 +22,7 @@ import FuelChart from "../components/FuelChart";
 import ServiceChart from "../components/ServiceChart";
 import BarChart from "../components/Barchart";
 import Listgroups from "../components/Listgroups";
-import DonutChart from "../components/DonutChat";
+import DonutChart from "../components/DonutChart";
 import { Chartdata } from "../data/chartData";
 
 const Dashboard = () => {
@@ -83,72 +83,67 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
+
       <div className="col">
-        <div className="col">
-          <div className="row">
-            <div className="col-md-6">
-              <div className="card mb-4">
-                <article className="card-body">
-                  <h5 className="card-title">Expenditures</h5>
-                  <DonutChart title="Costs" data={Chartdata} />
-                </article>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="card mb-4">
-                <article className="card-body">
-                  <h5 className="card-title">Repair Priority Class Trends</h5>
-                  <PriorityChart />
-                </article>
-              </div>
+        <div className="row">
+          <div className="col-md-8">
+            <div className="card mb-6">
+              <article className="card-body">
+                <h5 className="card-title">Repair Priority Class Trends</h5>
+                <PriorityChart />
+              </article>
             </div>
           </div>
-          <div className="container">
-            <div className="row mr-8">
-              <div className="col-md-6">
-                <div className="card mb-4">
-                  <article className="card-body">
-                    <h5 className="card-title">Fuel Costs</h5>
-                    <FuelChart />
-                  </article>
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="card mb-4">
-                  <article className="card-body">
-                    <h5 className="card-title">Service Costs</h5>
-                    <BarChart />
-                  </article>
-                </div>
-              </div>
-              <div className="row mb-3">
-                <div className="col-md-4">
-                  <div className="card mb-3">
-                    <article className="card-body">
-                      <Listgroups title="Reminders" items={items} />
-                    </article>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="card mb-3">
-                    <article className="card-body">
-                      <Listgroups title="Issues" items={issues} />
-                    </article>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="card mb-3">
-                    <article className="card-body">
-                      <Listgroups title="Maintenance" items={workorder} />
-                    </article>
-                  </div>
-                </div>
-              </div>
+          <div className="col-md-4">
+            <div className="card mb-4">
+              <article className="card-body">
+                <h5 className="card-title">Fuel Costs</h5>
+                <DonutChart/>
+              </article>
             </div>
           </div>
         </div>
-        <div />
+        <div className="row">
+          <div className="col-md-8">
+            <div className="card mb-4">
+              <article className="card-body">
+                <h5 className="card-title">Monthly Service Costs</h5>
+                <BarChart />
+              </article>
+            </div>
+            <div className="row">
+              <div className="col-md-4">
+                <div className="card mb-3">
+                  <article className="card-body">
+                    <Listgroups title="Issues" items={issues} />
+                  </article>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card mb-3">
+                  <article className="card-body">
+                    <Listgroups title="Maintenance" items={workorder} />
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card mb-4">
+              <article className="card-body">
+                <h5 className="card-title">Service Costs</h5>
+                <FuelChart />
+              </article>
+            </div>
+            <div className="card mb-3">
+              <article className="card-body">
+                <Listgroups title="Reminders" items={items} />
+              </article>
+            </div>
+          </div>
+        </div>
       </div>
+      <div />
 
       <div className="card mb-4">
         <header className="card-header" data-select2-id="11">
