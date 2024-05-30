@@ -230,6 +230,9 @@ const WorkOrder = () => {
                     <td>{d.description}</td>
                     <td>{d.cost}</td>
                     <td>{new Date(d.date).toDateString()}</td>
+                    <td>{new Date(d.date).toDateString()}</td>
+                    <td>{new Date(d.date).toDateString()}</td>
+                    <td>Assigned To</td>
                   </tr>
                 ))}
             </tbody>

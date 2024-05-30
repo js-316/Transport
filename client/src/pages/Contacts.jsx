@@ -221,7 +221,8 @@ const Drivers = () => {
                     <td>{d.phone_number}</td>
                     <td>{d.age}</td>
                     <td>{new Date(d.date_hired).toDateString()}</td>
-                    
+                    <td>User Role</td>
+                    <td>Assigned Vehicle</td>
                     
                   </tr>
                 ))}

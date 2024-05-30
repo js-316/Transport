@@ -37,9 +37,10 @@ const Dashboard = () => {
     maintenanceData || {};
   const { ids: fuelIds, entities: fuelEntities } = fuelData || {};
 
-  const vehichlesArray = ids?.map((id) => entities?.[id])
-  const driversArray = driverIds?.map((id) => driverEntities?.[id])
-  const maintenancesArray = maintenanceIds?.map((id) => maintenancesEntities?.[id]
+  const vehichlesArray = ids?.map((id) => entities?.[id]);
+  const driversArray = driverIds?.map((id) => driverEntities?.[id]);
+  const maintenancesArray = maintenanceIds?.map(
+    (id) => maintenancesEntities?.[id]
   );
   const fuelArray = maintenanceIds?.map((id) => fuelEntities?.[id]);
 
@@ -60,7 +61,6 @@ const Dashboard = () => {
         <div>
           <h2 className="content-title card-title">My Dashboard </h2>
         </div>
-        
       </div>
       <div className="row">
         {cardsData.map((cd, index) => (
@@ -88,10 +88,10 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="col-md-4">
-            <div className="card mb-4">
+            <div className="card mb-4" style={{ height: "445px" }}>
               <article className="card-body">
-                <h5 className="card-title">Fuel Costs</h5>
-                <DonutChart/>
+                <h5 className="card-title mb-6">Fuel Costs</h5>
+                <DonutChart />
               </article>
             </div>
           </div>
@@ -105,14 +105,14 @@ const Dashboard = () => {
               </article>
             </div>
             <div className="row">
-              <div className="col-md-4">
+              <div className="col-md-6">
                 <div className="card mb-3">
                   <article className="card-body">
                     <Listgroups title="Issues" items={issues} />
                   </article>
                 </div>
               </div>
-              <div className="col-md-4">
+              <div className="col-md-6">
                 <div className="card mb-3">
                   <article className="card-body">
                     <Listgroups title="Maintenance" items={workorder} />

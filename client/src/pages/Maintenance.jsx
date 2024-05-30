@@ -266,13 +266,13 @@ const Maintenance = () => {
                       <td>{d.description}</td>
                       <td>{d.cost}</td>
                       <td>{new Date(d.date).toDateString()}</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td>Driver</td>
+                      <td>Priority Class</td>
+                      <td>Meter</td>
+                      <td>Meter Unit</td>
+                      <td>Description</td>
+                      <td>Issues</td>
+                      <td>Work Order Number</td>
                       <td className="text-end">
                         <Link
                           to={`edit/${d.id}`}

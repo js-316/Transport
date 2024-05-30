@@ -283,7 +283,11 @@ const Vehichles = () => {
                     <td>{d.mileage}</td>
                     <td>{d.vehichle_type}</td>
                     <td>{d.manufacturer}</td>
-                    
+                    <td>Steering Mechanism</td>
+                    <td>Horn</td>
+                    <td>Tires</td>
+                    <td>Wheels</td>
+                    <td>Vehicle Condition</td>
                   </tr>
                 ))}
             </tbody>
