@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-
+import logo from '../assets/soliton.png'
 
 const Maintenance = () => {
     const { isLoading, data,refetch } = useGetMaintenanceQuery();
@@ -94,7 +94,20 @@ const Maintenance = () => {
 
   const exportToPDF = () => {
     const doc = new jsPDF();
-    doc.text("Maintenance", 10, 10);
+    
+     // Add logo
+     doc.addImage(logo, 'PNG', 10, 10, 20, 20);
+      
+     // Add header text
+     doc.text(`Soliton Telmec`, 40, 15);
+     doc.text(`Address: Bugolobi Plot 10, Mizindalo Road`, 40, 20);
+     doc.text(`Phone: +256 700 777 003`, 40, 25);
+     doc.text(`Email: info@soliton.co.ug`, 40, 30);
+   
+     // Add a newline
+     doc.text(`\n`, 10, 35);
+
+    doc.text("Service History", 10, 40)
     const tableData = [];
     filteredData.forEach((record) => {
       tableData.push([
@@ -102,12 +115,22 @@ const Maintenance = () => {
         record.description,
         record.cost,
         record.date,
+        record.driver,
+        record.repair_priority_class,
+        record.meter,
+        record.meter_unit,
+        record.work_order_number,
+        record.labels,
+        
+
       ]);
     });
     doc.autoTable({
-      head: [["Fleet", "Description", "Cost", "Date"]],
+      head: [["Vehicle", "Description", "Cost", "Date","Driver","Repair Priority Class","Meter","Meter Unit","Work Order Number","Labels"]],
       body: tableData,
+      startY: 50,
     });
+    
     doc.save("maintenance.pdf");
   };
 
@@ -221,9 +244,16 @@ const Maintenance = () => {
             <thead>
               <tr>
                 <th>Vehichle</th>
+                <th>Service Tasks</th>
+                <th>Total Cost</th>
+                <th>Completed At</th>
+                <th>Driver</th>
+                <th>Repair Priority Class</th>
+                <th>Meter</th>
+                <th>Meter Unit</th>
                 <th>Description</th>
-                <th>Cost</th>
-                <th>Date</th>
+                <th>Issues</th>
+                <th>Work Order Number</th>
                 <th className="text-end"> Action </th>
               </tr>
             </thead>
@@ -236,6 +266,13 @@ const Maintenance = () => {
                       <td>{d.description}</td>
                       <td>{d.cost}</td>
                       <td>{new Date(d.date).toDateString()}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
                       <td className="text-end">
                         <Link
                           to={`edit/${d.id}`}

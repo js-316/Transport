@@ -17,6 +17,7 @@ import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { DatePicker } from '@material-ui/pickers';
+import logo from '../assets/soliton.png';
 
 const ViewCosts = () => {
     const { id } = useParams();
@@ -40,21 +41,11 @@ const ViewCosts = () => {
         return <div>No data found</div>;
     }
 
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
-
-    const handleStartDateChange = (date) => {
-        setStartDate(date);
-    };
-
-    const handleEndDateChange = (date) => {
-        setEndDate(date);
-    };
 
     console.log("Maintenances array:", maintenancesArray)
     const costs = maintenancesArray?.filter((maintenance) => maintenance.fleet.number_plate === numberPlate);
-    const date = new Date(date);
-    date >= startDate && date <= endDate;
+    // const date = new Date(date);
+    // date >= startDate && date <= endDate;
 
     console.log("costs:", costs)
 
@@ -82,8 +73,6 @@ const ViewCosts = () => {
     const filteredData = maintenancesArray?.filter((maintenance) => {
         const cost = maintenance.cost;
         const description = maintenance.description.toLowerCase();
-        
-        
         const search = searchQuery.toLowerCase();
 
         if (search) {
@@ -113,25 +102,39 @@ const ViewCosts = () => {
 
     const exportToPDF = () => {
         const doc = new jsPDF();
-        doc.text("Vehichles", 10, 10);
+        
+        // Add logo
+        doc.addImage(logo, 'PNG', 10, 10, 20, 20);
+      
+        // Add header text
+        doc.text(`Soliton Telmec`, 40, 15);
+        doc.text(`Address: Bugolobi Plot 10, Mizindalo Road`, 40, 20);
+        doc.text(`Phone: +256 700 777 003`, 40, 25);
+        doc.text(`Email: info@soliton.co.ug`, 40, 30);
+      
+        // Add a newline
+        doc.text(`\n`, 10, 35);
+      
+        // Add the table
+        doc.text(`${numberPlate} Maintenance Costs`, 10, 40);
         const tableData = [];
-        filteredData.forEach((record) => {
-            tableData.push([
-                record.number_plate,
-                record.driver.name,
-                record.mileage,
-                record.vehichle_type,
-                record.manufacturer,
-                record.date_of_purchase,
-            ]);
+        let totalCost = 0;
+        costs.forEach((cost) => {
+          tableData.push([
+            cost.description,
+            cost.cost,
+            cost.date,
+          ]);
+          totalCost += cost.cost;
         });
         doc.autoTable({
-            head: [["Number Plate", "Driver", "Mileage", "Vehichle Type", "Manufacturer", "Total Maintenance", "Date of Purchase"]],
-            body: tableData,
+          head: [["Description", "Maintenance Cost", "Date"]],
+          body: tableData,
+          startY: 50,
         });
-        doc.save("vehicles.pdf");
-    };
-
+        doc.text(`Total: UGX ${totalCost}`, 15, doc.autoTable.previous.finalY + 10);
+        doc.save(`Costs for ${numberPlate}.pdf`);
+      };
 
     return (
         <Layout>
@@ -195,7 +198,7 @@ const ViewCosts = () => {
                                     <tr key={index}>
                                         <td>{cost.description}</td>
                                         <td>{cost.cost}</td>
-                                        <td>{new Date(cost.date).toDateString()}</td>
+                                        <td>{cost.date}</td>
                                     </tr>
                                 ))}
                         </tbody>
