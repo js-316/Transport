@@ -22,6 +22,8 @@ import FuelChart from "../components/FuelChart";
 import ServiceChart from "../components/ServiceChart";
 import BarChart from "../components/Barchart";
 import Listgroups from "../components/Listgroups";
+import DonutChart from "../components/DonutChart";
+import { Chartdata } from "../data/chartData";
 
 const Dashboard = () => {
   const { isLoading, data } = useGetVehichlesQuery();
@@ -42,18 +44,16 @@ const Dashboard = () => {
   );
   const fuelArray = maintenanceIds?.map((id) => fuelEntities[id]);
 
-   const items = [
-     { text: "Service Reminders", badge: 14 },
-     { text: "Contact Renewals", badge: 2 },
-     { text: "Vehicle Renewals", badge: 1 },
-   ];
-   const issues = [
-     { text: "vehicle Failures", badge: 14 },
-     { text: "Faults", badge: 2 },
-   ];
-   const workorder = [
-     { text: "Work Orders", badge: 14 },
-   ];
+  const items = [
+    { text: "Service Reminders", badge: 14 },
+    { text: "Contact Renewals", badge: 2 },
+    { text: "Vehicle Renewals", badge: 1 },
+  ];
+  const issues = [
+    { text: "vehicle Failures", badge: 14 },
+    { text: "Faults", badge: 2 },
+  ];
+  const workorder = [{ text: "Work Orders", badge: 14 }];
 
   return (
     <Layout>
@@ -77,61 +77,68 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
-      <div className="row">
-        <div className="col-md-10">
-          <div className="row">
-            <div className="col-md-6">
-              <div className="card mb-4">
-                <article className="card-body">
-                  <h5 className="card-title">Records Statistics</h5>
-                  <Charts />
-                </article>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="card mb-4">
-                <article className="card-body">
-                  <h5 className="card-title">Repair Priority Class Trends</h5>
-                  <PriorityChart />
-                </article>
-              </div>
+
+      <div className="col">
+        <div className="row">
+          <div className="col-md-8">
+            <div className="card mb-6">
+              <article className="card-body">
+                <h5 className="card-title">Repair Priority Class Trends</h5>
+                <PriorityChart />
+              </article>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-6">
-              <div className="card mb-4">
-                <article className="card-body">
-                  <h5 className="card-title">Fuel Costs</h5>
-                  <FuelChart />
-                </article>
-              </div>
+          <div className="col-md-4">
+            <div className="card mb-4">
+              <article className="card-body">
+                <h5 className="card-title">Fuel Costs</h5>
+                <DonutChart/>
+              </article>
             </div>
-            <div className="col-md-6">
-              <div className="card mb-4">
-                <article className="card-body">
-                  <h5 className="card-title">Service Costs</h5>
-                  <BarChart />
-                </article>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            
-            
           </div>
         </div>
-        <div className="col-md-2">
-          <div className="card mb-3">
-            <Listgroups title="Reminders" items={items} />
+        <div className="row">
+          <div className="col-md-8">
+            <div className="card mb-4">
+              <article className="card-body">
+                <h5 className="card-title">Monthly Service Costs</h5>
+                <BarChart />
+              </article>
+            </div>
+            <div className="row">
+              <div className="col-md-4">
+                <div className="card mb-3">
+                  <article className="card-body">
+                    <Listgroups title="Issues" items={issues} />
+                  </article>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card mb-3">
+                  <article className="card-body">
+                    <Listgroups title="Maintenance" items={workorder} />
+                  </article>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="card mb-3">
-            <Listgroups title="Issues" items={issues} />
-          </div>
-          <div className="card mb-3">
-            <Listgroups title="Maintanace" items={workorder} />
+          <div className="col-md-4">
+            <div className="card mb-4">
+              <article className="card-body">
+                <h5 className="card-title">Service Costs</h5>
+                <FuelChart />
+              </article>
+            </div>
+            <div className="card mb-3">
+              <article className="card-body">
+                <Listgroups title="Reminders" items={items} />
+              </article>
+            </div>
           </div>
         </div>
       </div>
+      <div />
+
       <div className="card mb-4">
         <header className="card-header" data-select2-id="11">
           <h4 className="card-title">Latest Fleet</h4>
@@ -158,30 +165,30 @@ const Dashboard = () => {
                 <tbody>
                   {isLoading
                     ? [...Array(5)].map((_, i) => (
-                      <TableLoader key={i} count={6} />
-                    ))
+                        <TableLoader key={i} count={6} />
+                      ))
                     : vehichlesArray?.map((v, index) => (
-                      <tr key={index}>
-                        <td>{v.number_plate}</td>
-                        <td>{v.driver.name}</td>
-                        <td>{v.mileage}</td>
-                        <td>{v.manufacturer}</td>
-                        <td>{v.date_of_purchase}</td>
-                        <td className="text-end">
-                          <Link
-                            to={`/vehichles/${v.id}`}
-                            className="btn btn-sm font-sm rounded btn-brand mx-4"
-                          >
-                            <i className="material-icons md-edit"></i>
-                            Edit
-                          </Link>
-                          <button className="btn btn-sm font-sm rounded btn-danger">
-                            <i className="material-icons md-delete"></i>
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                        <tr key={index}>
+                          <td>{v.number_plate}</td>
+                          <td>{v.driver.name}</td>
+                          <td>{v.mileage}</td>
+                          <td>{v.manufacturer}</td>
+                          <td>{v.date_of_purchase}</td>
+                          <td className="text-end">
+                            <Link
+                              to={`/vehichles/${v.id}`}
+                              className="btn btn-sm font-sm rounded btn-brand mx-4"
+                            >
+                              <i className="material-icons md-edit"></i>
+                              Edit
+                            </Link>
+                            <button className="btn btn-sm font-sm rounded btn-danger">
+                              <i className="material-icons md-delete"></i>
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
               </table>
             </div>
