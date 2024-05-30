@@ -54,27 +54,7 @@ const Sidebar = () => {
         },
       ],
     },
-    {
-      name: "Reminders",
-      icon: "icon material-icons md-notification_important",
-      submenu: [
-        {
-          name: "Service  Reminders",
-          path: "/dashboard/service_reminders",
-          active: location.pathname === "/dashboard/service_reminders",
-        },
-        {
-          name: "Vehicle Renewals",
-          path: "/dashboard/vehicle_reminders",
-          active: location.pathname === "/dashboard/vehicle_reminders",
-        },
-        {
-          name: "Contact Renewals",
-          path: "/dashboard/contact_reminders",
-          active: location.pathname === "/dashboard/contact_reminders",
-        },
-      ],
-    },
+    
     {
       name: "Equipment",
       path: "/dashboard/equipment",
@@ -85,6 +65,11 @@ const Sidebar = () => {
       name: "Inspections",
       icon: "icon material-icons md-hourglass_bottom",
       submenu: [
+        {
+          name: "Inspection History",
+          path: "/dashboard/inspections/inspection_history",
+          active: location.pathname === "/dashboard/inspections/insspection_history",
+        },
         {
           name: "Item failures",
           path: "/dashboard/inspections/item_failures",
@@ -114,6 +99,27 @@ const Sidebar = () => {
       ],
     },
     {
+      name: "Reminders",
+      icon: "icon material-icons md-notification_important",
+      submenu: [
+        {
+          name: "Service  Reminders",
+          path: "/dashboard/service_reminders",
+          active: location.pathname === "/dashboard/service_reminders",
+        },
+        {
+          name: "Vehicle Renewals",
+          path: "/dashboard/vehicle_reminders",
+          active: location.pathname === "/dashboard/vehicle_reminders",
+        },
+        {
+          name: "Contact Renewals",
+          path: "/dashboard/contact_reminders",
+          active: location.pathname === "/dashboard/contact_reminders",
+        },
+      ],
+    },
+    {
       name: "Contacts",
       path: "/dashboard/contacts",
       icon: "icon material-icons md-people",
@@ -124,6 +130,12 @@ const Sidebar = () => {
       path: "/dashboard/fuel",
       icon: "icon material-icons md-local_gas_station",
       active: location.pathname === "/dashboard/fuel",
+    },
+    {
+      name: "Parts",
+      path: "/dashboard/parts",
+      icon: "icon material-icons md-local_shipping",
+      active: location.pathname === "/dashboard/parts",
     },
     {
       name: "Logout",
@@ -175,6 +187,7 @@ const Sidebar = () => {
             <li
               key={index}
               className={`${link.active ? "menu-item active" : "menu-item"}`}
+              onClick={index.onClick}
             >
               <Link to={link.path} className="menu-link">
                 <i className={link.icon}></i>

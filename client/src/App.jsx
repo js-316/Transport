@@ -30,13 +30,15 @@ import Service_Reminders from "./pages/Service_Reminders";
 import Contact_Reminders from "./pages/Contact_Reminders";
 import Vehicle_Reminder from "./pages/Vehicle_Reminder";
 import Staff from "./pages/staff";
-
 import Equipment from "./pages/Equipment"
+import InspectionHistory from "./pages/InspectionHistory"
 import ItemFailures from "./pages/ItemFailures"
 import Schedules from "./pages/Schedules"
 import Issues from "./pages/Issues"
 import Faults from "./pages/Faults"
 import Contacts from "./pages/Contacts"
+import Parts from "./pages/Parts"
+
 
 function App() {
 
@@ -143,6 +145,10 @@ function App() {
           element: <Schedules />
         },
         {
+          path: "inspections/inspection_history",
+          element: <InspectionHistory />
+        },
+        {
           path: "issues",
           element: <Issues />
         },
@@ -166,11 +172,16 @@ function App() {
           path: "fuel/edit/:id",
           element: <EditFuel />,
         },
+        {
+          path: "parts",
+          element: <Parts />,
+        },
 
         {
           path: "logout",
           element: <Logout />,
         },
+
 
         {
           path: "service_reminders",

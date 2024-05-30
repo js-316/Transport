@@ -283,40 +283,7 @@ const Vehichles = () => {
                     <td>{d.mileage}</td>
                     <td>{d.vehichle_type}</td>
                     <td>{d.manufacturer}</td>
-                    <td>
-                      <Link
-                        to={`costs_view/${d.id}`}
-
-                      >
-                        {costsPerVehicle[d.number_plate] || 0}
-                      </Link>
-                    </td>
-                    <td>
-                      <Link
-                        to={`fuel_view/${d.id}`}
-
-                      >
-                        {fuelPerVehicle[d.number_plate] || 0}
-                      </Link>
-                    </td>
-                    <td>{new Date(d.date_of_purchase).toDateString()}</td>
-                    <td className="text-end">
-                      <Link
-                        to={`edit/${d.id}`}
-                        className="btn btn-sm font-sm rounded btn-brand mx-4"
-                      >
-                        <i className="material-icons md-edit"></i>
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDeleteVehichle(d.id)}
-                        className="btn btn-sm font-sm rounded btn-danger"
-
-                      >
-                        <i className="material-icons md-delete"></i>
-                        Delete
-                      </button>
-                    </td>
+                    
                   </tr>
                 ))}
             </tbody>

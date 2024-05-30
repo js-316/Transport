@@ -223,6 +223,7 @@ const [searchQuery, setSearchQuery] = useState('')
                 <th>Vehicle</th>
                 <th>Date</th>
                 <th>Type</th>
+                <th>Source</th>
                 <th>Amount</th>
               </tr>
             </thead>
@@ -231,12 +232,11 @@ const [searchQuery, setSearchQuery] = useState('')
                 ? [...Array(5)].map((_, i) => <TableLoader key={i} count={6} />)
                 : currentData?.map((d, index) => (
                   <tr key={index}>
-                    <td>{d.fuel_type}</td>
                     <td>{d.fuel_plate.number_plate}</td>
-                    <td>{d.mileage}</td>
-                    <td>{d.amount}</td>
                     <td>{new Date(d.date_of_fueling).toDateString()}</td>
-                    
+                    <td>{d.fuel_type}</td>
+                    <td>{d.amount}</td>
+                    <td>{d.mileage}</td>
                   </tr>
                 ))}
               
