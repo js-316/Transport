@@ -5,6 +5,10 @@ const Sidebar = () => {
   const location = useLocation();
   const [toggleMenu, setToggleMenu] = useState(false);
 
+  const toggleMenus = (link) => {
+    link.active = !link.active;
+  }
+
   // to toggle the menu, add aside-mini class to the body
   const toggleAside = () => {
     setToggleMenu(!toggleMenu);
@@ -40,13 +44,8 @@ const Sidebar = () => {
         },
         {
           name: "Expense History",
-          path: "/dashboard/vehichles/expense_history",
-          active: location.pathname === "/dashboard/vehichles/expense_history",
-        },
-        {
-          name: "Replacement Analysis",
-          path: "/dashboard/vehichles/replacement_analysis",
-          active: location.pathname === "/dashboard/vehichles/replacement_analysis"
+          path: "/dashboard/vehichles/expenses_history",
+          active: location.pathname === "/dashboard/vehichles/expenses_history",
         },
       ],
     },
@@ -132,10 +131,10 @@ const Sidebar = () => {
       ],
     },
     {
-      name: "Staff",
-      path: "/dashboard/staff",
+      name: "Contacts",
+      path: "/dashboard/contacts",
       icon: "icon material-icons md-people",
-      active: location.pathname === "/dashboard/staff",
+      active: location.pathname === "/dashboard/contacts",
     },
     {
       name: "Fuel",
@@ -151,6 +150,16 @@ const Sidebar = () => {
     },
   ];
 
+  const toggleSubMenu = (link) => {
+    const updatedMenuLinks = menuLinks.map((menuLink) => {
+      if (menuLink === link) {
+        menuLink.active = !menuLink.active;
+      }
+      return menuLink;
+    });
+    setMenuLinks(updatedMenuLinks);
+  };
+
   return (
     <div className="navbar-aside ps" id="offcanvas_aside">
       <div className="aside-top">
@@ -159,7 +168,7 @@ const Sidebar = () => {
         </Link>
         <div>
           <button
-            onClick={toggleAside}
+            onClick={() => setToggleMenu(!toggleMenu)}
             className="btn btn-icon btn-aside-minimize"
           >
             <i className="text-muted material-icons md-menu_open"></i>
@@ -171,16 +180,15 @@ const Sidebar = () => {
           {menuLinks.map((link, index) => (
             <li
               key={index}
-              className={link.active ? "menu-item active" : "menu-item"}
+              className={`${link.active ? "menu-item active" : "menu-item"}`}
+              onClick={() => toggleSubMenu(link)}
             >
               <Link to={link.path} className="menu-link">
                 <i className={link.icon}></i>
                 <span className="text">{link.name}</span>
               </Link>
               {link.submenu && (
-                <ul
-                  className="submenu"
-                >
+                <ul className="submenu">
                   {link.submenu.map((submenuItem, submenuIndex) => (
                     <li key={submenuIndex}>
                       <Link to={submenuItem.path} className="menu-link">

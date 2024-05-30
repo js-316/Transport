@@ -691,6 +691,10 @@ b {
   border: none;
   background-color: #088178;
   border-radius: 4px;
+
+}
+.menu-item.active .submenu {
+  display: block;
 }
 _submenu {
   display: none;

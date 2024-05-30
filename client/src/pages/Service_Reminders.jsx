@@ -183,7 +183,7 @@ const Service_Reminders = () => {
           </button>
         </div>
       </div>
-      <ButtonBudges/>
+      <ButtonBudges />
       <div className="card mb-4">
         <header className="card-header">
           <div className="row gx-3">
