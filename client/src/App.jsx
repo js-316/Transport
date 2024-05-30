@@ -29,16 +29,16 @@ import ViewFuel from "./pages/ViewFuel";
 import Service_Reminders from "./pages/Service_Reminders";
 import Contact_Reminders from "./pages/Contact_Reminders";
 import Vehicle_Reminder from "./pages/Vehicle_Reminder";
-<<<<<<< HEAD
 import Staff from "./pages/staff";
-=======
 import Equipment from "./pages/Equipment"
+import InspectionHistory from "./pages/InspectionHistory"
 import ItemFailures from "./pages/ItemFailures"
 import Schedules from "./pages/Schedules"
 import Issues from "./pages/Issues"
 import Faults from "./pages/Faults"
 import Contacts from "./pages/Contacts"
->>>>>>> 0f82627d593235fe54f54bf43d7b550e678b5c7a
+import Parts from "./pages/Parts"
+
 
 function App() {
 
@@ -145,6 +145,10 @@ function App() {
           element: <Schedules />
         },
         {
+          path: "inspections/inspection_history",
+          element: <InspectionHistory />
+        },
+        {
           path: "issues",
           element: <Issues />
         },
@@ -168,12 +172,16 @@ function App() {
           path: "fuel/edit/:id",
           element: <EditFuel />,
         },
+        {
+          path: "parts",
+          element: <Parts />,
+        },
 
         {
           path: "logout",
           element: <Logout />,
         },
-<<<<<<< HEAD
+
 
         {
           path: "service_reminders",
@@ -193,8 +201,7 @@ function App() {
           path: "staff",
           element: <Staff/>,
         },
-=======
->>>>>>> 0f82627d593235fe54f54bf43d7b550e678b5c7a
+
       ],
     },
   ]);

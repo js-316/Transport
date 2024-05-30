@@ -214,7 +214,7 @@ const WorkOrder = () => {
               <tr>
                 <th>Vehichle</th>
                 <th>Status</th>
-                <th>Repair Priority</th>
+                <th>Repair Priority Class</th>
                 <th>Issue Date</th>
                 <th>Start Date</th>
                 <th>Closing date</th>

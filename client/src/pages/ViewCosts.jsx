@@ -16,7 +16,6 @@ import Swal from 'sweetalert2';
 import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { DatePicker } from '@material-ui/pickers';
 import logo from '../assets/soliton.png';
 
 const ViewCosts = () => {
@@ -44,9 +43,7 @@ const ViewCosts = () => {
 
     console.log("Maintenances array:", maintenancesArray)
     const costs = maintenancesArray?.filter((maintenance) => maintenance.fleet.number_plate === numberPlate);
-    // const date = new Date(date);
-    // date >= startDate && date <= endDate;
-
+    
     console.log("costs:", costs)
 
     const costsPerVehicle = {};

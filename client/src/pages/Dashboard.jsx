@@ -37,12 +37,11 @@ const Dashboard = () => {
     maintenanceData || {};
   const { ids: fuelIds, entities: fuelEntities } = fuelData || {};
 
-  const vehichlesArray = ids?.map((id) => entities[id]);
-  const driversArray = driverIds?.map((id) => driverEntities[id]);
-  const maintenancesArray = maintenanceIds?.map(
-    (id) => maintenancesEntities[id]
+  const vehichlesArray = ids?.map((id) => entities?.[id])
+  const driversArray = driverIds?.map((id) => driverEntities?.[id])
+  const maintenancesArray = maintenanceIds?.map((id) => maintenancesEntities?.[id]
   );
-  const fuelArray = maintenanceIds?.map((id) => fuelEntities[id]);
+  const fuelArray = maintenanceIds?.map((id) => fuelEntities?.[id]);
 
   const items = [
     { text: "Service Reminders", badge: 14 },

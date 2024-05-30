@@ -175,7 +175,7 @@ const Contact_Reminders = () => {
         <h2 className="content-title">Contact Renewals</h2>
         <div>
           <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Add Renewal
+            <i className="material-icons md-plus"></i> Add Contact Renewal
           </Link>
 
           <button onClick={exportToPDF} className="btn btn-success mx-2">
@@ -236,7 +236,7 @@ const Contact_Reminders = () => {
                 <th>Renewal-Type</th>
                 <th>Renewal Status</th>
                 <th>Due-Date</th>
-                <th className="text-end">Watcher</th>
+                <th>Watcher</th>
               </tr>
             </thead>
             <tbody>
@@ -248,22 +248,7 @@ const Contact_Reminders = () => {
                       <td>{d.description}</td>
                       <td>{d.cost}</td>
                       <td>{new Date(d.date).toDateString()}</td>
-                      <td className="text-end">
-                        <Link
-                          to={`edit/${d.id}`}
-                          className="btn btn-sm font-sm rounded btn-brand mx-4"
-                        >
-                          <i className="material-icons md-edit"></i>
-                          Edit
-                        </Link>
-                        <button
-                          onClick={() => handleDeleteMaintenance(d.id)}
-                          className="btn btn-sm font-sm rounded btn-danger"
-                        >
-                          <i className="material-icons md-delete"></i>
-                          Delete
-                        </button>
-                      </td>
+                      
                     </tr>
                   ))}
             </tbody>

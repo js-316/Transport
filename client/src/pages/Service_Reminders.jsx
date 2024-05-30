@@ -232,11 +232,13 @@ const Service_Reminders = () => {
           <table className="table table-hover">
             <thead>
               <tr>
-                <th>Contact</th>
-                <th>Renewal-Type</th>
-                <th>Renewal Status</th>
-                <th>Due-Date</th>
-                <th className="text-end">Watcher</th>
+                <th>Vehicle</th>
+                <th>Service Task</th>
+                <th>Status</th>
+                <th>Next Due</th>
+                <th>Active Work Order</th>
+                <th>Last Completed</th>
+                <th>Notificaton</th>
               </tr>
             </thead>
             <tbody>
@@ -248,22 +250,9 @@ const Service_Reminders = () => {
                       <td>{d.description}</td>
                       <td>{d.cost}</td>
                       <td>{new Date(d.date).toDateString()}</td>
-                      <td className="text-end">
-                        <Link
-                          to={`edit/${d.id}`}
-                          className="btn btn-sm font-sm rounded btn-brand mx-4"
-                        >
-                          <i className="material-icons md-edit"></i>
-                          Edit
-                        </Link>
-                        <button
-                          onClick={() => handleDeleteMaintenance(d.id)}
-                          className="btn btn-sm font-sm rounded btn-danger"
-                        >
-                          <i className="material-icons md-delete"></i>
-                          Delete
-                        </button>
-                      </td>
+                      <td></td>
+                      <td>{new Date(d.date).toDateString()}</td>
+                      <td></td>
                     </tr>
                   ))}
             </tbody>
