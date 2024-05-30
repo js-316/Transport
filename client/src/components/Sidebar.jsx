@@ -39,11 +39,11 @@ const Sidebar = () => {
       active: location.pathname === "/dashboard/drivers",
     },
     {
-      name: "Maintenance",
+      name: "Service",
       icon: "icon material-icons md-home_repair_service",
       submenu: [
         {
-          name: "Service",
+          name: "Service History",
           path: "/dashboard/maintenance",
           active: location.pathname === "/dashboard/maintenance",
         },
