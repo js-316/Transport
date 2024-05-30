@@ -289,7 +289,7 @@ const Vehichles = () => {
                         {costsPerVehicle[d.number_plate] || 0}
                       </Link>
                     </td>
-                    
+                    <td>Frequency</td>
                   </tr>
                 ))}
             </tbody>

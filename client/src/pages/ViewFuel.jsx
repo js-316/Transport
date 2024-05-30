@@ -15,7 +15,8 @@ import Swal from 'sweetalert2';
 import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-
+import logo from "../assets/soliton.png";
+import { number } from "yup";
 
 const ViewFuel = () => {
     const { id } = useParams();
@@ -103,24 +104,44 @@ const ViewFuel = () => {
 
     const exportToPDF = () => {
         const doc = new jsPDF();
-        doc.text("Vehichles", 10, 10);
+        
+        // Add logo
+        doc.addImage(logo, 'PNG', 10, 10, 20, 20);
+      
+        // Add header text
+        doc.text(`Soliton Telmec`, 40, 15);
+        doc.text(`Address: Bugolobi Plot 10, Mizindalo Road`, 40, 20);
+        doc.text(`Phone: +256 700 777 003`, 40, 25);
+        doc.text(`Email: info@soliton.co.ug`, 40, 30);
+      
+        // Add a newline
+        doc.text(`\n`, 10, 35);
+      
+        // Add the table
+        doc.text(`${numberPlate} Fuel Costs`, 10, 40);
         const tableData = [];
-        filteredData.forEach((record) => {
-            tableData.push([
-                record.number_plate,
-                record.driver.name,
-                record.mileage,
-                record.vehichle_type,
-                record.manufacturer,
-                record.date_of_purchase,
-            ]);
+        let totalCost = 0;
+        fuelList.forEach((fuel) => {
+          tableData.push([
+            fuel.fuel_type,
+            fuel.mileage,
+            fuel.amount,
+            fuel.date_of_fueling,
+            fuel.usage,
+            fuel.volume_unit,
+            fuel.costs_per_meter,
+            fuel.fuel_capacity_alert,
+          ]);
+          totalCost += fuel.amount;
         });
         doc.autoTable({
-            head: [["Number Plate", "Driver", "Mileage", "Vehichle Type", "Manufacturer", "Total Maintenance", "Date of Purchase"]],
-            body: tableData,
+          head: [["Fuel Type", "Mileage", "Amount","Date","Usage","Volume Unit","Costs Per Meter","Fuel Capacity Alert"]],
+          body: tableData,
+          startY: 50,
         });
-        doc.save("vehicles.pdf");
-    };
+        doc.text(`Total: UGX ${totalCost}`, 15, doc.autoTable.previous.finalY + 10);
+        doc.save(`Fuel Costs for ${numberPlate}.pdf`);
+      };
 
 
     return (

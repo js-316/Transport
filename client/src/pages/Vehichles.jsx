@@ -262,12 +262,15 @@ const Vehichles = () => {
               <tr>
                 <th>Vehicle</th>
                 <th>Driver</th>
-                <th>Mileage</th>
+                <th>Current Mileage</th>
+                <th>Year</th>
                 <th>Type</th>
                 <th>Manufacturer</th>
                 <th>Total Service</th>
                 <th>Total Fuel</th>
-                <th>Date Purchased</th>
+                <th>Status</th>
+                <th>Group</th>
+                <th>Watchers</th>
                 <th className="text-end"> Action </th>
               </tr>
             </thead>
@@ -280,6 +283,7 @@ const Vehichles = () => {
                     <td>{d.number_plate}</td>
                     <td>{d.driver.name}</td>
                     <td>{d.mileage}</td>
+                    <td>{new Date(d.date_of_purchase).toDateString()}</td>
                     <td>{d.vehichle_type}</td>
                     <td>{d.manufacturer}</td>
                     <td>
@@ -298,7 +302,9 @@ const Vehichles = () => {
                         {fuelPerVehicle[d.number_plate] || 0}
                       </Link>
                     </td>
-                    <td>{new Date(d.date_of_purchase).toDateString()}</td>
+                    <td>Status</td>
+                    <td>Group</td>
+                    <td>Watchers</td>
                     <td className="text-end">
                       <Link
                         to={`edit/${d.id}`}

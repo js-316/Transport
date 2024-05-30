@@ -154,7 +154,7 @@ const [searchQuery, setSearchQuery] = useState('')
   return (
     <Layout>
       <div className="content-header">
-        <h2 className="content-title">Fuel </h2>
+        <h2 className="content-title">Fuel History</h2>
         <div className="flex">
       
           <Link
@@ -222,9 +222,13 @@ const [searchQuery, setSearchQuery] = useState('')
               <tr>
                 <th>Fuel Type</th>
                 <th>Number Plate</th>
+                <th>Date</th>
                 <th>Mileage</th>
                 <th>Amount</th>
-                <th>Date</th>
+                <th>Usage</th>
+                <th>Volume Unit</th>
+                <th>Costs per Meter</th>
+                <th>Fuel Capacity Alert</th>
                 <th className="text-end"> Action </th>
               </tr>
             </thead>
@@ -235,9 +239,13 @@ const [searchQuery, setSearchQuery] = useState('')
                   <tr key={index}>
                     <td>{d.fuel_type}</td>
                     <td>{d.fuel_plate.number_plate}</td>
+                    <td>{new Date(d.date_of_fueling).toDateString()}</td>
                     <td>{d.mileage}</td>
                     <td>{d.amount}</td>
-                    <td>{new Date(d.date_of_fueling).toDateString()}</td>
+                    <td>Usage</td>
+                    <td>Volume Unit</td>
+                    <td>Costs Per Meter</td>
+                    <td>Fuel Capacity Alert</td>
                     <td className="text-end">
                       <Link
                         to={`edit/${d.id}`}

@@ -250,9 +250,9 @@ const Service_Reminders = () => {
                       <td>{d.description}</td>
                       <td>{d.cost}</td>
                       <td>{new Date(d.date).toDateString()}</td>
-                      <td></td>
+                      <td>Active Work Order</td>
                       <td>{new Date(d.date).toDateString()}</td>
-                      <td></td>
+                      <td>Notification</td>
                     </tr>
                   ))}
             </tbody>

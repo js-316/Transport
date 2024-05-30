@@ -229,6 +229,8 @@ const Parts = () => {
                     <td>{d.description}</td>
                     <td>{d.cost}</td>
                     <td>{new Date(d.date).toDateString()}</td>
+                    <td>Measurement Unit</td>
+                    <td>Unit Cost</td>
                   </tr>
                 ))}
             </tbody>

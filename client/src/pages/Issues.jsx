@@ -236,6 +236,8 @@ const Issues = () => {
                       <td>{d.fleet.number_plate}</td>
                       <td>{d.description}</td>
                       <td>{d.cost}</td>
+                      <td></td>
+                      <td>{new Date(d.date).toDateString()}</td>
                       <td>{new Date(d.date).toDateString()}</td>
                       <td className="text-end">
                         <Link
