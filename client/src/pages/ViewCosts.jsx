@@ -174,16 +174,7 @@ const ViewCosts = () => {
                             </select>
                         </div>
                         <div className="date-range-picker">
-                            <DatePicker
-                                value={startDate}
-                                onChange={handleStartDateChange}
-                                label="Start Date"
-                            />
-                            <DatePicker
-                                value={endDate}
-                                onChange={handleEndDateChange}
-                                label="End Date"
-                            />
+                            
                         </div>
                     </div>
                 </header>
