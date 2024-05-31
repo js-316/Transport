@@ -13,7 +13,6 @@ import jsPDF from "jspdf";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import ButtonBudges from "../components/ButtonBudges";
-import { statuses } from "../data/chartData";
 
 const Service_Reminders = () => {
   const { isLoading, data, refetch } = useGetMaintenanceQuery();
@@ -153,7 +152,7 @@ const Service_Reminders = () => {
     doc.text(`Total Cost: ${totalCost}`, 10, 20);
 
     // Prepare table data
-    const tableData = vehicleMaintenances?.map((record) => [
+    const tableData = vehicleMaintenances.map((record) => [
       record.date,
       record.description,
       record.cost,
@@ -184,7 +183,7 @@ const Service_Reminders = () => {
           </button>
         </div>
       </div>
-      <ButtonBudges statuses={statuses} />
+      <ButtonBudges />
       <div className="card mb-4">
         <header className="card-header">
           <div className="row gx-3">
@@ -220,7 +219,7 @@ const Service_Reminders = () => {
                 onChange={(e) => costsExportToPDF(e.target.value)}
               >
                 <option>Calculate Cost</option>
-                {uniqueVehicles?.map((number_plate, index) => (
+                {uniqueVehicles.map((number_plate, index) => (
                   <option key={index} value={number_plate}>
                     {number_plate}
                   </option>
@@ -244,10 +243,8 @@ const Service_Reminders = () => {
             </thead>
             <tbody>
               {isLoading
-                ? [...Array(5)]?.map((_, i) => (
-                    <TableLoader key={i} count={5} />
-                  ))
-                : currentData?.map((d, index) => (
+                ? [...Array(5)].map((_, i) => <TableLoader key={i} count={5} />)
+                : currentData.map((d, index) => (
                     <tr key={index}>
                       <td>{d.fleet.number_plate}</td>
                       <td>{d.description}</td>
