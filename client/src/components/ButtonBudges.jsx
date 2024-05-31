@@ -1,44 +1,29 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-const ButtonBudges = ({ statuses }) => {
-
-var statuses = [
-  { label: "Upcoming", count: 4, variant: "primary" },
-  { label: "Pending", count: 4, variant: "secondary" },
-  { label: "Done", count: 4, variant: "success" },
-  { label: "OverDue", count: 4, variant: "danger" },
-];
-
+const ButtonBudges = () => {
   return (
     <div className="card">
       <div className="card-body d-flex justify-content-between">
         <h5 className="card-title mb-6">Status</h5>
-        {statuses.map((status, index) => (
-          <button
-            key={index}
-            type="button"
-            className={`btn mb-2 btn-${status.variant}`}
-          >
-            <span style={{ marginRight: "10px" }}>{status.label}</span>
-            <span className={`badge bg-white text-${status.variant}`}>
-              {status.count}
-            </span>
-          </button>
-        ))}
+        <button type="button" className="btn btn-primary mb-2 ">
+          <span style={{ marginRight: "10px" }}>Upcoming</span>
+          <span className="badge bg-white text-primary">4</span>
+        </button>
+        <button type="button" className="btn btn-secondary mb-2">
+          <span style={{ marginRight: "10px" }}>Pending</span>
+          <span className="badge bg-white text-secondary">4</span>
+        </button>
+        <button type="button" className="btn btn-success mb-2">
+          <span style={{ marginRight: "10px" }}>Done</span>
+          <span className="badge bg-white text-success">4</span>
+        </button>
+        <button type="button" className="btn btn-danger mb-2">
+          <span style={{ marginRight: "10px" }}>OverDue</span>
+          <span className="badge bg-white text-danger">4</span>
+        </button>
       </div>
     </div>
   );
-};
-
-ButtonBudges.propTypes = {
-  statuses: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      count: PropTypes.number.isRequired,
-      variant: PropTypes.string.isRequired,
-    })
-  ).isRequired,
 };
 
 export default ButtonBudges;

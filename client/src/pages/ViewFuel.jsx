@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import { toast } from "react-hot-toast";
 import {
@@ -20,13 +20,17 @@ import { number } from "yup";
 
 const ViewFuel = () => {
     const { id } = useParams();
+    const [dataPerPage, setDataPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const { data: vehichleData } = useGetVehichleByIdQuery(id);
     const numberPlate = vehichleData?.number_plate;
 
-    const { data: fuelData, isLoading } = useGetFuelQuery(numberPlate)
+    const { data: fuelData, isLoading } = useGetFuelQuery(numberPlate);
+
     const { ids, entities } = fuelData || {};
-    const fuelArray = ids?.map((id) => entities[id]);
+    const fuelArray = ids?.map((id) => entities?.[id]);
 
     console.log('Number Plate', numberPlate)
 
@@ -59,13 +63,22 @@ const ViewFuel = () => {
     }
 
 
-    const navigate = useNavigate();
-    const [AppError, setAppError] = useState(null);
+    
+    
+    const indexOfLastData = currentPage * dataPerPage;
+    const indexOfFirstData = indexOfLastData - dataPerPage;
+    const currentData = fuelList?.slice(indexOfFirstData, indexOfLastData);
+    console.log("Index of first data",indexOfFirstData)
+    console.log("index of last data",indexOfLastData)
 
-    const [searchQuery, setSearchQuery] = useState('');
 
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    const filteredData = fuelArray?.filter((fuel) => {
+    const handleDataPerPage = (e) => {
+        setDataPerPage(parseInt(e.target.value));
+    };
+
+    const filteredData = currentData?.filter((fuel) => {
         const fuel_type = fuel.fuel_type.toLowerCase()
         const fuel_plate = fuel.fuel_plate.number_plate.toLowerCase()
         const mileage = fuel.mileage
@@ -79,7 +92,7 @@ const ViewFuel = () => {
                 fuel_plate.includes(search) ||
                 (mileage && mileage.toString().includes(search)) ||
                 (amount && amount.toString().includes(search)) ||
-                date_of_fueling.includes(search)
+                (date_of_fueling && date_of_fueling.toString().includes(search))
             );
 
         } else {
@@ -88,18 +101,6 @@ const ViewFuel = () => {
         }
     });
 
-    const [dataPerPage, setDataPerPage] = useState(10);
-    const [currentPage, setCurrentPage] = useState(1);
-    const indexOfLastData = currentPage * dataPerPage;
-    const indexOfFirstData = indexOfLastData - dataPerPage;
-    const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
-
-
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-    const handleDataPerPage = (e) => {
-        setDataPerPage(parseInt(e.target.value));
-    };
 
 
     const exportToPDF = () => {
@@ -197,7 +198,7 @@ const ViewFuel = () => {
                         <tbody>
                             {isLoading
                                 ? [...Array(5)].map((_, i) => <TableLoader key={i} count={6} />)
-                                : fuelList?.map((fuel, index) => (
+                                : filteredData?.map((fuel, index) => (
 
                                     <tr key={index}>
                                         <td>{fuel.fuel_type}</td>
@@ -213,7 +214,7 @@ const ViewFuel = () => {
             <div className="pagination-area mt-30 mb-50">
                 <nav aria-label="Page navigation example">
                     <Pagination
-                        totalData={currentData?.length}
+                        totalData={fuelList?.length}
                         dataPerPage={dataPerPage}
                         paginate={paginate}
                         currentPage={currentPage}
