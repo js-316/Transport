@@ -262,10 +262,9 @@ const InspectionHistory = () => {
                       <td>{d.description}</td>
                       <td>{new Date(d.date).toDateString()}</td>
                       <td>{new Date(d.date).toDateString()}</td>
-                      <td>Duration</td>
-                      <td>Inspection Form</td>
-                      <td>User</td>
-                      <td>Failed Items</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
                     </tr>
                   ))}
             </tbody>
