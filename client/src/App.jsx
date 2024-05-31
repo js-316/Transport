@@ -201,7 +201,6 @@ function App() {
           path: "staff",
           element: <Staff/>,
         },
-
       ],
     },
   ]);
