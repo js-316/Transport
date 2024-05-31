@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useState ,useEffect} from "react";
+import {  useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import { toast } from "react-hot-toast";
 import {
@@ -12,7 +12,6 @@ import { useGetMaintenanceQuery } from "../features/maintenance/maintenanceApiSl
 import TableLoader from "../components/TableLoader";
 import errorParser from "../util/errorParser";
 import Pagination from "../components/Pagination";
-import Swal from 'sweetalert2';
 import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -20,13 +19,18 @@ import logo from '../assets/soliton.png';
 
 const ViewCosts = () => {
     const { id } = useParams();
+    const [searchQuery, setSearchQuery] = useState('');
+    const [dataPerPage, setDataPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const { data: vehichleData } = useGetVehichleByIdQuery(id);
     const numberPlate = vehichleData?.number_plate;
 
-    const { data: maintenanceData, isLoading } = useGetMaintenanceQuery(numberPlate)
+    const { data: maintenanceData, isLoading } = useGetMaintenanceQuery(numberPlate);
+
+
     const { ids, entities } = maintenanceData || {};
-    const maintenancesArray = ids?.map((id) => entities[id]);
+    const maintenancesArray = ids?.map((id) => entities?.[id]);
 
 
     console.log('Number Plate', numberPlate)
@@ -60,14 +64,26 @@ const ViewCosts = () => {
         console.log("maintenanceData is undefined");
     }
 
+   
 
-    const navigate = useNavigate();
-    const [AppError, setAppError] = useState(null);
+    
 
-    const [searchQuery, setSearchQuery] = useState('');
+    const indexOfLastData = currentPage * dataPerPage;
+    const indexOfFirstData = indexOfLastData - dataPerPage;
+    console.log('Index of First Data',indexOfFirstData)
+    console.log('Index of Last Data',indexOfLastData)
+
+    const currentData = costs?.slice(indexOfFirstData, indexOfLastData);
+    console.log('Current data',currentData)
 
 
-    const filteredData = maintenancesArray?.filter((maintenance) => {
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const handleDataPerPage = (e) => {
+        setDataPerPage(parseInt(e.target.value));
+    };
+
+    const filteredData = currentData?.filter((maintenance) => {
         const cost = maintenance.cost;
         const description = maintenance.description.toLowerCase();
         const search = searchQuery.toLowerCase();
@@ -79,22 +95,12 @@ const ViewCosts = () => {
                 
             )
         } else {
-            return maintenancesArray;
+            return costs;
         }
     });
 
-    const [dataPerPage, setDataPerPage] = useState(10);
-    const [currentPage, setCurrentPage] = useState(1);
-    const indexOfLastData = currentPage * dataPerPage;
-    const indexOfFirstData = indexOfLastData - dataPerPage;
-    const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
+    
 
-
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-    const handleDataPerPage = (e) => {
-        setDataPerPage(parseInt(e.target.value));
-    };
 
 
     const exportToPDF = () => {
@@ -125,7 +131,7 @@ const ViewCosts = () => {
           totalCost += cost.cost;
         });
         doc.autoTable({
-          head: [["Description", "Maintenance Cost", "Date"]],
+          head: [["Description", "Maintenance Cost", "Completed At","Driver","Repair Priority Class","Issues","Work Order Number","Labels"]],
           body: tableData,
           startY: 50,
         });
@@ -184,13 +190,18 @@ const ViewCosts = () => {
                             <tr>
                                 <th>Description</th>
                                 <th>Cost</th>
-                                <th>Date </th>
+                                <th>Completed At</th>
+                                <th>Driver</th>
+                                <th>Repair Priority Class</th>
+                                <th>Issues</th>
+                                <th>Work Order Number</th>
+                                <th>Labels</th>
                             </tr>
                         </thead>
                         <tbody>
                             {isLoading
                                 ? [...Array(5)].map((_, i) => <TableLoader key={i} count={6} />)
-                                : costs?.map((cost, index) => (
+                                : filteredData?.map((cost, index) => (
 
                                     <tr key={index}>
                                         <td>{cost.description}</td>
@@ -206,7 +217,7 @@ const ViewCosts = () => {
             <div className="pagination-area mt-30 mb-50">
                 <nav aria-label="Page navigation example">
                     <Pagination
-                        totalData={currentData?.length}
+                        totalData={costs?.length}
                         dataPerPage={dataPerPage}
                         paginate={paginate}
                         currentPage={currentPage}
