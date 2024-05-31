@@ -23,7 +23,7 @@ import ServiceChart from "../components/ServiceChart";
 import BarChart from "../components/Barchart";
 import Listgroups from "../components/Listgroups";
 import DonutChart from "../components/DonutChart";
-import { Chartdata } from "../data/chartData";
+import { issues,workorder,items } from "../data/chartData";
 
 const Dashboard = () => {
   const { isLoading, data } = useGetVehichlesQuery();
@@ -44,16 +44,7 @@ const Dashboard = () => {
   );
   const fuelArray = maintenanceIds?.map((id) => fuelEntities?.[id]);
 
-  const items = [
-    { text: "Service Reminders", badge: 14 },
-    { text: "Contact Renewals", badge: 2 },
-    { text: "Vehicle Renewals", badge: 1 },
-  ];
-  const issues = [
-    { text: "vehicle Failures", badge: 14 },
-    { text: "Faults", badge: 2 },
-  ];
-  const workorder = [{ text: "Work Orders", badge: 14 }];
+  
 
   return (
     <Layout>
