@@ -13,6 +13,7 @@ import jsPDF from "jspdf";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import ButtonBudges from "../components/ButtonBudges";
+import { Service_statuses } from "../data/chartData";
 
 const Contact_Reminders = () => {
   const { isLoading, data, refetch } = useGetMaintenanceQuery();
@@ -183,7 +184,7 @@ const Contact_Reminders = () => {
           </button>
         </div>
       </div>
-      <ButtonBudges/>
+      <ButtonBudges title="Satus" buttons={Service_statuses} />
       <div className="card mb-4">
         <header className="card-header">
           <div className="row gx-3">
@@ -249,7 +250,6 @@ const Contact_Reminders = () => {
                       <td>{d.cost}</td>
                       <td>{new Date(d.date).toDateString()}</td>
                       <td>Watcher</td>
-                      
                     </tr>
                   ))}
             </tbody>

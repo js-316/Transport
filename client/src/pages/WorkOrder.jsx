@@ -10,6 +10,7 @@ import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import ButtonBudges from "../components/ButtonBudges";
+import { statuses } from "../data/chartData";
 
 
 const WorkOrder = () => {
@@ -176,7 +177,7 @@ const WorkOrder = () => {
           </button>
         </div>
       </div>
-      <ButtonBudges/>
+      <ButtonBudges title="Status" buttons={statuses} />
       <div className="card mb-4">
         <header className="card-header">
           <div className="row gx-3">
@@ -205,7 +206,6 @@ const WorkOrder = () => {
                 <option value="40">Show 40</option>
               </select>
             </div>
-            
           </div>
         </header>
         <div className="card-body">
@@ -225,16 +225,16 @@ const WorkOrder = () => {
               {isLoading
                 ? [...Array(5)].map((_, i) => <TableLoader key={i} count={5} />)
                 : currentData.map((d, index) => (
-                  <tr key={index}>
-                    <td>{d.fleet.number_plate}</td>
-                    <td>{d.description}</td>
-                    <td>{d.cost}</td>
-                    <td>{new Date(d.date).toDateString()}</td>
-                    <td>{new Date(d.date).toDateString()}</td>
-                    <td>{new Date(d.date).toDateString()}</td>
-                    <td>Assigned To</td>
-                  </tr>
-                ))}
+                    <tr key={index}>
+                      <td>{d.fleet.number_plate}</td>
+                      <td>{d.description}</td>
+                      <td>{d.cost}</td>
+                      <td>{new Date(d.date).toDateString()}</td>
+                      <td>{new Date(d.date).toDateString()}</td>
+                      <td>{new Date(d.date).toDateString()}</td>
+                      <td>Assigned To</td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>
