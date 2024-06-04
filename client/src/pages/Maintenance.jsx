@@ -16,7 +16,7 @@ const Maintenance = () => {
     
     const { ids, entities} = data || {};
     const maintenancesArray = ids?.map((id) => entities[id])
-    const [AppError, setAppError] = useState(null);
+    
 
     const [deleteMaintenance, {isLoading: isDeleting}] = useDeleteMaintenanceMutation();
 
