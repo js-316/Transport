@@ -108,6 +108,7 @@ const ViewCosts = () => {
         (endDate === null || date <= endDate)
       );
     }
+
   });
 
   const exportToPDF = () => {
@@ -132,6 +133,30 @@ const ViewCosts = () => {
     costs.forEach((cost) => {
       tableData.push([cost.description, cost.cost, cost.date]);
       totalCost += cost.cost;
+=======
+
+    const filteredData = currentData?.filter((maintenance) => {
+        const cost = maintenance.cost;
+        const description = maintenance.description.toLowerCase();
+        const date = maintenance.date
+        const search = searchQuery.toLowerCase();
+
+        if (search) {
+            return (
+                (startDate === null || startDate <= date) &&
+                (endDate === null || date <= endDate) &&
+                 (
+                    (cost && cost.toString().includes(search)) ||
+                    description.includes(search) ||
+                    (date && date.toString().includes(search))
+                )
+
+            )
+        } else {
+            return (startDate === null || startDate <= date) &&
+            (endDate === null || date <= endDate) 
+        }
+
     });
     doc.autoTable({
       head: [

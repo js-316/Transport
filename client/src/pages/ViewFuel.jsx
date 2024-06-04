@@ -110,6 +110,7 @@ const ViewFuel = () => {
         (endDate === null || date_of_fueling <= endDate)
       );
     }
+
   });
 
   const exportToPDF = () => {
@@ -143,6 +144,36 @@ const ViewFuel = () => {
         fuel.fuel_capacity_alert,
       ]);
       totalCost += fuel.amount;
+
+
+    const filteredData = currentData?.filter((fuel) => {
+        const fuel_type = fuel.fuel_type.toLowerCase()
+        const fuel_plate = fuel.fuel_plate.number_plate.toLowerCase()
+        const mileage = fuel.mileage
+        const amount = fuel.amount
+        const date_of_fueling = fuel.date_of_fueling
+        const search = searchQuery.toLowerCase()
+
+        if (search) {
+            return (
+                (startDate === null || startDate <= date_of_fueling) &&
+                (endDate === null || date_of_fueling <= endDate) &&
+                (
+                    fuel_type.includes(search) ||
+                    fuel_plate.includes(search) ||
+                    (mileage && mileage.toString().includes(search)) ||
+                    (amount && amount.toString().includes(search)) ||
+                    (date_of_fueling && date_of_fueling.toString().includes(search))
+                )
+            );
+
+        } else {
+            //return fuelArray
+            return (startDate === null || startDate <= date_of_fueling) &&
+            (endDate === null || date_of_fueling <= endDate) 
+
+        }
+
     });
     doc.autoTable({
       head: [
