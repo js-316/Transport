@@ -23,7 +23,8 @@ import ServiceChart from "../components/ServiceChart";
 import BarChart from "../components/Barchart";
 import Listgroups from "../components/Listgroups";
 import DonutChart from "../components/DonutChart";
-import { Chartdata } from "../data/chartData";
+import { issues,workorder,items ,activities } from "../data/chartData";
+import RecentActivity from "../components/RecentActivity";
 
 const Dashboard = () => {
   const { isLoading, data } = useGetVehichlesQuery();
@@ -79,6 +80,29 @@ const Dashboard = () => {
 
       <div className="col">
         <div className="row">
+          <div className="col-md-4">
+            <div className="card mb-3">
+              <article className="card-body">
+                <Listgroups title="Issues" items={issues} />
+              </article>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card mb-3">
+              <article className="card-body">
+                <Listgroups title="Work Orders" items={workorder} />
+              </article>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card mb-3">
+              <article className="card-body">
+                <Listgroups title="Reminders" items={items} />
+              </article>
+            </div>
+          </div>
+        </div>
+        <div className="row">
           <div className="col-md-8">
             <div className="card mb-6">
               <article className="card-body">
@@ -90,8 +114,10 @@ const Dashboard = () => {
           <div className="col-md-4">
             <div className="card mb-4" style={{ height: "445px" }}>
               <article className="card-body">
-                <h5 className="card-title mb-6">Fuel Costs</h5>
-                <DonutChart />
+                <RecentActivity
+                  title="Recent Activity"
+                  activities={activities}
+                />
               </article>
             </div>
           </div>
@@ -104,33 +130,12 @@ const Dashboard = () => {
                 <BarChart />
               </article>
             </div>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="card mb-3">
-                  <article className="card-body">
-                    <Listgroups title="Issues" items={issues} />
-                  </article>
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="card mb-3">
-                  <article className="card-body">
-                    <Listgroups title="Maintenance" items={workorder} />
-                  </article>
-                </div>
-              </div>
-            </div>
           </div>
           <div className="col-md-4">
-            <div className="card mb-4">
+            <div className="card mb-4" style={{ height: "445px" }}>
               <article className="card-body">
                 <h5 className="card-title">Service Costs</h5>
-                <FuelChart />
-              </article>
-            </div>
-            <div className="card mb-3">
-              <article className="card-body">
-                <Listgroups title="Reminders" items={items} />
+                <DonutChart />
               </article>
             </div>
           </div>
