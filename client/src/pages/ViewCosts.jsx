@@ -132,32 +132,9 @@ const ViewCosts = () => {
     let totalCost = 0;
     costs.forEach((cost) => {
       tableData.push([cost.description, cost.cost, cost.date]);
-      totalCost += cost.cost;
-=======
+      totalCost += cost.cost
 
-    const filteredData = currentData?.filter((maintenance) => {
-        const cost = maintenance.cost;
-        const description = maintenance.description.toLowerCase();
-        const date = maintenance.date
-        const search = searchQuery.toLowerCase();
-
-        if (search) {
-            return (
-                (startDate === null || startDate <= date) &&
-                (endDate === null || date <= endDate) &&
-                 (
-                    (cost && cost.toString().includes(search)) ||
-                    description.includes(search) ||
-                    (date && date.toString().includes(search))
-                )
-
-            )
-        } else {
-            return (startDate === null || startDate <= date) &&
-            (endDate === null || date <= endDate) 
-        }
-
-    });
+    
     doc.autoTable({
       head: [
         [
@@ -173,7 +150,9 @@ const ViewCosts = () => {
       ],
       body: tableData,
       startY: 50,
-    });
+    })
+  });
+  
     doc.text(`Total: UGX ${totalCost}`, 15, doc.autoTable.previous.finalY + 10);
     doc.save(`Costs for ${numberPlate}.pdf`);
   };
