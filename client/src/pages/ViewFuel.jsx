@@ -16,13 +16,15 @@ import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import logo from "../assets/soliton.png";
-import { number } from "yup";
+import { date, number } from "yup";
 
 const ViewFuel = () => {
     const { id } = useParams();
     const [dataPerPage, setDataPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
+    const [startDate, setStartDate] = useState(null)
+    const [endDate, setEndDate] = useState(null)
 
     const { data: vehichleData } = useGetVehichleByIdQuery(id);
     const numberPlate = vehichleData?.number_plate;
@@ -78,25 +80,41 @@ const ViewFuel = () => {
         setDataPerPage(parseInt(e.target.value));
     };
 
+    const handleDateRange = (dateRange) => {
+        if(dateRange){
+            setStartDate( dateRange[0])
+            setEndDate( dateRange[1])
+        }else{
+            setStartDate(null)
+            setEndDate(null)
+        }
+        
+        
+    }
+
     const filteredData = currentData?.filter((fuel) => {
         const fuel_type = fuel.fuel_type.toLowerCase()
         const fuel_plate = fuel.fuel_plate.number_plate.toLowerCase()
         const mileage = fuel.mileage
         const amount = fuel.amount
-        const date_of_fueling = fuel.date_of_fueling.toLowerCase()
+        const date_of_fueling = fuel.date_of_fueling
         const search = searchQuery.toLowerCase()
 
         if (search) {
             return (
-                fuel_type.includes(search) ||
-                fuel_plate.includes(search) ||
-                (mileage && mileage.toString().includes(search)) ||
-                (amount && amount.toString().includes(search)) ||
-                (date_of_fueling && date_of_fueling.toString().includes(search))
+                (startDate <= date_of_fueling && date_of_fueling <= endDate) &&
+                (
+                    fuel_type.includes(search) ||
+                    fuel_plate.includes(search) ||
+                    (mileage && mileage.toString().includes(search)) ||
+                    (amount && amount.toString().includes(search)) ||
+                    (date_of_fueling && date_of_fueling.toString().includes(search))
+                )
             );
 
         } else {
-            return fuelArray;
+            //return fuelArray
+            return startDate <= date_of_fueling && date_of_fueling <=endDate;
 
         }
     });
@@ -144,6 +162,7 @@ const ViewFuel = () => {
         doc.save(`Fuel Costs for ${numberPlate}.pdf`);
       };
 
+      
 
     return (
         <Layout>
@@ -170,6 +189,28 @@ const ViewFuel = () => {
                                     className="form-control"
                                 />
                             </div>
+                        </div>
+                        <div className="col-lg-2 col-md-3 col-6">
+                            <div className="input-group">
+                                {/* <label className="form-label">Start:</label> */}
+                                <input type="date"
+                                className="form-control"
+                                value={ startDate }
+                                onChange={(e)=>setStartDate(e.target.value)}
+                                />
+                            </div>
+
+                        </div>
+                        <div className="col-lg-2 col-md-3 col-6">
+                            <div className="input-group">
+                                {/* <label className="form-label">End:</label> */}
+                                <input type="date"
+                                className="form-control"
+                                value={ endDate }
+                                onChange={(e) =>setEndDate(e.target.value)}
+                                />
+                            </div>
+
                         </div>
                         <div className="col-lg-2 col-md-3 col-6">
                             <select

@@ -22,6 +22,8 @@ const ViewCosts = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [dataPerPage, setDataPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
+    const [startDate, setStartDate] = useState(null)
+    const [ endDate, setEndDate] = useState(null)
 
     const { data: vehichleData } = useGetVehichleByIdQuery(id);
     const numberPlate = vehichleData?.number_plate;
@@ -83,19 +85,34 @@ const ViewCosts = () => {
         setDataPerPage(parseInt(e.target.value));
     };
 
+    const handleDateRange = (dateRange) => {
+        if (dateRange) {
+            setStartDate([dateRange(0)])
+            setEndDate([dateRange(1)])
+        } else {
+            setStartDate(null)
+            setEndDate(null)
+        }
+
+    }
+
     const filteredData = currentData?.filter((maintenance) => {
         const cost = maintenance.cost;
         const description = maintenance.description.toLowerCase();
+        const date = maintenance.date
         const search = searchQuery.toLowerCase();
 
         if (search) {
             return (
-                (cost && cost.toString().includes(search)) ||
-                description.includes(search) 
-                
+                (startDate <= date && date <= endDate) && (
+                    (cost && cost.toString().includes(search)) ||
+                    description.includes(search) ||
+                    (date && date.toString().includes(search))
+                )
+
             )
         } else {
-            return costs;
+            return startDate <= date && date <= endDate;
         }
     });
 
@@ -166,6 +183,24 @@ const ViewCosts = () => {
                                     className="form-control"
                                 />
                             </div>
+                        </div>
+                        <div className="col-lg-2 col-md-3 col-6">
+                            <input
+                            type="date"
+                            value={startDate}
+                            className="form-control"
+                            onChange={(e) => {setStartDate(e.target.value)}} 
+                            />
+
+                        </div>
+                        <div className="col-lg-2 col-md-3 col-6">
+                            <input
+                            type="date"
+                            value={endDate}
+                            className="form-control"
+                            onChange={(e) => {setEndDate(e.target.value)}} 
+                            />
+
                         </div>
                         <div className="col-lg-2 col-md-3 col-6">
                             <select
