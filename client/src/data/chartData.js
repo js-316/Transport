@@ -23,3 +23,18 @@ export const workorder = [
   { text: "Pending", badge: 14 },
 { text: "Done", badge: 14 },
 ];
+
+export const activities = [
+  {
+    time: "32 min",
+    badgeColor: "success",
+    content:"Lorem Ipsum dolor sit amet, consectetured"
+      
+  },
+  {
+    time: "56 min",
+    badgeColor: "danger",
+    content: "Voluptatem blanditiis blanditiis eveniet",
+  },
+ 
+];

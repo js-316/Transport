@@ -259,8 +259,8 @@ const Maintenance = () => {
             </thead>
             <tbody>
               {isLoading
-                ? [...Array(5)].map((_, i) => <TableLoader key={i} count={5} />)
-                : currentData.map((d, index) => (
+                ? [...Array(5)]?.map((_, i) => <TableLoader key={i} count={5} />)
+                : currentData?.map((d, index) => (
                     <tr key={index}>
                       <td>{d.fleet.number_plate}</td>
                       <td>{d.description}</td>

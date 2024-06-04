@@ -54,7 +54,7 @@ const Sidebar = () => {
         },
       ],
     },
-    
+
     {
       name: "Equipment",
       path: "/dashboard/equipment",
@@ -68,7 +68,8 @@ const Sidebar = () => {
         {
           name: "Inspection History",
           path: "/dashboard/inspections/inspection_history",
-          active: location.pathname === "/dashboard/inspections/insspection_history",
+          active:
+            location.pathname === "/dashboard/inspections/insspection_history",
         },
         {
           name: "Item failures",
@@ -176,7 +177,10 @@ const Sidebar = () => {
           Fleet Management
         </Link>
         <div>
-          <button onClick={toggleAside} className="btn btn-icon btn-aside-minimize">
+          <button
+            onClick={toggleAside}
+            className="btn btn-icon btn-aside-minimize"
+          >
             <i className="text-muted material-icons md-menu_open"></i>
           </button>
         </div>
@@ -192,7 +196,9 @@ const Sidebar = () => {
               <Link to={link.path} className="menu-link">
                 <i className={link.icon}></i>
                 <span className="text">{link.name}</span>
-                {link.submenu && <i className="material-icons md-arrow_drop_down"></i>}
+                {link.submenu && (
+                  <i className="material-icons md-arrow_drop_down"></i>
+                )}
               </Link>
               {link.submenu && (
                 <ul className="submenu">
@@ -215,10 +221,9 @@ const Sidebar = () => {
             </li>
           ))}
         </ul>
-
-      </nav >
-    </div >
+      </nav>
+    </div>
   );
 };
 
-export default Sidebar
+export default Sidebar;
