@@ -1,13 +1,18 @@
 export const Chartdata = [
-  
   { value: 484, name: "Union Ads" },
   { value: 300, name: "Video Ads" },
 ];
 export const statuses = [
-  { label: "Upcoming", count: 4, variant: "primary" },
-  { label: "Pending", count: 4, variant: "secondary" },
-  { label: "Done", count: 4, variant: "success" },
-  { label: "OverDue", count: 4, variant: "danger" },
+  { label: "All", count: 4, color: "primary" },
+  { label: "Pending", count: 4, color: "secondary" },
+  { label: "Open", count: 4, color: "success" },
+  { label: "Completed", count: 4, color: "success" },
+];
+
+export const Service_statuses = [
+  { label: "All", count: 4, color: "primary" },
+  { label: "OverDue", count: 4, color: "secondary" },
+  { label: "Due", count: 4, color: "success" },
 ];
 
 export const items = [
@@ -21,20 +26,18 @@ export const issues = [
 ];
 export const workorder = [
   { text: "Pending", badge: 14 },
-{ text: "Done", badge: 14 },
+  { text: "Done", badge: 14 },
 ];
 
 export const activities = [
   {
     time: "32 min",
     badgeColor: "success",
-    content:"Lorem Ipsum dolor sit amet, consectetured"
-      
+    content: "Lorem Ipsum dolor sit amet, consectetured",
   },
   {
     time: "56 min",
     badgeColor: "danger",
     content: "Voluptatem blanditiis blanditiis eveniet",
   },
- 
 ];
