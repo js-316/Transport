@@ -16,7 +16,7 @@ import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import logo from "../assets/soliton.png";
-import { date, number } from "yup";
+
 
 const ViewFuel = () => {
     const { id } = useParams();
@@ -102,7 +102,8 @@ const ViewFuel = () => {
 
         if (search) {
             return (
-                (startDate <= date_of_fueling && date_of_fueling <= endDate) &&
+                (startDate === null || startDate <= date_of_fueling) &&
+                (endDate === null || date_of_fueling <= endDate) &&
                 (
                     fuel_type.includes(search) ||
                     fuel_plate.includes(search) ||
@@ -114,7 +115,8 @@ const ViewFuel = () => {
 
         } else {
             //return fuelArray
-            return startDate <= date_of_fueling && date_of_fueling <=endDate;
+            return (startDate === null || startDate <= date_of_fueling) &&
+            (endDate === null || date_of_fueling <= endDate) 
 
         }
     });
