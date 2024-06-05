@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
 
-const AddFuel = () => {
+const AddPart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState(null);
@@ -34,7 +34,7 @@ const AddFuel = () => {
     setAppError(null);
     try {
       const res = await addFuel({
-        vehichle: data.fuel_plate,
+        vehichle: data.name,
         amount: data.amount,
         date_of_fueling: data.date_of_fueling,
         fuel_type: data.fuel_type,
@@ -44,7 +44,7 @@ const AddFuel = () => {
         navigate("/dashboard/fuel");
       }
     } catch (err) {
-      if (parseInt(err.status) !== err.status) {
+      if (parseInt(err.type) !== err.type) {
         setAppError("Network Error");
       } else {
         const parsedError = errorParser(err?.data);
@@ -62,12 +62,12 @@ const AddFuel = () => {
         <div className="content-header">
             <div>
               <div>
-                <Link to="/dashboard/fuel">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Fuel History
+                <Link to="/dashboard/parts">
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />Parts
                 </Link>
               </div>
               <h2 className="content-title">
-                Add Fuel Record</h2>
+                New Part</h2>
             </div>
 
           </div>
@@ -75,7 +75,7 @@ const AddFuel = () => {
         <div className="col-lg-12">
           <div className="card mb-4">
             <div className="card-header">
-              <h4>Fuel Information</h4>
+              <h4>Part Information</h4>
             </div>
             <div className="card-body">
               {appError && (
@@ -86,48 +86,21 @@ const AddFuel = () => {
 
               <form id="fuel_form" onSubmit={handleSubmit(handleAddFuel)}>
                 <div className="row">
-                  <div className="col-lg-4">
+                <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Vehichle</label>
-                      <div className="row gx-2">
-                      <select
-                          placeholder="Select Vehichle"
-                          className={`form-control ${
-                            errors.fuel_plate ? "is-invalid" : ""
-                          }`}
-                          {...register("fuel_plate")}
-                        >
-                          <option>Select Vehicle</option>
-                          {vehichlesArray?.map((d, index) => (
-                            <option key={index} value={d.id}>
-                              {d.number_plate}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.fuel_plate && (
-                          <div className="invalid-feedback">
-                            
-                            {errors.fuel_plate?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Mileage</label>
+                      <label className="form-label">Part Number</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="50,000"
+                          placeholder="Part identifier"
                           type="number"
                           className={`form-control ${
-                            errors.mileage ? "is-invalid" : ""
+                            errors.part_number ? "is-invalid" : ""
                           }`}
-                          {...register("mileage")}
+                          {...register("part_number")}
                         />
-                        {errors.mileage && (
+                        {errors.part_number && (
                           <div className="invalid-feedback">
-                            {errors.mileage?.message}
+                            {errors.part_number?.message}
                           </div>
                         )}
                       </div>
@@ -135,68 +108,127 @@ const AddFuel = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Amount</label>
+                      <label className="form-label">Description</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="50,000"
-                          type="number"
-                          className={`form-control ${
-                            errors.amount ? "is-invalid" : ""
-                          }`}
-                          {...register("amount")}
-                        />
-                        {errors.amount && (
-                          <div className="invalid-feedback">
-                            {errors.amount?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Fuel Type</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="Petrol"
+                          placeholder="Description"
                           type="text"
                           className={`form-control ${
-                            errors.fuel_type ? "is-invalid" : ""
+                            errors.description ? "is-invalid" : ""
                           }`}
-                          {...register("fuel_type")}
+                          {...register("description")}
                         />
-                        {errors.fuel_type && (
+                        {errors.description && (
                           <div className="invalid-feedback">
-                            {errors.fuel_type?.message}
+                            {errors.description?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Date of Fueling</label>
+                        <label className="form-label">Photo</label>
+                        <div className="row gx-2">
+                            <input
+                             type="file"
+                            accept="image/*"
+                            className="form-control"
+                            {...register("photo")}
+                            />
+                                {errors.photo && (
+                                <div className="invalid-feedback">
+                                {errors.photo?.message}
+                                </div>
+                                     )}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-lg-4">
+                            <div className="mb-4">
+                        <label className="form-label">Documents</label>
+                        <div className="row gx-2">
+                            <input
+                             type="file"
+                            accept=".pdf, .doc, .docx, .txt"
+                            className="form-control"
+                            {...register("documents")}
+                            />
+                                {errors.documents && (
+                                <div className="invalid-feedback">
+                                {errors.documents?.message}
+                                </div>
+                                     )}
+                                </div>
+                            </div>
+                        </div>
+                        
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Category</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="2022-02-02"
-                          type="date"
-                          max={new Date().toISOString().split("T")[0]}
+                          placeholder="e.g Belts,Tires,Fluids"
+                          type="text"
                           className={`form-control ${
-                            errors.date_of_fueling ? "is-invalid" : ""
+                            errors.category ? "is-invalid" : ""
                           }`}
-                          {...register("date_of_fueling")}
+                          {...register("category")}
                         />
-                        {errors.date_of_fueling && (
+                        {errors.category && (
                           <div className="invalid-feedback">
-                            {errors.date_of_fueling?.message}
+                            {errors.category?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Manufacturer Part #</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="Manufacturer Identifier"
+                          type="number"
+                          className={`form-control ${
+                            errors.manufacturer_part_number ? "is-invalid" : ""
+                          }`}
+                          {...register("manufacturer_part_number")}
+                        />
+                        {errors.manufacturer_part_number && (
+                          <div className="invalid-feedback">
+                            {errors.manufacturer_part_number?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Unit Cost</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="100,000"
+                          type="number"
+                          className={`form-control ${
+                            errors.unit_cost ? "is-invalid" : ""
+                          }`}
+                          {...register("unit_cost")}
+                        />
+                        {errors.unit_cost && (
+                          <div className="invalid-feedback">
+                            {errors.unit_cost?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
+                  
+                  
                 <button class="btn btn-primary" type="submit">
-                  {isLoading ? "Adding..." : "Add Fuel"}
+                  {isLoading ? "Adding..." : "Add Part"}
                 </button>
               </form>
             </div>
@@ -207,5 +239,5 @@ const AddFuel = () => {
   );
 };
 
-export default AddFuel;
+export default AddPart;
 

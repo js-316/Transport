@@ -1,47 +1,45 @@
 import React, { useState } from "react";
+import Layout from "../components/Layout";
 import { useDispatch } from "react-redux";
 import { useNavigate, Link} from "react-router-dom";
-import { fuelSchema } from "../util/validations";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Layout from "../components/Layout";
+import { maintenanceSchema } from "../util/validations";
+import { useAddMaintenanceMutation } from "../features/maintenance/maintenanceApiSlice";
 import { useForm } from "react-hook-form";
-import { useAddFuelMutation } from "../features/fuel/fuelApiSlice";
-import errorParser from "../util/errorParser";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useGetVehichlesQuery } from "../features/vehichle/vehicleApiSlice";
+import errorParser from "../util/errorParser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
+Link
 
-
-const AddFuel = () => {
+const AddExpense = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState(null);
-
   const { register, handleSubmit, formState } = useForm({
-    resolver: yupResolver(fuelSchema),
+    resolver: yupResolver(maintenanceSchema),
   });
 
+  const [addMaintenance, { isLoading, isSuccess }] =
+    useAddMaintenanceMutation();
+
   const { isLoading: loading, data } = useGetVehichlesQuery();
-
-  const [addFuel, { isLoading, isSuccess }] = useAddFuelMutation();
-
 
   const { ids, entities } = data || {};
 
   const vehichlesArray = ids?.map((id) => entities[id]);
 
-  const handleAddFuel = async (data) => {
+  const handleAddMaintenance = async (data) => {
     setAppError(null);
     try {
-      const res = await addFuel({
-        vehichle: data.fuel_plate,
-        amount: data.amount,
-        date_of_fueling: data.date_of_fueling,
-        fuel_type: data.fuel_type,
-        mileage: data.mileage,
+      const res = await addMaintenance({
+        service_task: data.service_task,
+        date: data.date,
+        cost: data.cost,
+        vehichle: data.fleet,
       }).unwrap();
-      if (res.fuel) {
-        navigate("/dashboard/fuel");
+      if (res.maintenance) {
+        navigate("/dashboard/maintenance");
       }
     } catch (err) {
       if (parseInt(err.status) !== err.status) {
@@ -62,12 +60,12 @@ const AddFuel = () => {
         <div className="content-header">
             <div>
               <div>
-                <Link to="/dashboard/fuel">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Fuel History
+                <Link to="/dashboard/vehichles/expenses_history">
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />Expense Entries
                 </Link>
               </div>
               <h2 className="content-title">
-                Add Fuel Record</h2>
+                New Expense Entry</h2>
             </div>
 
           </div>
@@ -75,7 +73,7 @@ const AddFuel = () => {
         <div className="col-lg-12">
           <div className="card mb-4">
             <div className="card-header">
-              <h4>Fuel Information</h4>
+              <h4>Expense Information</h4>
             </div>
             <div className="card-body">
               {appError && (
@@ -83,19 +81,21 @@ const AddFuel = () => {
                   {appError}
                 </div>
               )}
-
-              <form id="fuel_form" onSubmit={handleSubmit(handleAddFuel)}>
+              <form
+                id="driver_form"
+                onSubmit={handleSubmit(handleAddMaintenance)}
+              >
                 <div className="row">
-                  <div className="col-lg-4">
+                <div className="col-lg-6">
                     <div className="mb-4">
                       <label className="form-label">Vehichle</label>
                       <div className="row gx-2">
-                      <select
-                          placeholder="Select Vehichle"
+                        <select
+                          placeholder="Select Driver"
                           className={`form-control ${
-                            errors.fuel_plate ? "is-invalid" : ""
+                            errors.fleet ? "is-invalid" : ""
                           }`}
-                          {...register("fuel_plate")}
+                          {...register("fleet")}
                         >
                           <option>Select Vehicle</option>
                           {vehichlesArray?.map((d, index) => (
@@ -104,41 +104,40 @@ const AddFuel = () => {
                             </option>
                           ))}
                         </select>
-                        {errors.fuel_plate && (
+                        {errors.fleet && (
                           <div className="invalid-feedback">
-                            
-                            {errors.fuel_plate?.message}
+                            {errors.fleet?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-4">
+                  <div className="col-lg-6">
                     <div className="mb-4">
-                      <label className="form-label">Mileage</label>
+                      <label className="form-label">Expense</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="50,000"
-                          type="number"
+                          placeholder="e.g fines, insurance,loan"
+                          type="text"
                           className={`form-control ${
-                            errors.mileage ? "is-invalid" : ""
+                            errors.expense ? "is-invalid" : ""
                           }`}
-                          {...register("mileage")}
+                          {...register("expense")}
                         />
-                        {errors.mileage && (
+                        {errors.expense && (
                           <div className="invalid-feedback">
-                            {errors.mileage?.message}
+                            {errors.expense?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-4">
+                  <div className="col-lg-6">
                     <div className="mb-4">
                       <label className="form-label">Amount</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="50,000"
+                          placeholder="40,000"
                           type="number"
                           className={`form-control ${
                             errors.amount ? "is-invalid" : ""
@@ -153,21 +152,21 @@ const AddFuel = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-4">
+                  <div className="col-lg-6">
                     <div className="mb-4">
-                      <label className="form-label">Fuel Type</label>
+                      <label className="form-label">Date</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="Petrol"
-                          type="text"
+                          placeholder="2022-02-02"
+                          type="date"
                           className={`form-control ${
-                            errors.fuel_type ? "is-invalid" : ""
+                            errors.date ? "is-invalid" : ""
                           }`}
-                          {...register("fuel_type")}
+                          {...register("date")}
                         />
-                        {errors.fuel_type && (
+                        {errors.date && (
                           <div className="invalid-feedback">
-                            {errors.fuel_type?.message}
+                            {errors.date?.message}
                           </div>
                         )}
                       </div>
@@ -175,28 +174,66 @@ const AddFuel = () => {
                   </div>
                   <div className="col-lg-6">
                     <div className="mb-4">
-                      <label className="form-label">Date of Fueling</label>
+                      <label className="form-label">Notes</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="2022-02-02"
-                          type="date"
-                          max={new Date().toISOString().split("T")[0]}
+                          placeholder="Service Task"
+                          type="text"
                           className={`form-control ${
-                            errors.date_of_fueling ? "is-invalid" : ""
+                            errors.notes ? "is-invalid" : ""
                           }`}
-                          {...register("date_of_fueling")}
+                          {...register("notes")}
                         />
-                        {errors.date_of_fueling && (
+                        {errors.notes && (
                           <div className="invalid-feedback">
-                            {errors.date_of_fueling?.message}
+                            {errors.notes?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
+                  
+                  
+                  <div className="col-lg-6">
+                    <div className="mb-4">
+                        <label className="form-label">Photos</label>
+                        <div className="row gx-2">
+                            <input
+                             type="file"
+                            accept="image/*"
+                            className="form-control"
+                            {...register("photo")}
+                            />
+                                {errors.photo && (
+                                <div className="invalid-feedback">
+                                {errors.photo?.message}
+                                </div>
+                                     )}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-lg-4">
+                            <div className="mb-4">
+                                <label className="form-label">Documents</label>
+                                <div className="row gx-2">
+                                    <input
+                                    type="file"
+                                    accept=".pdf, .doc, .docx, .txt"
+                                    className="form-control"
+                                    {...register("documents")}
+                                    />
+                                    {errors.documents && (
+                                    <div className="invalid-feedback">
+                                    {errors.documents?.message}
+                                </div>
+                                )}
+                                </div>
+                        </div>
+                        </div>
+
                 </div>
-                <button class="btn btn-primary" type="submit">
-                  {isLoading ? "Adding..." : "Add Fuel"}
+                <button className="btn btn-primary" type="submit">
+                  {isLoading ? "Adding..." : "Add Expense"}
                 </button>
               </form>
             </div>
@@ -207,5 +244,4 @@ const AddFuel = () => {
   );
 };
 
-export default AddFuel;
-
+export default AddExpense;

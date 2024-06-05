@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
 
-const AddFuel = () => {
+const AddServiceReminder = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState(null);
@@ -44,7 +44,7 @@ const AddFuel = () => {
         navigate("/dashboard/fuel");
       }
     } catch (err) {
-      if (parseInt(err.status) !== err.status) {
+      if (parseInt(err.priority) !== err.priority) {
         setAppError("Network Error");
       } else {
         const parsedError = errorParser(err?.data);
@@ -62,12 +62,12 @@ const AddFuel = () => {
         <div className="content-header">
             <div>
               <div>
-                <Link to="/dashboard/fuel">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Fuel History
+                <Link to="/dashboard/service_reminders">
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />Service Reminders
                 </Link>
               </div>
               <h2 className="content-title">
-                Add Fuel Record</h2>
+                New Service Reminder</h2>
             </div>
 
           </div>
@@ -75,7 +75,7 @@ const AddFuel = () => {
         <div className="col-lg-12">
           <div className="card mb-4">
             <div className="card-header">
-              <h4>Fuel Information</h4>
+              <h4>Service Reminder Information</h4>
             </div>
             <div className="card-body">
               {appError && (
@@ -88,7 +88,7 @@ const AddFuel = () => {
                 <div className="row">
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Vehichle</label>
+                      <label className="form-label">Vehicle</label>
                       <div className="row gx-2">
                       <select
                           placeholder="Select Vehichle"
@@ -115,88 +115,102 @@ const AddFuel = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Mileage</label>
+                      <label className="form-label">Service Task</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="50,000"
-                          type="number"
-                          className={`form-control ${
-                            errors.mileage ? "is-invalid" : ""
-                          }`}
-                          {...register("mileage")}
-                        />
-                        {errors.mileage && (
-                          <div className="invalid-feedback">
-                            {errors.mileage?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Amount</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="50,000"
-                          type="number"
-                          className={`form-control ${
-                            errors.amount ? "is-invalid" : ""
-                          }`}
-                          {...register("amount")}
-                        />
-                        {errors.amount && (
-                          <div className="invalid-feedback">
-                            {errors.amount?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Fuel Type</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="Petrol"
+                          placeholder="Please select"
                           type="text"
                           className={`form-control ${
-                            errors.fuel_type ? "is-invalid" : ""
+                            errors.service_task ? "is-invalid" : ""
                           }`}
-                          {...register("fuel_type")}
+                          {...register("service_task")}
                         />
-                        {errors.fuel_type && (
+                        {errors.service_task && (
                           <div className="invalid-feedback">
-                            {errors.fuel_type?.message}
+                            {errors.service_task?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Date of Fueling</label>
+                      <label className="form-label">Time Interval</label>
+                      <div className="row gx-2">
+                        <div className="col-3">
+                          <input
+                            type="text"
+                            value="Every"
+                            disabled
+                            className="form-control"
+                          />
+                        </div>
+                        <div className="col-4">
+                          <input
+                            type="number"
+                            min="1"
+                            className="form-control"
+                            {...register("time_interval")}
+                          />
+                        </div>
+                        <div className="col-5">
+                          <select className="form-select" {...register("time_interval")}>
+                            <option value="days">Days</option>
+                            <option value="months">Months</option>
+                            <option value="years">Years</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Time Due Soon</label>
+                      <div className="row gx-2">
+                        <div className="col-4">
+                          <input
+                            type="number"
+                            min="1"
+                            className="form-control"
+                            {...register("time_due_soon")}
+                          />
+                        </div>
+                        <div className="col-8">
+                          <select className="form-select" {...register("time_due_soon")}>
+                            <option value="days">Day(s)</option>
+                            <option value="months">Month(s)</option>
+                            <option value="years">Year(s)</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Watcher To be Notified</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="2022-02-02"
-                          type="date"
-                          max={new Date().toISOString().split("T")[0]}
+                          placeholder="Select Watcher"
+                          type="text"
                           className={`form-control ${
-                            errors.date_of_fueling ? "is-invalid" : ""
+                            errors.watcher ? "is-invalid" : ""
                           }`}
-                          {...register("date_of_fueling")}
+                          {...register("watcher")}
                         />
-                        {errors.date_of_fueling && (
+                        {errors.watcher && (
                           <div className="invalid-feedback">
-                            {errors.date_of_fueling?.message}
+                            {errors.watcher?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
                 </div>
+                  
+                  
                 <button class="btn btn-primary" type="submit">
-                  {isLoading ? "Adding..." : "Add Fuel"}
+                  {isLoading ? "Adding..." : "Save Service Reminder"}
                 </button>
               </form>
             </div>
@@ -207,5 +221,5 @@ const AddFuel = () => {
   );
 };
 
-export default AddFuel;
+export default AddServiceReminder;
 

@@ -206,6 +206,7 @@ const Drivers = () => {
               <tr>
                 <th>Name</th>
                 <th>Phone Number</th>
+                <th>Age</th>
                 <th>Email</th>
                 <th>User Status</th>
                 <th>User Role</th>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { vehichleSchema } from "../util/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Layout from "../components/Layout";
@@ -8,6 +8,9 @@ import { useForm } from "react-hook-form";
 import { useAddVehicleMutation } from "../features/vehichle/vehicleApiSlice";
 import { useGetDriversQuery } from "../features/driver/driverApiSlice";
 import errorParser from "../util/errorParser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
+
 
 const AddVehichle = () => {
   const dispatch = useDispatch();
@@ -56,7 +59,16 @@ const AddVehichle = () => {
       <div className="row">
         <div className="col-9">
           <div className="content-header">
-            <h2 className="content-title">Add Vehichle</h2>
+            <div>
+              <div>
+                <Link to="/dashboard/vehichles">
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />Vehicles
+                </Link>
+              </div>
+              <h2 className="content-title">
+                Add Vehichle</h2>
+            </div>
+
           </div>
         </div>
         <div className="col-lg-12">
@@ -79,9 +91,8 @@ const AddVehichle = () => {
                         <input
                           placeholder="UAB 675T"
                           type="text"
-                          className={`form-control ${
-                            errors.number_plate ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.number_plate ? "is-invalid" : ""
+                            }`}
                           {...register("number_plate")}
                         />
                         {errors.number_plate && (
@@ -99,9 +110,8 @@ const AddVehichle = () => {
                         <input
                           placeholder="Pickup"
                           type="text"
-                          className={`form-control ${
-                            errors.vehichle_type ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.vehichle_type ? "is-invalid" : ""
+                            }`}
                           {...register("vehichle_type")}
                         />
                         {errors.vehichle_type && (
@@ -114,14 +124,52 @@ const AddVehichle = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
+                      <label className="form-label">Fuel Type</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="Petrol"
+                          type="text"
+                          className={`form-control ${errors.fuel_type ? "is-invalid" : ""
+                            }`}
+                          {...register("fuel_type")}
+                        />
+                        {errors.fuel_type && (
+                          <div className="invalid-feedback">
+                            {errors.fuel_type?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Year</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="2022-02-02"
+                          type="date"
+                          max={new Date().toISOString().split("T")[0]}
+                          className={`form-control ${errors.date_of_purchase ? "is-invalid" : ""
+                            }`}
+                          {...register("date_of_purchase")}
+                        />
+                        {errors.date_of_purchase && (
+                          <div className="invalid-feedback">
+                            {errors.date_of_purchase?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
                       <label className="form-label">Manufacturer</label>
                       <div className="row gx-2">
                         <input
                           placeholder="Toyota"
                           type="text"
-                          className={`form-control ${
-                            errors.manufacturer ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.manufacturer ? "is-invalid" : ""
+                            }`}
                           {...register("manufacturer")}
                         />
                         {errors.manufacturer && (
@@ -134,13 +182,31 @@ const AddVehichle = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
+                      <label className="form-label">Model</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="Toyota Harrier"
+                          type="text"
+                          className={`form-control ${errors.model ? "is-invalid" : ""
+                            }`}
+                          {...register("model")}
+                        />
+                        {errors.model && (
+                          <div className="invalid-feedback">
+                            {errors.model?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
                       <label className="form-label">Drivers</label>
                       <div className="row gx-2">
                         <select
                           placeholder="Select Driver"
-                          className={`form-control ${
-                            errors.driver ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.driver ? "is-invalid" : ""
+                            }`}
                           {...register("driver")}
                         >
                           <option>Select Driver</option>
@@ -158,16 +224,15 @@ const AddVehichle = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Mileage</label>
                       <div className="row gx-2">
                         <input
                           placeholder="40"
                           type="number"
-                          className={`form-control ${
-                            errors.mileage ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.mileage ? "is-invalid" : ""
+                            }`}
                           {...register("mileage")}
                         />
                         {errors.mileage && (
@@ -178,22 +243,57 @@ const AddVehichle = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Date of Purchase</label>
+                        <label className="form-label">Photos</label>
+                        <div className="row gx-2">
+                            <input
+                             type="file"
+                            accept="image/*"
+                            className="form-control"
+                            {...register("photo")}
+                            />
+                                {errors.photo && (
+                                <div className="invalid-feedback">
+                                {errors.photo?.message}
+                                </div>
+                                     )}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Status</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="2022-02-02"
-                          type="date"
-                          max={new Date().toISOString().split("T")[0]}
-                          className={`form-control ${
-                            errors.date_of_purchase ? "is-invalid" : ""
-                          }`}
-                          {...register("date_of_purchase")}
+                          placeholder="Please select"
+                          type="text"
+                          className={`form-control ${errors.status ? "is-invalid" : ""
+                            }`}
+                          {...register("status")}
                         />
-                        {errors.date_of_purchase && (
+                        {errors.status && (
                           <div className="invalid-feedback">
-                            {errors.date_of_purchase?.message}
+                            {errors.status?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Ownership</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="e.g Owned,Rented"
+                          type="text"
+                          className={`form-control ${errors.ownership ? "is-invalid" : ""
+                            }`}
+                          {...register("ownership")}
+                        />
+                        {errors.ownership && (
+                          <div className="invalid-feedback">
+                            {errors.ownership?.message}
                           </div>
                         )}
                       </div>

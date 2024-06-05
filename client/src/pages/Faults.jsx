@@ -168,7 +168,7 @@ const WorkOrder = () => {
         <h2 className="content-title">Faults</h2>
         <div>
           <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Add Faults
+            <i className="material-icons md-plus"></i> Add Fault
           </Link>
 
           <button onClick={exportToPDF} className="btn btn-success mx-2">

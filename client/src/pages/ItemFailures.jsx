@@ -211,7 +211,7 @@ const Vehichles = () => {
             <i className="material-icons md-import_export"></i>
             Import
           </Link>
-          <Link to="add" className="btn btn-primary">
+          <Link to="/dashboard/inspections/inspection_history/add" className="btn btn-primary">
             <i className="material-icons md-plus"></i> Start Inspection
           </Link>
           <input

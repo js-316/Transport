@@ -220,10 +220,12 @@ const Issues = () => {
           <table className="table table-hover">
             <thead>
               <tr>
-                <th>Vehichle</th>
                 <th>Priority</th>
+                <th>Vehichle</th>
+                <th>Issue</th>
                 <th>Summary</th>
                 <th>Issue Status</th>
+                <th>Source</th>
                 <th>Reported Date </th>
                 <th>Reported By </th>
               </tr>
@@ -233,6 +235,7 @@ const Issues = () => {
                 ? [...Array(5)].map((_, i) => <TableLoader key={i} count={5} />)
                 : currentData.map((d, index) => (
                     <tr key={index}>
+                      <td>No Priority</td>
                       <td>{d.fleet.number_plate}</td>
                       <td>{d.description}</td>
                       <td>{d.cost}</td>
