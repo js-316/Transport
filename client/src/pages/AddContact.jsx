@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
 
-const AddDriver = () => {
+const AddContact = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState(null);
@@ -58,12 +58,12 @@ const AddDriver = () => {
           <div className="content-header">
             <div>
               <div>
-                <Link to="/dashboard/drivers">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Drivers
+                <Link to="/dashboard/contacts">
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />Contacts
                 </Link>
               </div>
               <h2 className="content-title">
-                Add Driver</h2>
+                Add Contact</h2>
             </div>
 
           </div>
@@ -71,7 +71,7 @@ const AddDriver = () => {
         <div className="col-lg-12">
           <div className="card mb-4">
             <div className="card-header">
-              <h4>Driver Information</h4>
+              <h4>Contact Information</h4>
             </div>
             <div className="card-body">
               {appError && (
@@ -136,7 +136,26 @@ const AddDriver = () => {
                       )}
                     </div>
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Email</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="john@example.com"
+                          type="text"
+                          className={`form-control ${errors.email ? "is-invalid" : ""
+                            }`}
+                          {...register("email")}
+                        />
+                        {errors.email && (
+                          <div className="invalid-feedback">
+                            {errors.email?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Age</label>
                       <div className="row gx-2">
@@ -155,7 +174,25 @@ const AddDriver = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                        <label className="form-label">Profile Photo</label>
+                        <div className="row gx-2">
+                            <input
+                             type="file"
+                            accept="image/*"
+                            className="form-control"
+                            {...register("profile_photo")}
+                            />
+                                {errors.profile_photo && (
+                                <div className="invalid-feedback">
+                                {errors.profile_photo?.message}
+                                </div>
+                                     )}
+                                </div>
+                            </div>
+                        </div>
+                  <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Date Hired</label>
                       <div className="row gx-2">
@@ -175,21 +212,21 @@ const AddDriver = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Date Hired</label>
+                      <label className="form-label">Job Title</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="2022-02-02"
-                          type="date"
-                          max={new Date().toISOString().split("T")[0]}
-                          className={`form-control ${errors.date_hired ? "is-invalid" : ""
+                          placeholder="Driver"
+                          type="text"
+                          
+                          className={`form-control ${errors.job_title ? "is-invalid" : ""
                             }`}
-                          {...register("date_hired")}
+                          {...register("job_title")}
                         />
-                        {errors.date_hired && (
+                        {errors.job_title && (
                           <div className="invalid-feedback">
-                            {errors.date_hired?.message}
+                            {errors.job_title?.message}
                           </div>
                         )}
                       </div>
@@ -197,7 +234,7 @@ const AddDriver = () => {
                   </div>
                 </div>
                 <button class="btn btn-primary" type="submit">
-                  {isLoading ? "Adding..." : "Add Driver"}
+                  {isLoading ? "Adding..." : "Add Contact"}
                 </button>
               </form>
             </div>
@@ -208,4 +245,4 @@ const AddDriver = () => {
   );
 };
 
-export default AddDriver;
+export default AddContact;

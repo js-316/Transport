@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
 
-const AddFuel = () => {
+const AddMeter = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState(null);
@@ -44,7 +44,7 @@ const AddFuel = () => {
         navigate("/dashboard/fuel");
       }
     } catch (err) {
-      if (parseInt(err.status) !== err.status) {
+      if (parseInt(err.priority) !== err.priority) {
         setAppError("Network Error");
       } else {
         const parsedError = errorParser(err?.data);
@@ -62,12 +62,12 @@ const AddFuel = () => {
         <div className="content-header">
             <div>
               <div>
-                <Link to="/dashboard/fuel">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Fuel History
+                <Link to="/dashboard/vehichles/meter_history">
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />Meter History
                 </Link>
               </div>
               <h2 className="content-title">
-                Add Fuel Record</h2>
+                New Issue</h2>
             </div>
 
           </div>
@@ -75,7 +75,7 @@ const AddFuel = () => {
         <div className="col-lg-12">
           <div className="card mb-4">
             <div className="card-header">
-              <h4>Fuel Information</h4>
+              <h4>Issue Information</h4>
             </div>
             <div className="card-body">
               {appError && (
@@ -88,7 +88,7 @@ const AddFuel = () => {
                 <div className="row">
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Vehichle</label>
+                      <label className="form-label">Vehicle</label>
                       <div className="row gx-2">
                       <select
                           placeholder="Select Vehichle"
@@ -115,88 +115,52 @@ const AddFuel = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Mileage</label>
+                      <label className="form-label">Meter</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="50,000"
+                          placeholder="167,876"
                           type="number"
                           className={`form-control ${
-                            errors.mileage ? "is-invalid" : ""
+                            errors.meter ? "is-invalid" : ""
                           }`}
-                          {...register("mileage")}
+                          {...register("meter")}
                         />
-                        {errors.mileage && (
+                        {errors.meter && (
                           <div className="invalid-feedback">
-                            {errors.mileage?.message}
+                            {errors.meter?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
+                  
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Amount</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="50,000"
-                          type="number"
-                          className={`form-control ${
-                            errors.amount ? "is-invalid" : ""
-                          }`}
-                          {...register("amount")}
-                        />
-                        {errors.amount && (
-                          <div className="invalid-feedback">
-                            {errors.amount?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Fuel Type</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="Petrol"
-                          type="text"
-                          className={`form-control ${
-                            errors.fuel_type ? "is-invalid" : ""
-                          }`}
-                          {...register("fuel_type")}
-                        />
-                        {errors.fuel_type && (
-                          <div className="invalid-feedback">
-                            {errors.fuel_type?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-6">
-                    <div className="mb-4">
-                      <label className="form-label">Date of Fueling</label>
+                      <label className="form-label">Meter Date</label>
                       <div className="row gx-2">
                         <input
                           placeholder="2022-02-02"
                           type="date"
                           max={new Date().toISOString().split("T")[0]}
                           className={`form-control ${
-                            errors.date_of_fueling ? "is-invalid" : ""
+                            errors.meter_date ? "is-invalid" : ""
                           }`}
-                          {...register("date_of_fueling")}
+                          {...register("meter_date")}
                         />
-                        {errors.date_of_fueling && (
+                        {errors.meter_date && (
                           <div className="invalid-feedback">
-                            {errors.date_of_fueling?.message}
+                            {errors.meter_date?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
+
                 </div>
+                  
+                  
                 <button class="btn btn-primary" type="submit">
-                  {isLoading ? "Adding..." : "Add Fuel"}
+                  {isLoading ? "Adding..." : "Save Issue"}
                 </button>
               </form>
             </div>
@@ -207,5 +171,5 @@ const AddFuel = () => {
   );
 };
 
-export default AddFuel;
+export default AddMeter;
 

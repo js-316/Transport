@@ -38,6 +38,19 @@ import Issues from "./pages/Issues"
 import Faults from "./pages/Faults"
 import Contacts from "./pages/Contacts"
 import Parts from "./pages/Parts"
+import AddWorkOrder from "./pages/AddWorkOrder";
+import AddEquipment from "./pages/AddEquipment";
+import AddInspection from "./pages/AddInspection";
+import AddIssue from "./pages/AddIssue";
+import AddFault from "./pages/AddFault";
+import AddServiceReminder from "./pages/AddServiceReminder";
+import AddVehicleReminder from "./pages/AddVehicleRenewal";
+import AddContactReminder from "./pages/AddContactRenewal";
+import AddContact from "./pages/AddContact";
+import AddExpense from "./pages/AddExpense";
+import AddPart from "./pages/AddPart";
+import AddMeter from "./pages/AddMeter";
+
 
 
 function App() {
@@ -94,13 +107,22 @@ function App() {
           path: "vehichles/fuel_view/:id",
           element: <ViewFuel />,
         },
+        
+        {
+          path: "vehichles/expenses_history",
+          element: <ExpensesHistory />,
+        },
+        {
+          path: "vehichles/expenses_history/add",
+          element: <AddExpense />,
+        },
         {
           path: "vehichles/meter_history",
           element: <MeterHistory />,
         },
         {
-          path: "vehichles/expenses_history",
-          element: <ExpensesHistory />,
+          path: "vehichles/meter_history/add",
+          element: <AddMeter />,
         },
         {
           path: "maintenance",
@@ -119,22 +141,40 @@ function App() {
           element: <WorkOrder />,
         },
         {
+          path: "maintenance/work_order/add",
+          element: <AddWorkOrder />,
+        },
+        {
           path: "service_reminders",
           element: <Service_Reminders />,
         },
-
+        {
+          path: "service_reminders/add",
+          element: <AddServiceReminder />,
+        },
         {
           path: "contact_reminders",
           element: < Contact_Reminders/>,
         },
-
+        {
+          path: "contact_reminders/add",
+          element: < AddContactReminder/>,
+        },
         {
           path: "vehicle_reminders",
           element: <Vehicle_Reminder />,
         },
         {
+          path: "vehicle_reminders/add",
+          element: <AddVehicleReminder />,
+        },
+        {
           path: "equipment",
           element: <Equipment/>
+        },
+        {
+          path: "equipment/add",
+          element: <AddEquipment/>
         },
         {
           path: "inspections/item_failures",
@@ -149,16 +189,32 @@ function App() {
           element: <InspectionHistory />
         },
         {
+          path: "inspections/inspection_history/add",
+          element: <AddInspection />
+        },
+        {
           path: "issues",
           element: <Issues />
+        },
+        {
+          path: "issues/add",
+          element: <AddIssue />
         },
         {
           path: "issues/faults",
           element: <Faults />
         },
         {
+          path: "issues/faults/add",
+          element: <AddFault />
+        },
+        {
           path: "contacts",
           element: <Contacts />
+        },
+        {
+          path: "contacts/add",
+          element: <AddContact />
         },
         {
           path: "fuel",
@@ -176,7 +232,10 @@ function App() {
           path: "parts",
           element: <Parts />,
         },
-
+        {
+          path: "parts/add",
+          element: <AddPart />,
+        },
         {
           path: "logout",
           element: <Logout />,

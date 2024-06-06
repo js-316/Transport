@@ -32,7 +32,7 @@ export const workorder = [
 export const activities = [
   {
     time: "32 min",
-    badgeColor: "success",
+    badgeColor: "primary",
     content: "Lorem Ipsum dolor sit amet, consectetured",
   },
   {
