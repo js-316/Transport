@@ -153,7 +153,7 @@ const Vehicle_Reminders = () => {
     doc.text(`Total Cost: ${totalCost}`, 10, 20);
 
     // Prepare table data
-    const tableData = vehicleMaintenances.map((record) => [
+    const tableData = vehicleMaintenances?.map((record) => [
       record.date,
       record.description,
       record.cost,
@@ -221,7 +221,7 @@ const Vehicle_Reminders = () => {
                 onChange={(e) => costsExportToPDF(e.target.value)}
               >
                 <option>Calculate Cost</option>
-                {uniqueVehicles.map((number_plate, index) => (
+                {uniqueVehicles?.map((number_plate, index) => (
                   <option key={index} value={number_plate}>
                     {number_plate}
                   </option>
@@ -243,8 +243,8 @@ const Vehicle_Reminders = () => {
             </thead>
             <tbody>
               {isLoading
-                ? [...Array(5)].map((_, i) => <TableLoader key={i} count={5} />)
-                : currentData.map((d, index) => (
+                ? [...Array(5)]?.map((_, i) => <TableLoader key={i} count={5} />)
+                : currentData?.map((d, index) => (
                     <tr key={index}>
                       <td>{d.fleet.number_plate}</td>
                       <td>{d.description}</td>

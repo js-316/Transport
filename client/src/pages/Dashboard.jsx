@@ -54,7 +54,6 @@ const Dashboard = () => {
     { text: "vehicle Failures", badge: 14 },
     { text: "Faults", badge: 2 },
   ];
-  const workorder = [{ text: "Work Orders", badge: 14 }];
 
   return (
     <Layout>

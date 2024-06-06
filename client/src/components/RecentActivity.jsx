@@ -9,7 +9,7 @@ const RecentActivity = ({ title, activities }) => {
         {title} <span>| Today</span>
       </h5>
       <div className="activity">
-        {activities.map((activity, index) => (
+        {activities?.map((activity, index) => (
           <div key={index} className="activity-item d-flex">
             <div className="activity-label">{activity.time}</div>
             <i
