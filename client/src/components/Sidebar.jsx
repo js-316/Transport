@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -33,6 +35,12 @@ const Sidebar = () => {
       ],
     },
     {
+      name: "DriverDashboard",
+      path: "/dashboard/userdashboard",
+      icon: "icon material-icons md-home",
+      active: location.pathname === "/dashboard/userdashboard",
+    },
+    {
       name: "Drivers",
       path: "/dashboard/drivers",
       icon: "icon material-icons md-person",
@@ -48,13 +56,12 @@ const Sidebar = () => {
           active: location.pathname === "/dashboard/maintenance",
         },
         {
-          name: "Work Orders",
+          name: "Job Cards",
           path: "/dashboard/maintenance/work_order",
           active: location.pathname === "/dashboard/maintenance/work_order",
         },
       ],
     },
-
     {
       name: "Equipment",
       path: "/dashboard/equipment",
@@ -160,7 +167,7 @@ const Sidebar = () => {
   const toggleSubMenu = (link) => {
     const updatedMenuLinks = menuLinks.map((menuLink) => {
       if (menuLink === link) {
-        menuLink.active = true;
+        menuLink.active = !menuLink.active;
         setCurrentMenuItem(link);
       } else {
         menuLink.active = false;
@@ -171,7 +178,10 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="navbar-aside ps" id="offcanvas_aside">
+    <div
+      className={`navbar-aside ps ${toggleMenu ? "open" : ""}`}
+      id="offcanvas_aside"
+    >
       <div className="aside-top">
         <Link to="/dashboard" className="brand-wrap">
           Fleet Management
@@ -191,7 +201,7 @@ const Sidebar = () => {
             <li
               key={index}
               className={`${link.active ? "menu-item active" : "menu-item"}`}
-              onClick={index.onClick}
+              onClick={() => toggleSubMenu(link)}
             >
               <Link to={link.path} className="menu-link">
                 <i className={link.icon}></i>
@@ -204,7 +214,7 @@ const Sidebar = () => {
                 <ul className="submenu">
                   {link.submenu.map((submenuItem, submenuIndex) => (
                     <li key={submenuIndex}>
-                      <Link to={submenuItem.path} className="menu-link">
+                      <Link to={submenuItem.path} className="">
                         <span className="text">{submenuItem.name}</span>
                       </Link>
                     </li>

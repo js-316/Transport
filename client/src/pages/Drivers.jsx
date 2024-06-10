@@ -208,6 +208,10 @@ const Drivers = () => {
                 <th>Phone Number</th>
                 <th>Age</th>
                 <th>Date Hired</th>
+                <th>License Number</th>
+                <th>vehicle Number</th>
+                <th>Permit Issue Date</th>
+                <th>Permit Expire date</th>
                 <th className="text-end"> Action </th>
               </tr>
             </thead>

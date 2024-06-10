@@ -59,7 +59,7 @@ const Dashboard = () => {
     <Layout>
       <div className="content-header">
         <div>
-          <h2 className="content-title card-title">My Dashboard </h2>
+          <h2 className="content-title card-title">Admin Dashboard </h2>
         </div>
       </div>
       <div className="row">
@@ -89,7 +89,7 @@ const Dashboard = () => {
           <div className="col-md-4">
             <div className="card mb-3">
               <article className="card-body">
-                <Listgroups title="Work Orders" items={workorder} />
+                <Listgroups title="Job Cards" items={workorder} />
               </article>
             </div>
           </div>

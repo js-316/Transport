@@ -50,7 +50,7 @@ import AddContact from "./pages/AddContact";
 import AddExpense from "./pages/AddExpense";
 import AddPart from "./pages/AddPart";
 import AddMeter from "./pages/AddMeter";
-
+import UserDashboard from './pages/User/UserDashboard';
 
 
 function App() {
@@ -107,7 +107,7 @@ function App() {
           path: "vehichles/fuel_view/:id",
           element: <ViewFuel />,
         },
-        
+
         {
           path: "vehichles/expenses_history",
           element: <ExpensesHistory />,
@@ -152,13 +152,14 @@ function App() {
           path: "service_reminders/add",
           element: <AddServiceReminder />,
         },
+        
         {
           path: "contact_reminders",
-          element: < Contact_Reminders/>,
+          element: <Contact_Reminders />,
         },
         {
           path: "contact_reminders/add",
-          element: < AddContactReminder/>,
+          element: <AddContactReminder />,
         },
         {
           path: "vehicle_reminders",
@@ -170,51 +171,51 @@ function App() {
         },
         {
           path: "equipment",
-          element: <Equipment/>
+          element: <Equipment />,
         },
         {
           path: "equipment/add",
-          element: <AddEquipment/>
+          element: <AddEquipment />,
         },
         {
           path: "inspections/item_failures",
-          element: <ItemFailures />
+          element: <ItemFailures />,
         },
         {
           path: "inspections/schedules",
-          element: <Schedules />
+          element: <Schedules />,
         },
         {
           path: "inspections/inspection_history",
-          element: <InspectionHistory />
+          element: <InspectionHistory />,
         },
         {
           path: "inspections/inspection_history/add",
-          element: <AddInspection />
+          element: <AddInspection />,
         },
         {
           path: "issues",
-          element: <Issues />
+          element: <Issues />,
         },
         {
           path: "issues/add",
-          element: <AddIssue />
+          element: <AddIssue />,
         },
         {
           path: "issues/faults",
-          element: <Faults />
+          element: <Faults />,
         },
         {
           path: "issues/faults/add",
-          element: <AddFault />
+          element: <AddFault />,
         },
         {
           path: "contacts",
-          element: <Contacts />
+          element: <Contacts />,
         },
         {
           path: "contacts/add",
-          element: <AddContact />
+          element: <AddContact />,
         },
         {
           path: "fuel",
@@ -240,8 +241,6 @@ function App() {
           path: "logout",
           element: <Logout />,
         },
-
-
         {
           path: "service_reminders",
           element: <Service_Reminders />,
@@ -257,9 +256,10 @@ function App() {
           element: <Vehicle_Reminder />,
         },
         {
-          path: "staff",
-          element: <Staff/>,
+          path: "userdashboard",
+          element: <UserDashboard/>,
         },
+        
       ],
     },
   ]);
