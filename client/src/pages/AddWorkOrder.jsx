@@ -30,11 +30,7 @@ const AddWorkOrder = () => {
 
   const vehichlesArray = ids?.map((id) => entities[id]);
 
-   const assigneesArray = [
-     { id: 1, name: "John Doe" },
-     { id: 2, name: "Jane Smith" },
-     // Add more assignees here
-   ];
+   
 
   const handleAddFuel = async (data) => {
     setAppError(null);
@@ -197,31 +193,6 @@ const AddWorkOrder = () => {
                         {errors.expected_completion_date && (
                           <div className="invalid-feedback">
                             {errors.expected_completion_date?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Assigned To</label>
-                      <div className="row gx-2">
-                        <select
-                          className={`form-control ${
-                            errors.assigned_to ? "is-invalid" : ""
-                          }`}
-                          {...register("assigned_to")}
-                        >
-                          <option>Select Assignee</option>
-                          {assigneesArray?.map((assignee) => (
-                            <option key={assignee.id} value={assignee.id}>
-                              {assignee.name}
-                            </option>
-                          ))};
-                          </select>
-                        {errors.fuel_type && (
-                          <div className="invalid-feedback">
-                            {errors.fuel_type?.message}
                           </div>
                         )}
                       </div>
