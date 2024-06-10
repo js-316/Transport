@@ -24,6 +24,7 @@ from .views import (
     FuelListView,
     FuelDetailView,
     FuelEditView,
+    DriverDashboardView
 
 )
 
@@ -56,6 +57,8 @@ urlpatterns = [
     path('fuel/<int:pk>/' ,FuelDetailView.as_view(), name ='fuel-detail'),
     path('fuel/create/', FuelCreateView.as_view(), name='fuel-create'),
     path('fuel/edit/<int:pk>', FuelEditView.as_view(), name='fuel-edit'),
+    path('driver_dashboard/', DriverDashboardView.as_view(), name='driver_dashboard'),
+
     
     
 ]

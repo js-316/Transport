@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+
 const Sidebar = () => {
+ 
   const location = useLocation();
   const [toggleMenu, setToggleMenu] = useState(false);
+
+  const token = localStorage.getItem('token');
+  const user = parseToken(token);
+
+  function parseToken(token) {
+    if (!token) return null;
+    const decoded = JSON.parse(atob(token.split('.')[1]));
+    return decoded.user;
+  }
+ 
   const [menuLinks, setMenuLinks] = useState([
     {
       name: "Dashboard",
@@ -60,6 +72,7 @@ const Sidebar = () => {
       path: "/dashboard/equipment",
       icon: "icon material-icons md-handyman",
       active: location.pathname === "/dashboard/equipment",
+      // display: user?.is_driver,
     },
     {
       name: "Inspections",

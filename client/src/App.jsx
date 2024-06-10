@@ -1,6 +1,6 @@
 import {
   createBrowserRouter as Router,
-  RouterProvider, BrowserRouter,Routes,Route
+  RouterProvider,Route,
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
@@ -50,10 +50,14 @@ import AddContact from "./pages/AddContact";
 import AddExpense from "./pages/AddExpense";
 import AddPart from "./pages/AddPart";
 import AddMeter from "./pages/AddMeter";
+import { useState } from "react";
+
 
 
 
 function App() {
+
+
 
   const routes = Router([
     {
@@ -74,10 +78,12 @@ function App() {
         {
           path: "",
           element: <Dashboard />,
+          display: true,
         },
         {
           path: "drivers",
           element: <Drivers />,
+         
         },
         {
           path: "drivers/add",
@@ -86,6 +92,18 @@ function App() {
         {
           path: "drivers/edit/:id",
           element: <EditDriver />,
+        },
+        {
+          path: "drivers",
+          element: <RequireAuth />,
+          children: [
+            {
+              path: "",
+              element: <Drivers />,
+              
+            },
+            
+          ],
         },
         {
           path: "vehichles",
@@ -260,9 +278,11 @@ function App() {
           path: "staff",
           element: <Staff/>,
         },
+        
       ],
     },
   ]);
+
 
   return (
     <>
