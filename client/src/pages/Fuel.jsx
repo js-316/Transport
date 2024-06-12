@@ -22,19 +22,28 @@ const Fuel = () => {
 
   const user = useSelector(selectUser);
 
-  
-
   const [importError, setImportError] = useState(null);
   const [AppError, setAppError] = useState(null);
+
   const { isLoading, data, refetch } = useGetFuelQuery();
   const [importFuel, { isLoading: isImporting }] = useImportFuelMutation();
-  const { ids, entities } = data || {};
-  const fuelArray = ids?.map((id) => entities[id]);
-  
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedNumberPlate, setSelectedNumberPlate] = useState('All');
   const uploadRef = useRef(null);
 
+
+  const [dataPerPage, setDataPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const handleDataPerPage = (e) => setDataPerPage(parseInt(e.target.value));
+
+  
+  
+  const { ids, entities } = data || {};
+  const fuelArray = ids?.map((id) => entities[id]);
+  
+  
   const handleFileUpload = async (e) => {
     setImportError(null);
     const file = e.target.files[0];
@@ -119,14 +128,10 @@ const Fuel = () => {
     ...new Set(fuelArray?.map((fuel) => fuel.fuel_plate.number_plate)),
   ];
 
-  const [dataPerPage, setDataPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfFirstData + dataPerPage);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const handleDataPerPage = (e) => setDataPerPage(parseInt(e.target.value));
 
   const exportToPDF = () => {
     const doc = new jsPDF();
@@ -235,7 +240,16 @@ const Fuel = () => {
                 <th>Usage</th>
                 <th>Volume Unit</th>
                 <th>Fuel Capacity Alert</th>
-                <th className="text-end"> Action </th>
+                { user?.is_staff ? (
+                  <>
+
+                    <th className="text-end"> Action </th>
+                  </>
+                ):null
+                }
+
+                
+
               </tr>
             </thead>
             <tbody>
@@ -250,24 +264,29 @@ const Fuel = () => {
                       <td>{d.amount}</td>
                       <td>Usage</td>
                       <td>Volume Unit</td>
-                      <td>Costs Per Meter</td>
                       <td>Fuel Capacity Alert</td>
-                      <td className="text-center" style={{whiteSpace:"noWrap"}}>
-                        <Link
-                          to={`edit/${d.id}`}
-                          className="btn btn-sm font-sm rounded btn-brand mx-4"
-                        >
-                          <i className="material-icons md-edit"></i>
-                          Edit
-                        </Link>
-                        <button
-                          onClick={() => handleDeleteFuel(d.id)}
-                          className="btn btn-sm font-sm rounded btn-danger"
-                        >
-                          <i className="material-icons md-delete"></i>
-                          Delete
-                        </button>
-                      </td>
+                    {
+                      user?.is_staff ? (
+                        <>
+                          <td className="text-end">
+                            <Link
+                              to={`edit/${d.id}`}
+                              className="btn btn-sm font-sm rounded btn-brand mx-4"
+                            >
+                              <i className="material-icons md-edit"></i>
+                              Edit
+                            </Link>
+                            <button
+                              onClick={() => handleDeleteFuel(d.id)}
+                              className="btn btn-sm font-sm rounded btn-danger"
+                            >
+                              <i className="material-icons md-delete"></i>
+                              Delete
+                            </button>
+                          </td>
+                        </>
+                      ) : null
+                    }
                     </tr>
                   ))}
             </tbody>
