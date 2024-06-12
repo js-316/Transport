@@ -15,8 +15,15 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from "react-redux";
+import { selectUser } from "../features/auth/authSlice";
 
 const Fuel = () => {
+
+  const user = useSelector(selectUser);
+
+  
+
   const [importError, setImportError] = useState(null);
   const [AppError, setAppError] = useState(null);
   const { isLoading, data, refetch } = useGetFuelQuery();

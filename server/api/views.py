@@ -10,9 +10,21 @@ from .models import User, Driver, Vehichle, Maintenance, Fuel
 from .serializers import UserSerializer, DriverSerializer, VehichleSerializer, MaintenanceSerializer,FuelSerializer
 from django import forms
 from datetime import datetime
+# from .management.permissions import create_permissions
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.contrib.auth.mixins import UserPassesTestMixin
+
+from django.views.generic import TemplateView
+# from .mixins import PermissionMixin
+
 
 import io
 import csv
+
+# dashboard/views.py
+
+
 
 # NOTE: used post method to create new objects because of foreign key constraints issues
 
@@ -21,8 +33,20 @@ from django.http import HttpResponse
 
 class UserCreateView(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
+    # permission_classes = [IsAdmin,IsDriver,IsEngineer]
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+class PermissionMixin(UserPassesTestMixin):
+    def test_func(self):
+        user = self.request.user
+        permissions = [permission for group in user.groups.all() for permission in group.permissions.all()]
+        print(f"Checking permissions: {permissions}")
+        return any(permission in permissions for permission in self.required_permissions)
+    
+class DriverDashboardView(PermissionMixin, TemplateView):
+    template_name = 'driver_dashboard.html'
+    required_permissions = ['view_dashboard', 'view_drivers']
 
 class StaffCreateView(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
@@ -51,7 +75,12 @@ class CustomAuthToken(ObtainAuthToken):
             'user': {
             'user_id': user.pk,
             'email': user.email,
-            'is_staff': user.is_staff
+            'is_superuser': user.is_superuser,
+            'is_admin' : user.is_admin,
+            'is_staff': user.is_staff,
+            'is_driver': user.is_driver,
+            'is_engineer': user.is_engineer,
+            
             }
         })
 
@@ -60,6 +89,7 @@ class DriverListView(generics.ListAPIView):
     queryset = Driver.objects.all()
     serializer_class = DriverSerializer
     permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = [IsAdmin]
 
 class DriverDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Driver.objects.all()
@@ -144,6 +174,11 @@ class ImportDriver(generics.CreateAPIView):
                 return Response({'message': f'Error processing row: {e}'}, status=400)
 
         return Response({'message': 'Drivers imported successfully'})
+
+# class EngineerListView(generics.ListAPIView):
+#     permission_classes = [IsEngineer]
+#     serializer_class = EngineerSerializer
+#     queryset = Engineer.objects.all()
 
 # CRUD
 
@@ -360,3 +395,4 @@ class FuelEditView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+    

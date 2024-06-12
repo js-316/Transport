@@ -1,9 +1,11 @@
 import {
   createBrowserRouter as Router,
   RouterProvider,
+ Route,
+  useNavigate,
   BrowserRouter,
   Routes,
-  Route,
+  
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
@@ -32,7 +34,7 @@ import ViewFuel from "./pages/ViewFuel";
 import Service_Reminders from "./pages/Service_Reminders";
 import Contact_Reminders from "./pages/Contact_Reminders";
 import Vehicle_Reminder from "./pages/Vehicle_Reminder";
-import Staff from "./pages/staff";
+import Staff from "./pages/Staff";
 import Equipment from "./pages/Equipment";
 import InspectionHistory from "./pages/InspectionHistory";
 import ItemFailures from "./pages/ItemFailures";
@@ -51,12 +53,26 @@ import AddContact from "./pages/AddContact";
 import AddExpense from "./pages/AddExpense";
 import AddPart from "./pages/AddPart";
 import AddMeter from "./pages/AddMeter";
+import { useSelector } from "react-redux";
+import { selectUser } from "./features/auth/authSlice";
+import { useRoutes } from 'react-router-dom';
 import UserDashboard from "./pages/User/UserDashboard";
-import EngineerDashboard from "./pages/user/EngineerDashboard";
+import EngineerDashboard from "./pages/User/EngineerDashboard";
 import ViewFuelRequests from "./pages/ViewFuelRequests";
 import Issues from "./pages/Issue";
 
 function App() {
+
+  // const user = useSelector(selectUser)
+  
+  const user = useSelector(selectUser);
+  console.log("Current User",user);
+  console.log("Is Driver:", user?.is_driver);
+  console.log("Is Staff:", user?.is_staff);
+  console.log("Is Engineer:",user?.is_engineer)
+  console.log("Is Admin:",user?.is_admin)
+
+ 
   const routes = Router([
     {
       path: "",
@@ -66,6 +82,7 @@ function App() {
         {
           path: "/",
           element: <Login />,
+         
         },
       ],
     },
@@ -76,10 +93,14 @@ function App() {
         {
           path: "",
           element: <Dashboard />,
+        
         },
+        
         {
           path: "drivers",
           element: <Drivers />,
+          
+         
         },
         {
           path: "drivers/add",
@@ -88,6 +109,18 @@ function App() {
         {
           path: "drivers/edit/:id",
           element: <EditDriver />,
+        },
+        {
+          path: "drivers",
+          element: <RequireAuth />,
+          children: [
+            {
+              path: "",
+              element: <Drivers />,
+              
+            },
+            
+          ],
         },
         {
           path: "vehichles",
@@ -259,9 +292,25 @@ function App() {
           path: "/dashboard/EngDashboard",
           element: <EngineerDashboard />,
         },
+        
       ],
     },
   ]);
+
+  const filteredRoutes = [];
+
+for (const route of Object.values(routes)) {
+  if (!route) continue; // skip if route is undefined
+  
+  if (route.path === "drivers" && !user.is_driver) continue;
+  filteredRoutes.push(route);
+}
+
+  // const filteredRoutes = routes.map((route) => {
+  //   const user = useSelector(selectUser);
+  //   if (route.path === "drivers" && !user.is_driver) return null;
+  //   return route;
+  // }).filter((route) => route !== null);
 
   return (
     <>
@@ -280,6 +329,9 @@ function App() {
       <RouterProvider router={routes} />
     </>
   );
+ 
+
+
 }
 
 export default App;

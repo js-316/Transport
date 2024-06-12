@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from .models import Vehichle, Driver, Maintenance, User,Fuel
-
+from django.contrib.auth.password_validation import validate_password
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 # create serializers
@@ -27,12 +30,6 @@ class MaintenanceSerializer(serializers.ModelSerializer):
         model = Maintenance
         fields = '__all__'
 
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'email', 'is_driver', 'is_fleet_manager', 'is_maintenance_manager')
-
 class FuelSerializer(serializers.ModelSerializer):
 
     fuel_plate = VehichleSerializer(read_only = True)
@@ -40,3 +37,9 @@ class FuelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fuel
         fields = '__all__'
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'is_staff','is_driver', 'is_engineer')
+
