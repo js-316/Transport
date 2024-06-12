@@ -1,15 +1,6 @@
 import {
   createBrowserRouter as Router,
-<<<<<<< HEAD
-  RouterProvider,
- Route,
-  useNavigate,
-  BrowserRouter,
-  Routes,
-  
-=======
   RouterProvider, BrowserRouter,Routes,Route
->>>>>>> fed1e1e2ce7c617ee814377b101a5b5f7f315c02
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
@@ -57,31 +48,17 @@ import AddContact from "./pages/AddContact";
 import AddExpense from "./pages/AddExpense";
 import AddPart from "./pages/AddPart";
 import AddMeter from "./pages/AddMeter";
-<<<<<<< HEAD
-import { useSelector } from "react-redux";
-import { selectUser } from "./features/auth/authSlice";
-import { useRoutes } from 'react-router-dom';
-import UserDashboard from "./pages/User/UserDashboard";
-import EngineerDashboard from "./pages/User/EngineerDashboard";
-import ViewFuelRequests from "./pages/ViewFuelRequests";
-import Issues from "./pages/Issue";
-=======
 import ViewFuelRequests from "./pages/ViewFuelRequests"
 import UserDashboard from "./pages/User/UserDashboard"
 import EngineerDashboard from "./pages/User/EngineerDashboard"
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/auth/authSlice";
 
->>>>>>> fed1e1e2ce7c617ee814377b101a5b5f7f315c02
 
 function App() {
 
   const user = useSelector(selectUser)
 
-<<<<<<< HEAD
- 
-=======
->>>>>>> fed1e1e2ce7c617ee814377b101a5b5f7f315c02
   const routes = Router([
     {
       path: "",

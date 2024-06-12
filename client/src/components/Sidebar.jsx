@@ -62,23 +62,6 @@ const Sidebar = () => {
     }:null,
     user?.is_staff ?
     {
-<<<<<<< HEAD
-      name: "DriverDashboard",
-      path: "/dashboard/userdashboard",
-      icon: "icon material-icons md-home",
-      active: location.pathname === "/dashboard/userdashboard",
-    } : null,
-    user?.is_engineer ?
-    {
-      name: "EngDashboard",
-      path: "/dashboard/EngDashboard",
-      icon: "icon material-icons md-home",
-      active: location.pathname === "/dashboard/EngDashboard",
-    } : null,
-    user?.is_staff ?
-    {
-=======
->>>>>>> fed1e1e2ce7c617ee814377b101a5b5f7f315c02
       name: "Drivers",
       path: "/dashboard/drivers",
       icon: "icon material-icons md-person",
