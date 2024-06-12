@@ -190,9 +190,9 @@ const Maintenance = () => {
         <h2 className="content-title">Maintenances</h2>
         <div>
           <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Add Maintenance
+            <i className="material-icons md-plus"></i> Request Maintenance
           </Link>
-          
+
           <button onClick={exportToPDF} className="btn btn-success mx-2">
             Export to PDF
           </button>
@@ -202,16 +202,16 @@ const Maintenance = () => {
         <header className="card-header">
           <div className="row gx-3">
             <div className="col-lg-4 col-md-6 me-auto">
-            <div className="input-group">
-                  <span className="input-group-text">
+              <div className="input-group">
+                <span className="input-group-text">
                   <FontAwesomeIcon icon={faSearch} />
-                  </span>
-              <input
-                type="text"
-                placeholder="Search..."
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="form-control"
-              />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="form-control"
+                />
               </div>
             </div>
             <div className="col-lg-2 col-md-3 col-6">
@@ -227,71 +227,79 @@ const Maintenance = () => {
               </select>
             </div>
             <div className="col-lg-2 col-md-3 col-6">
-              <select id="vehicle-select" 
-              className="form-select"
-              onChange={(e) => costsExportToPDF(e.target.value)}>
+              <select
+                id="vehicle-select"
+                className="form-select"
+                onChange={(e) => costsExportToPDF(e.target.value)}
+              >
                 <option>Calculate Cost</option>
                 {uniqueVehicles?.map((number_plate, index) => (
-                <option key={index} value={number_plate}>{number_plate}</option>
+                  <option key={index} value={number_plate}>
+                    {number_plate}
+                  </option>
                 ))}
               </select>
-
             </div>
           </div>
         </header>
         <div className="card-body">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Vehichle</th>
-                <th>Service Tasks</th>
-                <th>Total Cost</th>
-                <th>Completed At</th>
-                <th>Driver</th>
-                <th>Repair Priority Class</th>
-                <th>Meter</th>
-                <th>Meter Unit</th>
-                <th>Description</th>
-                <th>Issues</th>
-                <th>Work Order Number</th>
-                <th className="text-end"> Action </th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading
-                ? [...Array(5)]?.map((_, i) => <TableLoader key={i} count={5} />)
-                : currentData?.map((d, index) => (
-                    <tr key={index}>
-                      <td>{d.fleet.number_plate}</td>
-                      <td>{d.description}</td>
-                      <td>{d.cost}</td>
-                      <td>{new Date(d.date).toDateString()}</td>
-                      <td>Driver</td>
-                      <td>Priority Class</td>
-                      <td>Meter</td>
-                      <td>Meter Unit</td>
-                      <td>Description</td>
-                      <td>Issues</td>
-                      <td>Work Order Number</td>
-                      <td className="text-end">
-                        <Link
-                          to={`edit/${d.id}`}
-                          className="btn btn-sm font-sm rounded btn-brand mx-4"
-                        >
-                          <i className="material-icons md-edit"></i>
-                          Edit
-                        </Link>
-                        <button 
-                        onClick={() => handleDeleteMaintenance(d.id)}
-                        className="btn btn-sm font-sm rounded btn-danger">
-                          <i className="material-icons md-delete"></i>
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-            </tbody>
-          </table>
+          <div className="table-responsive-lg">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Vehichle</th>
+                  <th>Service Tasks</th>
+                  <th>Total Cost</th>
+                  <th>Completed At</th>
+                  <th>Driver</th>
+                  <th>Repair Priority Class</th>
+                  <th>Meter</th>
+                  <th>Meter Unit</th>
+                  <th>Description</th>
+                  <th>Issues</th>
+                  <th>Work Order Number</th>
+                  <th className="text-center"> Action </th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading
+                  ? [...Array(5)]?.map((_, i) => (
+                      <TableLoader key={i} count={5} />
+                    ))
+                  : currentData?.map((d, index) => (
+                      <tr key={index}>
+                        <td>{d.fleet.number_plate}</td>
+                        <td>{d.description}</td>
+                        <td>{d.cost}</td>
+                        <td>{new Date(d.date).toDateString()}</td>
+                        <td>Driver</td>
+                        <td>Priority Class</td>
+                        <td>Meter</td>
+                        <td>Meter Unit</td>
+                        <td>Description</td>
+                        <td>Issues</td>
+                        <td>Work Order Number</td>
+                        <td className="text-center" style={{whiteSpace:"noWrap"}}>
+                          <Link
+                            to={`edit/${d.id}`}
+                            className="btn btn-sm font-sm rounded btn-brand mx-4"
+                          >
+                            <i className="material-icons md-edit"></i>
+                            Edit
+                          </Link>
+                          <button
+                            onClick={() => handleDeleteMaintenance(d.id)}
+                            className="btn btn-sm font-sm rounded btn-danger"
+                          >
+                            <i className="material-icons md-delete"></i>
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div className="pagination-area mt-30 mb-50">

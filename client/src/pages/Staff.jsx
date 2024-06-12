@@ -204,7 +204,7 @@ const Staff = () => {
                 <th>Phone Number</th>
                 <th>Age</th>
                 <th>Date Hired</th>
-                <th className="text-end"> Action </th>
+                <th className="text-center"> Action </th>
               </tr>
             </thead>
             <tbody>
@@ -217,7 +217,7 @@ const Staff = () => {
                       <td>{d.age}</td>
                       <td>{new Date(d.date_hired).toDateString()}</td>
 
-                      <td className="text-end">
+                      <td className="text-center">
                         <Link
                           to={`edit/${d.id}`}
                           className="btn btn-sm font-sm rounded btn-brand mx-4"

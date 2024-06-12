@@ -176,7 +176,7 @@ const WorkOrder = () => {
         <h2 className="content-title">Job Cards</h2>
         <div>
           <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Add Job Card
+            <i className="material-icons md-plus"></i> Create Job Card
           </Link>
 
           <button onClick={exportToPDF} className="btn btn-success mx-2">
@@ -216,37 +216,38 @@ const WorkOrder = () => {
           </div>
         </header>
         <div className="card-body">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Vehichle</th>
-                <th>Status</th>
-                <th>Issue Date</th>
-                <th>Start Date</th>
-                <th>Closing date</th>
-                <th>Assigned To</th>
-                <th>Action</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading
-                ? [...Array(5)]?.map((_, i) => (
-                    <TableLoader key={i} count={5} />
-                  ))
-                : currentData?.map((d, index) => (
-                    <tr key={index}>
-                      <td>{d.fleet.number_plate}</td>
-                      <td>{d.description}</td>
-                      <td>{d.cost}</td>
-                      <td>{new Date(d.date).toDateString()}</td>
-                      <td>{new Date(d.date).toDateString()}</td>
-                      <td>{new Date(d.date).toDateString()}</td>
-                      <td>Assigned To</td>
-                    </tr>
-                  ))}
-            </tbody>
-          </table>
+          <div className="table-responsive-lg">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Vehichle</th>
+                  <th>Status</th>
+                  <th>Issue Date</th>
+                  <th>Start Date</th>
+                  <th>Closing date</th>
+                  <th>Assigned To</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading
+                  ? [...Array(5)]?.map((_, i) => (
+                      <TableLoader key={i} count={5} />
+                    ))
+                  : currentData?.map((d, index) => (
+                      <tr key={index}>
+                        <td>{d.fleet.number_plate}</td>
+                        <td>{d.description}</td>
+                        <td>{d.cost}</td>
+                        <td>{new Date(d.date).toDateString()}</td>
+                        <td>{new Date(d.date).toDateString()}</td>
+                        <td>{new Date(d.date).toDateString()}</td>
+                        <td>Assigned To</td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div className="pagination-area mt-30 mb-50">

@@ -23,8 +23,9 @@ import ServiceChart from "../components/ServiceChart";
 import BarChart from "../components/Barchart";
 import Listgroups from "../components/Listgroups";
 import DonutChart from "../components/DonutChart";
-import { issues,workorder,items ,activities } from "../data/chartData";
+import { issues, workorder, items, activities } from "../data/chartData";
 import RecentActivity from "../components/RecentActivity";
+import ResponsiveContent from "../components/ResponsiveContent";
 
 const Dashboard = () => {
   const { isLoading, data } = useGetVehichlesQuery();
@@ -151,50 +152,51 @@ const Dashboard = () => {
             </div>
           </div>
         </header>
-        <div className="card-body">
-          <div className="table-responsive">
-            <div className="table-responsive">
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Number Plate</th>
-                    <th>Drivers</th>
-                    <th>Mileage</th>
-                    <th>Manufacturer</th>
-                    <th>Date of Purchase</th>
-                    <th className="text-end"> Action </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {isLoading
-                    ? [...Array(5)].map((_, i) => (
-                        <TableLoader key={i} count={6} />
-                      ))
-                    : vehichlesArray?.map((v, index) => (
-                        <tr key={index}>
-                          <td>{v.number_plate}</td>
-                          <td>{v.driver.name}</td>
-                          <td>{v.mileage}</td>
-                          <td>{v.manufacturer}</td>
-                          <td>{v.date_of_purchase}</td>
-                          <td className="text-end">
-                            <Link
-                              to={`/vehichles/${v.id}`}
-                              className="btn btn-sm font-sm rounded btn-brand mx-4"
-                            >
-                              <i className="material-icons md-edit"></i>
-                              Edit
-                            </Link>
-                            <button className="btn btn-sm font-sm rounded btn-danger">
-                              <i className="material-icons md-delete"></i>
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                </tbody>
-              </table>
-            </div>
+        <div className="table-responsive-sm">
+          <div className="card-body">
+            <table
+              className="table table-hover"
+              style={{ whiteSpace: "noWrap" }}
+            >
+              <thead>
+                <tr>
+                  <th>Number Plate</th>
+                  <th>Drivers</th>
+                  <th>Mileage</th>
+                  <th>Manufacturer</th>
+                  <th>Date of Purchase</th>
+                  <th className="text-end"> Action </th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading
+                  ? [...Array(5)].map((_, i) => (
+                      <TableLoader key={i} count={6} />
+                    ))
+                  : vehichlesArray?.map((v, index) => (
+                      <tr key={index}>
+                        <td>{v.number_plate}</td>
+                        <td>{v.driver.name}</td>
+                        <td>{v.mileage}</td>
+                        <td>{v.manufacturer}</td>
+                        <td>{v.date_of_purchase}</td>
+                        <td className="text-end">
+                          <Link
+                            to={`/vehichles/${v.id}`}
+                            className="btn btn-sm font-sm rounded btn-brand mx-4"
+                          >
+                            <i className="material-icons md-edit"></i>
+                            Edit
+                          </Link>
+                          <button className="btn btn-sm font-sm rounded btn-danger">
+                            <i className="material-icons md-delete"></i>
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

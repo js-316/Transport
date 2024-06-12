@@ -224,7 +224,6 @@ const Issues = () => {
                 <th>Vehichle</th>
                 <th>Issue</th>
                 <th>Summary</th>
-                <th>Issue Status</th>
                 <th>Source</th>
                 <th>Reported Date </th>
                 <th>Reported By </th>
@@ -242,7 +241,7 @@ const Issues = () => {
                       <td></td>
                       <td>{new Date(d.date).toDateString()}</td>
                       <td>{new Date(d.date).toDateString()}</td>
-                      <td className="text-end">
+                      <td className="text-center">
                         <Link
                           to={`edit/${d.id}`}
                           className="btn btn-sm font-sm rounded btn-brand mx-4"

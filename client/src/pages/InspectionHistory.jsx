@@ -262,38 +262,38 @@ const InspectionHistory = () => {
           </div>
         </header>
         <div className="card-body">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Vehichle</th>
-                <th>Vehicle Group</th>
-                <th>Submitted</th>
-                <th>Completed At</th>
-                <th>Duration</th>
-                <th>Inspection Form</th>
-                <th>User</th>
-                <th>Failed Items</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading
-                ? [...Array(5)]?.map((_, i) => (
-                    <TableLoader key={i} count={5} />
-                  ))
-                : currentData?.map((d, index) => (
-                    <tr key={index}>
-                      <td>{d.fleet.number_plate}</td>
-                      <td>{d.description}</td>
-                      <td>{new Date(d.date).toDateString()}</td>
-                      <td>{new Date(d.date).toDateString()}</td>
-                      <td>Duration</td>
-                      <td>Inspection Form</td>
-                      <td>User</td>
-                      <td>Failed Items</td>
-                    </tr>
-                  ))}
-            </tbody>
-          </table>
+          <div className="table-responsive-lg">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Vehichle</th>
+                  <th>Vehicle Group</th>
+                  <th>Submitted</th>
+                  <th>Completed At</th>
+                  <th>Duration</th>
+                  <th>User</th>
+                  <th>Failed Items</th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading
+                  ? [...Array(5)]?.map((_, i) => (
+                      <TableLoader key={i} count={5} />
+                    ))
+                  : currentData?.map((d, index) => (
+                      <tr key={index}>
+                        <td>{d.fleet.number_plate}</td>
+                        <td>{d.description}</td>
+                        <td>{new Date(d.date).toDateString()}</td>
+                        <td>{new Date(d.date).toDateString()}</td>
+                        <td>Duration</td>
+                        <td>User</td>
+                        <td>Failed Items</td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div className="pagination-area mt-30 mb-50">

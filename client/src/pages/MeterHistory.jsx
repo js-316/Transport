@@ -156,7 +156,6 @@ const [searchQuery, setSearchQuery] = useState('')
       <div className="content-header">
         <h2 className="content-title">Meter History </h2>
         <div className="flex">
-      
           <Link
             onClick={() => uploadRef.current.click()}
             to="#"
@@ -166,10 +165,9 @@ const [searchQuery, setSearchQuery] = useState('')
                 : "btn btn-light rounded mx-2"
             }
           >
-            <i className="material-icons md-import_export" ></i>
+            <i className="material-icons md-import_export"></i>
             Import
           </Link>
-         
 
           <Link to="add" className="btn btn-primary">
             <i className="material-icons md-plus"></i> Add Meter History
@@ -181,7 +179,7 @@ const [searchQuery, setSearchQuery] = useState('')
             style={{ display: "none" }}
             onChange={handleFileUpload}
           />
-           <button onClick={exportToPDF} className="btn btn-success mx-2">
+          <button onClick={exportToPDF} className="btn btn-success mx-2">
             Export to PDF
           </button>
         </div>
@@ -190,16 +188,16 @@ const [searchQuery, setSearchQuery] = useState('')
         <header className="card-header">
           <div className="row gx-3">
             <div className="col-lg-4 col-md-6 me-auto">
-                <div className="input-group">
-                  <span className="input-group-text">
+              <div className="input-group">
+                <span className="input-group-text">
                   <FontAwesomeIcon icon={faSearch} />
-                  </span>
-              <input
-                type="text"
-                placeholder="Search..."
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="form-control"
-              />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="form-control"
+                />
               </div>
             </div>
             <div className="col-lg-2 col-md-3 col-6">
@@ -217,33 +215,34 @@ const [searchQuery, setSearchQuery] = useState('')
           </div>
         </header>
         <div className="card-body">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Vehicle</th>
-                <th>Meter Date</th>
-                <th>Meter Value</th>
-                <th>Meter Unit</th>
-                <th>Source</th>
-              </tr>
-            </thead>
-            <tbody>
-            {isLoading
-                ? [...Array(5)].map((_, i) => <TableLoader key={i} count={6} />)
-                : currentData?.map((d, index) => (
-                  <tr key={index}>
-                    <td>{d.fuel_plate.number_plate}</td>
-                    <td>{new Date(d.date_of_fueling).toDateString()}</td>
-                    <td>{d.fuel_type}</td>
-                    <td>{d.mileage}</td>
-                    <td>{d.amount}</td>
-                    
-                      
-                  </tr>
-                ))}
-              
-            </tbody>
-          </table>
+          <div className="table-responsive-lg">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Vehicle</th>
+                  <th>Meter Date</th>
+                  <th>Meter Value</th>
+                  <th>Meter Unit</th>
+                  <th>Source</th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading
+                  ? [...Array(5)].map((_, i) => (
+                      <TableLoader key={i} count={6} />
+                    ))
+                  : currentData?.map((d, index) => (
+                      <tr key={index}>
+                        <td>{d.fuel_plate.number_plate}</td>
+                        <td>{new Date(d.date_of_fueling).toDateString()}</td>
+                        <td>{d.fuel_type}</td>
+                        <td>{d.mileage}</td>
+                        <td>{d.amount}</td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div className="pagination-area mt-30 mb-50">

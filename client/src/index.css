@@ -4776,6 +4776,7 @@ body.dark .dropdown-menu .dropdown-item.text-danger {
 
 @media all and (max-width: 480px) {
   .table-responsive table {
+    white-space: nowrap;
     min-width: unset;
   }
   .table-responsive table td {
@@ -4867,4 +4868,7 @@ body.dark .dropdown-menu .dropdown-item.text-danger {
 
 .aside-mini .navbar-aside {
   transform: translateX(0);
+}
+.noWrap{
+  white-space: nowrap;
 }

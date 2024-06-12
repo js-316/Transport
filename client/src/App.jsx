@@ -1,6 +1,9 @@
 import {
   createBrowserRouter as Router,
-  RouterProvider, BrowserRouter,Routes,Route
+  RouterProvider,
+  BrowserRouter,
+  Routes,
+  Route,
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
@@ -14,13 +17,13 @@ import EditDriver from "./pages/EditDriver";
 import Vehichles from "./pages/Vehichles";
 import AddVehichle from "./pages/AddVehichle";
 import EditVehichle from "./pages/EditVehichle";
-import MeterHistory from "./pages/MeterHistory"
-import ExpensesHistory from "./pages/ExpensesHistory"
+import MeterHistory from "./pages/MeterHistory";
+import ExpensesHistory from "./pages/ExpensesHistory";
 import Logout from "./pages/Logout";
 import Maintenance from "./pages/Maintenance";
 import AddMaintenance from "./pages/AddMaintenance";
 import EditMaintenance from "./pages/EditMaintenance";
-import WorkOrder from "./pages/WorkOrder";
+import WorkOrder from "./pages/JobCard";
 import ViewCosts from "./pages/ViewCosts";
 import Fuel from "./pages/Fuel";
 import AddFuel from "./pages/AddFuel";
@@ -30,14 +33,12 @@ import Service_Reminders from "./pages/Service_Reminders";
 import Contact_Reminders from "./pages/Contact_Reminders";
 import Vehicle_Reminder from "./pages/Vehicle_Reminder";
 import Staff from "./pages/staff";
-import Equipment from "./pages/Equipment"
-import InspectionHistory from "./pages/InspectionHistory"
-import ItemFailures from "./pages/ItemFailures"
-import Schedules from "./pages/Schedules"
-import Issues from "./pages/Issues"
-import Faults from "./pages/Faults"
-import Contacts from "./pages/Contacts"
-import Parts from "./pages/Parts"
+import Equipment from "./pages/Equipment";
+import InspectionHistory from "./pages/InspectionHistory";
+import ItemFailures from "./pages/ItemFailures";
+import Schedules from "./pages/Schedules";
+import Contacts from "./pages/Contacts";
+import Parts from "./pages/Parts";
 import AddWorkOrder from "./pages/AddWorkOrder";
 import AddEquipment from "./pages/AddEquipment";
 import AddInspection from "./pages/AddInspection";
@@ -50,11 +51,12 @@ import AddContact from "./pages/AddContact";
 import AddExpense from "./pages/AddExpense";
 import AddPart from "./pages/AddPart";
 import AddMeter from "./pages/AddMeter";
-import UserDashboard from './pages/User/UserDashboard';
-
+import UserDashboard from "./pages/User/UserDashboard";
+import EngineerDashboard from "./pages/user/EngineerDashboard";
+import ViewFuelRequests from "./pages/ViewFuelRequests";
+import Issues from "./pages/Issue";
 
 function App() {
-
   const routes = Router([
     {
       path: "",
@@ -152,7 +154,7 @@ function App() {
           path: "service_reminders/add",
           element: <AddServiceReminder />,
         },
-        
+
         {
           path: "contact_reminders",
           element: <Contact_Reminders />,
@@ -194,16 +196,13 @@ function App() {
           element: <AddInspection />,
         },
         {
-          path: "issues",
-          element: <Issues />,
+          path: "fuel",
+          element: <Fuel  />,
         },
+       
         {
-          path: "issues/add",
-          element: <AddIssue />,
-        },
-        {
-          path: "issues/faults",
-          element: <Faults />,
+          path: "fuelrequests",
+          element: <ViewFuelRequests />,
         },
         {
           path: "issues/faults/add",
@@ -217,10 +216,7 @@ function App() {
           path: "contacts/add",
           element: <AddContact />,
         },
-        {
-          path: "fuel",
-          element: <Fuel />,
-        },
+       
         {
           path: "fuel/add",
           element: <AddFuel />,
@@ -257,9 +253,12 @@ function App() {
         },
         {
           path: "userdashboard",
-          element: <UserDashboard/>,
+          element: <UserDashboard />,
         },
-        
+        {
+          path: "/dashboard/EngDashboard",
+          element: <EngineerDashboard />,
+        },
       ],
     },
   ]);

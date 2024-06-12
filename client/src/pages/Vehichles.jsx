@@ -199,7 +199,6 @@ const Vehichles = () => {
         <h2 className="content-title">Vehicles</h2>
         <div>
           <Link
-
             onClick={() => uploadRef.current.click()}
             to="#"
             className={
@@ -256,76 +255,75 @@ const Vehichles = () => {
             </div>
           </div>
         </header>
-        <div className="card-body">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Vehicle</th>
-                <th>Driver</th>
-                <th>Current Mileage</th>
-                <th>Year</th>
-                <th>Type</th>
-                <th>Manufacturer</th>
-                <th>Total Service</th>
-                <th>Total Fuel</th>
-                <th>Status</th>
-                <th>Group</th>
-                <th>Watchers</th>
-                <th className="text-end"> Action </th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading
-                ? [...Array(5)].map((_, i) => <TableLoader key={i} count={6} />)
-                : currentData?.map((d, index) => (
-
-                  <tr key={index}>
-                    <td>{d.number_plate}</td>
-                    <td>{d.driver.name}</td>
-                    <td>{d.mileage}</td>
-                    <td>{new Date(d.date_of_purchase).toDateString()}</td>
-                    <td>{d.vehichle_type}</td>
-                    <td>{d.manufacturer}</td>
-                    <td>
-                      <Link
-                        to={`costs_view/${d.id}`}
-
-                      >
-                        {costsPerVehicle[d.number_plate] || 0}
-                      </Link>
-                    </td>
-                    <td>
-                      <Link
-                        to={`fuel_view/${d.id}`}
-
-                      >
-                        {fuelPerVehicle[d.number_plate] || 0}
-                      </Link>
-                    </td>
-                    <td>Status</td>
-                    <td>Group</td>
-                    <td>Watchers</td>
-                    <td className="text-end">
-                      <Link
-                        to={`edit/${d.id}`}
-                        className="btn btn-sm font-sm rounded btn-brand mx-4"
-                      >
-                        <i className="material-icons md-edit"></i>
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDeleteVehichle(d.id)}
-                        className="btn btn-sm font-sm rounded btn-danger"
-
-                      >
-                        <i className="material-icons md-delete"></i>
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+        <div className=" table-responsive-lg">
+          <div className="card-body">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Vehicle</th>
+                  <th>Driver</th>
+                  <th>Current Mileage</th>
+                  <th>Year</th>
+                  <th>Type</th>
+                  <th>Manufacturer</th>
+                  <th>Total Service</th>
+                  <th>Total Fuel</th>
+                  <th>Status</th>
+                  <th>Group</th>
+                  <th>Watchers</th>
+                  <th className="text-center"> Action </th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading
+                  ? [...Array(5)].map((_, i) => (
+                      <TableLoader key={i} count={6} />
+                    ))
+                  : currentData?.map((d, index) => (
+                      <tr key={index}>
+                        <td>{d.number_plate}</td>
+                        <td>{d.driver.name}</td>
+                        <td>{d.mileage}</td>
+                        <td>{new Date(d.date_of_purchase).toDateString()}</td>
+                        <td>{d.vehichle_type}</td>
+                        <td>{d.manufacturer}</td>
+                        <td>
+                          <Link to={`costs_view/${d.id}`}>
+                            {costsPerVehicle[d.number_plate] || 0}
+                          </Link>
+                        </td>
+                        <td>
+                          <Link to={`fuel_view/${d.id}`}>
+                            {fuelPerVehicle[d.number_plate] || 0}
+                          </Link>
+                        </td>
+                        <td>Status</td>
+                        <td>Group</td>
+                        <td>Watchers</td>
+                        <td
+                          className="text-center"
+                          style={{ whiteSpace: "noWrap" }}
+                        >
+                          <Link
+                            to={`edit/${d.id}`}
+                            className="btn btn-sm font-sm rounded btn-brand mx-4"
+                          >
+                            <i className="material-icons md-edit"></i>
+                            Edit
+                          </Link>
+                          <button
+                            onClick={() => handleDeleteVehichle(d.id)}
+                            className="btn btn-sm font-sm rounded btn-danger"
+                          >
+                            <i className="material-icons md-delete"></i>
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div className="pagination-area mt-30 mb-50">

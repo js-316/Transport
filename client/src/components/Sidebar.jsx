@@ -41,17 +41,23 @@ const Sidebar = () => {
       active: location.pathname === "/dashboard/userdashboard",
     },
     {
+      name: "EngDashboard",
+      path: "/dashboard/EngDashboard",
+      icon: "icon material-icons md-home",
+      active: location.pathname === "/dashboard/EngDashboard",
+    },
+    {
       name: "Drivers",
       path: "/dashboard/drivers",
       icon: "icon material-icons md-person",
       active: location.pathname === "/dashboard/drivers",
     },
     {
-      name: "Service",
+      name: "Maintainance",
       icon: "icon material-icons md-home_repair_service",
       submenu: [
         {
-          name: "Service History",
+          name: "Mantainance Requests",
           path: "/dashboard/maintenance",
           active: location.pathname === "/dashboard/maintenance",
         },
@@ -91,18 +97,19 @@ const Sidebar = () => {
       ],
     },
     {
-      name: "Issues",
-      icon: "icon material-icons md-warning",
+      name: "Fuel",
+      icon: "icon material-icons md-local_gas_station",
       submenu: [
         {
-          name: "Issues",
-          path: "/dashboard/issues",
-          active: location.pathname === "/dashboard/issues",
+          name: "Fuel history",
+          path: "/dashboard/fuel",
+          active: location.pathname === "/dashboard/fuel",
+          
         },
         {
-          name: "Faults",
-          path: "/dashboard/issues/faults",
-          active: location.pathname === "/dashboard/issues/faults",
+          name: "Fuel Requests",
+          path: "/dashboard/fuelrequests",
+          active: location.pathname === "/dashboard/fuelrequests",
         },
       ],
     },
@@ -127,6 +134,7 @@ const Sidebar = () => {
         },
       ],
     },
+
     {
       name: "Contacts",
       path: "/dashboard/contacts",
