@@ -199,7 +199,6 @@ const Equipment = () => {
         <h2 className="content-title">Equipment</h2>
         <div>
           <Link
-
             onClick={() => uploadRef.current.click()}
             to="#"
             className={
@@ -257,69 +256,65 @@ const Equipment = () => {
           </div>
         </header>
         <div className="card-body">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Brand</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Open Issues</th>
-                <th>Vehicle Operator</th>
-                <th>Date Purchased</th>
-                <th className="text-end"> Action </th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading
-                ? [...Array(5)].map((_, i) => <TableLoader key={i} count={6} />)
-                : currentData?.map((d, index) => (
-
-                  <tr key={index}>
-                    <td>{d.number_plate}</td>
-                    <td>{d.driver.name}</td>
-                    <td>{d.mileage}</td>
-                    <td>{d.vehichle_type}</td>
-                    <td>{d.manufacturer}</td>
-                    <td>
-                      <Link
-                        to={`costs_view/${d.id}`}
-
-                      >
-                        {costsPerVehicle[d.number_plate] || 0}
-                      </Link>
-                    </td>
-                    <td>
-                      <Link
-                        to={`fuel_view/${d.id}`}
-
-                      >
-                        {fuelPerVehicle[d.number_plate] || 0}
-                      </Link>
-                    </td>
-                    <td>{new Date(d.date_of_purchase).toDateString()}</td>
-                    <td className="text-end">
-                      <Link
-                        to={`edit/${d.id}`}
-                        className="btn btn-sm font-sm rounded btn-brand mx-4"
-                      >
-                        <i className="material-icons md-edit"></i>
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDeleteVehichle(d.id)}
-                        className="btn btn-sm font-sm rounded btn-danger"
-
-                      >
-                        <i className="material-icons md-delete"></i>
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          <div className="table-responsive-lg">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Brand</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Open Issues</th>
+                  <th>Vehicle Operator</th>
+                  <th>Date Purchased</th>
+                  <th className="text-center"> Action </th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading
+                  ? [...Array(5)].map((_, i) => (
+                      <TableLoader key={i} count={6} />
+                    ))
+                  : currentData?.map((d, index) => (
+                      <tr key={index}>
+                        <td>{d.number_plate}</td>
+                        <td>{d.driver.name}</td>
+                        <td>{d.mileage}</td>
+                        <td>{d.vehichle_type}</td>
+                        <td>{d.manufacturer}</td>
+                        <td>
+                          <Link to={`costs_view/${d.id}`}>
+                            {costsPerVehicle[d.number_plate] || 0}
+                          </Link>
+                        </td>
+                        <td>
+                          <Link to={`fuel_view/${d.id}`}>
+                            {fuelPerVehicle[d.number_plate] || 0}
+                          </Link>
+                        </td>
+                        <td>{new Date(d.date_of_purchase).toDateString()}</td>
+                        <td className="text-center" style={{whiteSpace:"nowrap"}}>
+                          <Link
+                            to={`edit/${d.id}`}
+                            className="btn btn-sm font-sm rounded btn-brand mx-4"
+                          >
+                            <i className="material-icons md-edit"></i>
+                            Edit
+                          </Link>
+                          <button
+                            onClick={() => handleDeleteVehichle(d.id)}
+                            className="btn btn-sm font-sm rounded btn-danger"
+                          >
+                            <i className="material-icons md-delete"></i>
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div className="pagination-area mt-30 mb-50">

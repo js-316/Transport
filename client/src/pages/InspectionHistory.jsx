@@ -1,46 +1,47 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Layout from "../components/Layout";
-import { useGetMaintenanceQuery, useDeleteMaintenanceMutation} from "../features/maintenance/maintenanceApiSlice";
+import {
+  useGetMaintenanceQuery,
+  useDeleteMaintenanceMutation,
+} from "../features/maintenance/maintenanceApiSlice";
 import { Link, useNavigate } from "react-router-dom";
 import TableLoader from "../components/TableLoader";
 import Pagination from "../components/Pagination";
 import errorParser from "../util/errorParser";
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import logo from '../assets/soliton.png'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import logo from "../assets/soliton.png";
 
 const InspectionHistory = () => {
-    const { isLoading, data,refetch } = useGetMaintenanceQuery();
-    
-    const { ids, entities} = data || {};
-    const maintenancesArray = ids?.map((id) => entities[id])
-    const [AppError, setAppError] = useState(null);
+  const { isLoading, data, refetch } = useGetMaintenanceQuery();
 
-    const [deleteMaintenance, {isLoading: isDeleting}] = useDeleteMaintenanceMutation();
+  const { ids, entities } = data || {};
+  const maintenancesArray = ids?.map((id) => entities[id]);
+  const [AppError, setAppError] = useState(null);
 
-  const[searchQuery, setSearchQuery] = useState('')
+  const [deleteMaintenance, { isLoading: isDeleting }] =
+    useDeleteMaintenanceMutation();
+
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleDeleteMaintenance = async (id) => {
     setAppError(null);
     try {
       const result = await Swal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
       });
       if (result.isConfirmed) {
-        
-        const res = await deleteMaintenance( id ).unwrap();
-        
+        const res = await deleteMaintenance(id).unwrap();
 
         refetch();
-        
       }
     } catch (err) {
       console.error("Error deleting Maintenance:", err);
@@ -57,25 +58,26 @@ const InspectionHistory = () => {
     const fleet = maintenance.fleet.number_plate.toLowerCase();
     const cost = maintenance.cost;
     const description = maintenance.description.toLowerCase();
-    const date = maintenance.date.toLowerCase()
+    const date = maintenance.date.toLowerCase();
     const search = searchQuery.toLowerCase();
-    
 
-    if(search){
-      return(
+    if (search) {
+      return (
         fleet.includes(search) ||
         (cost && cost.toString().includes(search)) ||
         description.includes(search) ||
         date.includes(search)
-      )
-    }else{
-    return maintenancesArray;
+      );
+    } else {
+      return maintenancesArray;
     }
   });
 
-  console.log('Filtered Maintenance Data:', maintenancesArray);
+  console.log("Filtered Maintenance Data:", maintenancesArray);
 
-  const uniqueVehicles = [...new Set(maintenancesArray?.map(m => m.fleet.number_plate))];
+  const uniqueVehicles = [
+    ...new Set(maintenancesArray?.map((m) => m.fleet.number_plate)),
+  ];
 
   const [dataPerPage, setDataPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,31 +85,28 @@ const InspectionHistory = () => {
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
 
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleDataPerPage = (e) => {
     setDataPerPage(parseInt(e.target.value));
   };
 
-  
-
   const exportToPDF = () => {
     const doc = new jsPDF();
-    
-     // Add logo
-     doc.addImage(logo, 'PNG', 10, 10, 20, 20);
-      
-     // Add header text
-     doc.text(`Soliton Telmec`, 40, 15);
-     doc.text(`Address: Bugolobi Plot 10, Mizindalo Road`, 40, 20);
-     doc.text(`Phone: +256 700 777 003`, 40, 25);
-     doc.text(`Email: info@soliton.co.ug`, 40, 30);
-   
-     // Add a newline
-     doc.text(`\n`, 10, 35);
 
-    doc.text("Service History", 10, 40)
+    // Add logo
+    doc.addImage(logo, "PNG", 10, 10, 20, 20);
+
+    // Add header text
+    doc.text(`Soliton Telmec`, 40, 15);
+    doc.text(`Address: Bugolobi Plot 10, Mizindalo Road`, 40, 20);
+    doc.text(`Phone: +256 700 777 003`, 40, 25);
+    doc.text(`Email: info@soliton.co.ug`, 40, 30);
+
+    // Add a newline
+    doc.text(`\n`, 10, 35);
+
+    doc.text("Service History", 10, 40);
     const tableData = [];
     filteredData.forEach((record) => {
       tableData.push([
@@ -121,69 +120,89 @@ const InspectionHistory = () => {
         record.meter_unit,
         record.work_order_number,
         record.labels,
-        
-
       ]);
     });
     doc.autoTable({
-      head: [["Vehicle", "Description", "Cost", "Date","Driver","Repair Priority Class","Meter","Meter Unit","Work Order Number","Labels"]],
+      head: [
+        [
+          "Vehicle",
+          "Description",
+          "Cost",
+          "Date",
+          "Driver",
+          "Repair Priority Class",
+          "Meter",
+          "Meter Unit",
+          "Work Order Number",
+          "Labels",
+        ],
+      ],
       body: tableData,
       startY: 50,
     });
-    
+
     doc.save("maintenance.pdf");
   };
 
   const costsExportToPDF = (fleetNumberPlate) => {
-    console.log('Selected Fleet Number Plate:', fleetNumberPlate);
-    console.log('All Maintenance Records:', maintenancesArray);
+    console.log("Selected Fleet Number Plate:", fleetNumberPlate);
+    console.log("All Maintenance Records:", maintenancesArray);
 
     // Filter maintenance records for the selected fleet number plate
     const vehicleMaintenances = maintenancesArray.filter((maintenance) => {
-        const maintenanceFleetNumberPlate = maintenance.fleet.number_plate;
-        console.log('Maintenance Fleet Number Plate:', maintenanceFleetNumberPlate);
-        console.log('Comparison:', maintenanceFleetNumberPlate === fleetNumberPlate);
-        return maintenanceFleetNumberPlate === fleetNumberPlate;
+      const maintenanceFleetNumberPlate = maintenance.fleet.number_plate;
+      console.log(
+        "Maintenance Fleet Number Plate:",
+        maintenanceFleetNumberPlate
+      );
+      console.log(
+        "Comparison:",
+        maintenanceFleetNumberPlate === fleetNumberPlate
+      );
+      return maintenanceFleetNumberPlate === fleetNumberPlate;
     });
 
-    console.log('Maintenance Records for Selected Fleet:', vehicleMaintenances);
+    console.log("Maintenance Records for Selected Fleet:", vehicleMaintenances);
 
     // Check if there are any maintenance records for the selected fleet
     if (vehicleMaintenances.length === 0) {
-        console.error('No maintenance records found for the selected fleet.');
-        return;
+      console.error("No maintenance records found for the selected fleet.");
+      return;
     }
 
     // Calculate the total cost
-    const totalCost = vehicleMaintenances.reduce((acc, maintenance) => acc + maintenance.cost, 0);
+    const totalCost = vehicleMaintenances.reduce(
+      (acc, maintenance) => acc + maintenance.cost,
+      0
+    );
 
     // Create and configure the PDF
     const doc = new jsPDF();
-    doc.text(`Vehicle Maintenance Report For- ${vehicleMaintenances[0].fleet.number_plate}`, 10, 10);
+    doc.text(
+      `Vehicle Maintenance Report For- ${vehicleMaintenances[0].fleet.number_plate}`,
+      10,
+      10
+    );
     doc.text(`Total Cost: ${totalCost}`, 10, 20);
 
     // Prepare table data
-    const tableData = vehicleMaintenances.map((record) => [
-        record.date,
-        record.description,
-        record.cost,
-       
+    const tableData = vehicleMaintenances?.map((record) => [
+      record.date,
+      record.description,
+      record.cost,
     ]);
 
     // Generate the table in the PDF
     doc.autoTable({
-        head: [["Date","Description", "Cost" ]],
-        body: tableData,
-        startY: 30,
+      head: [["Date", "Description", "Cost"]],
+      body: tableData,
+      startY: 30,
     });
 
     // Save the PDF
     doc.save("vehicle_maintenance_report.pdf");
-};
+  };
 
-
-  
-    
   return (
     <Layout>
       <div className="content-header">
@@ -192,7 +211,7 @@ const InspectionHistory = () => {
           <Link to="add" className="btn btn-primary">
             <i className="material-icons md-plus"></i> Start Inspection
           </Link>
-          
+
           <button onClick={exportToPDF} className="btn btn-success mx-2">
             Export to PDF
           </button>
@@ -202,16 +221,16 @@ const InspectionHistory = () => {
         <header className="card-header">
           <div className="row gx-3">
             <div className="col-lg-4 col-md-6 me-auto">
-            <div className="input-group">
-                  <span className="input-group-text">
+              <div className="input-group">
+                <span className="input-group-text">
                   <FontAwesomeIcon icon={faSearch} />
-                  </span>
-              <input
-                type="text"
-                placeholder="Search..."
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="form-control"
-              />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="form-control"
+                />
               </div>
             </div>
             <div className="col-lg-2 col-md-3 col-6">
@@ -227,49 +246,54 @@ const InspectionHistory = () => {
               </select>
             </div>
             <div className="col-lg-2 col-md-3 col-6">
-              <select id="vehicle-select" 
-              className="form-select"
-              onChange={(e) => costsExportToPDF(e.target.value)}>
+              <select
+                id="vehicle-select"
+                className="form-select"
+                onChange={(e) => costsExportToPDF(e.target.value)}
+              >
                 <option>Calculate Cost</option>
-                {uniqueVehicles.map((number_plate, index) => (
-                <option key={index} value={number_plate}>{number_plate}</option>
+                {uniqueVehicles?.map((number_plate, index) => (
+                  <option key={index} value={number_plate}>
+                    {number_plate}
+                  </option>
                 ))}
               </select>
-
             </div>
           </div>
         </header>
         <div className="card-body">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Vehichle</th>
-                <th>Vehicle Group</th>
-                <th>Submitted</th>
-                <th>Completed At</th>
-                <th>Duration</th>
-                <th>Inspection Form</th>
-                <th>User</th>
-                <th>Failed Items</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading
-                ? [...Array(5)].map((_, i) => <TableLoader key={i} count={5} />)
-                : currentData.map((d, index) => (
-                    <tr key={index}>
-                      <td>{d.fleet.number_plate}</td>
-                      <td>{d.description}</td>
-                      <td>{new Date(d.date).toDateString()}</td>
-                      <td>{new Date(d.date).toDateString()}</td>
-                      <td>Duration</td>
-                      <td>Inspection Form</td>
-                      <td>User</td>
-                      <td>Failed Items</td>
-                    </tr>
-                  ))}
-            </tbody>
-          </table>
+          <div className="table-responsive-lg">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Vehichle</th>
+                  <th>Vehicle Group</th>
+                  <th>Submitted</th>
+                  <th>Completed At</th>
+                  <th>Duration</th>
+                  <th>User</th>
+                  <th>Failed Items</th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading
+                  ? [...Array(5)]?.map((_, i) => (
+                      <TableLoader key={i} count={5} />
+                    ))
+                  : currentData?.map((d, index) => (
+                      <tr key={index}>
+                        <td>{d.fleet.number_plate}</td>
+                        <td>{d.description}</td>
+                        <td>{new Date(d.date).toDateString()}</td>
+                        <td>{new Date(d.date).toDateString()}</td>
+                        <td>Duration</td>
+                        <td>User</td>
+                        <td>Failed Items</td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div className="pagination-area mt-30 mb-50">

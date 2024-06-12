@@ -18,8 +18,12 @@ const Navbar = () => {
     size="lg" 
     style={{ fontSize: 24, color: '#008000' }} 
     />
-    
+    <span>
+      
+    </span>
     </Link>
+
+
     {/* <span className="input-group-text">
       <FontAwesomeIcon icon={faSearch} />
     </span>
@@ -29,6 +33,7 @@ const Navbar = () => {
       onChange={(e) => setSearchQuery(e.target.value)}
       className="form-control"
     /> */}
+
   </div>
 </div>
 
@@ -62,6 +67,7 @@ const Navbar = () => {
           {" "}
           <i className="material-icons md-apps "></i>{" "}
         </button>
+
         <ul className="nav">
           <li className="nav-item">
             <a 

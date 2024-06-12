@@ -1,46 +1,48 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Layout from "../components/Layout";
-import { useGetMaintenanceQuery, useDeleteMaintenanceMutation} from "../features/maintenance/maintenanceApiSlice";
+import {
+  useGetMaintenanceQuery,
+  useDeleteMaintenanceMutation,
+} from "../features/maintenance/maintenanceApiSlice";
 import { Link, useNavigate } from "react-router-dom";
 import TableLoader from "../components/TableLoader";
 import Pagination from "../components/Pagination";
 import errorParser from "../util/errorParser";
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import logo from '../assets/soliton.png'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import ButtonBudges from "../components/ButtonBudges";
+import { statuses } from "../data/chartData";
 
-const Maintenance = () => {
-    const { isLoading, data,refetch } = useGetMaintenanceQuery();
-    
-    const { ids, entities} = data || {};
-    const maintenancesArray = ids?.map((id) => entities[id])
-    
+const WorkOrder = () => {
+  const { isLoading, data, refetch } = useGetMaintenanceQuery();
 
-    const [deleteMaintenance, {isLoading: isDeleting}] = useDeleteMaintenanceMutation();
+  const { ids, entities } = data || {};
+  const maintenancesArray = ids?.map((id) => entities[id]);
+  const [AppError, setAppError] = useState(null);
 
-  const[searchQuery, setSearchQuery] = useState('')
+  const [deleteMaintenance, { isLoading: isDeleting }] =
+    useDeleteMaintenanceMutation();
+
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleDeleteMaintenance = async (id) => {
     setAppError(null);
     try {
       const result = await Swal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
       });
       if (result.isConfirmed) {
-        
-        const res = await deleteMaintenance( id ).unwrap();
-        
+        const res = await deleteMaintenance(id).unwrap();
 
         refetch();
-        
       }
     } catch (err) {
       console.error("Error deleting Maintenance:", err);
@@ -57,25 +59,26 @@ const Maintenance = () => {
     const fleet = maintenance.fleet.number_plate.toLowerCase();
     const cost = maintenance.cost;
     const description = maintenance.description.toLowerCase();
-    const date = maintenance.date.toLowerCase()
+    const date = maintenance.date.toLowerCase();
     const search = searchQuery.toLowerCase();
-    
 
-    if(search){
-      return(
+    if (search) {
+      return (
         fleet.includes(search) ||
         (cost && cost.toString().includes(search)) ||
         description.includes(search) ||
         date.includes(search)
-      )
-    }else{
-    return maintenancesArray;
+      );
+    } else {
+      return maintenancesArray;
     }
   });
 
-  console.log('Filtered Maintenance Data:', maintenancesArray);
+  console.log("Filtered Maintenance Data:", maintenancesArray);
 
-  const uniqueVehicles = [...new Set(maintenancesArray?.map(m => m.fleet.number_plate))];
+  const uniqueVehicles = [
+    ...new Set(maintenancesArray?.map((m) => m.fleet.number_plate)),
+  ];
 
   const [dataPerPage, setDataPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,31 +86,15 @@ const Maintenance = () => {
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
 
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleDataPerPage = (e) => {
     setDataPerPage(parseInt(e.target.value));
   };
 
-  
-
   const exportToPDF = () => {
     const doc = new jsPDF();
-    
-     // Add logo
-     doc.addImage(logo, 'PNG', 10, 10, 20, 20);
-      
-     // Add header text
-     doc.text(`Soliton Telmec`, 40, 15);
-     doc.text(`Address: Bugolobi Plot 10, Mizindalo Road`, 40, 20);
-     doc.text(`Phone: +256 700 777 003`, 40, 25);
-     doc.text(`Email: info@soliton.co.ug`, 40, 30);
-   
-     // Add a newline
-     doc.text(`\n`, 10, 35);
-
-    doc.text("Service History", 10, 40)
+    doc.text("Maintenance", 10, 10);
     const tableData = [];
     filteredData.forEach((record) => {
       tableData.push([
@@ -115,82 +102,81 @@ const Maintenance = () => {
         record.description,
         record.cost,
         record.date,
-        record.driver,
-        record.repair_priority_class,
-        record.meter,
-        record.meter_unit,
-        record.work_order_number,
-        record.labels,
-        
-
       ]);
     });
     doc.autoTable({
-      head: [["Vehicle", "Description", "Cost", "Date","Driver","Repair Priority Class","Meter","Meter Unit","Work Order Number","Labels"]],
+      head: [["Fleet", "Description", "Cost", "Date"]],
       body: tableData,
-      startY: 50,
     });
-    
     doc.save("maintenance.pdf");
   };
 
   const costsExportToPDF = (fleetNumberPlate) => {
-    console.log('Selected Fleet Number Plate:', fleetNumberPlate);
-    console.log('All Maintenance Records:', maintenancesArray);
+    console.log("Selected Fleet Number Plate:", fleetNumberPlate);
+    console.log("All Maintenance Records:", maintenancesArray);
 
     // Filter maintenance records for the selected fleet number plate
     const vehicleMaintenances = maintenancesArray.filter((maintenance) => {
-        const maintenanceFleetNumberPlate = maintenance.fleet.number_plate;
-        console.log('Maintenance Fleet Number Plate:', maintenanceFleetNumberPlate);
-        console.log('Comparison:', maintenanceFleetNumberPlate === fleetNumberPlate);
-        return maintenanceFleetNumberPlate === fleetNumberPlate;
+      const maintenanceFleetNumberPlate = maintenance.fleet.number_plate;
+      console.log(
+        "Maintenance Fleet Number Plate:",
+        maintenanceFleetNumberPlate
+      );
+      console.log(
+        "Comparison:",
+        maintenanceFleetNumberPlate === fleetNumberPlate
+      );
+      return maintenanceFleetNumberPlate === fleetNumberPlate;
     });
 
-    console.log('Maintenance Records for Selected Fleet:', vehicleMaintenances);
+    console.log("Maintenance Records for Selected Fleet:", vehicleMaintenances);
 
     // Check if there are any maintenance records for the selected fleet
     if (vehicleMaintenances.length === 0) {
-        console.error('No maintenance records found for the selected fleet.');
-        return;
+      console.error("No maintenance records found for the selected fleet.");
+      return;
     }
 
     // Calculate the total cost
-    const totalCost = vehicleMaintenances.reduce((acc, maintenance) => acc + maintenance.cost, 0);
+    const totalCost = vehicleMaintenances.reduce(
+      (acc, maintenance) => acc + maintenance.cost,
+      0
+    );
 
     // Create and configure the PDF
     const doc = new jsPDF();
-    doc.text(`Vehicle Maintenance Report For- ${vehicleMaintenances[0].fleet.number_plate}`, 10, 10);
+    doc.text(
+      `Vehicle Maintenance Report For- ${vehicleMaintenances[0].fleet.number_plate}`,
+      10,
+      10
+    );
     doc.text(`Total Cost: ${totalCost}`, 10, 20);
 
     // Prepare table data
     const tableData = vehicleMaintenances?.map((record) => [
-        record.date,
-        record.description,
-        record.cost,
-       
+      record.date,
+      record.description,
+      record.cost,
     ]);
 
     // Generate the table in the PDF
     doc.autoTable({
-        head: [["Date","Description", "Cost" ]],
-        body: tableData,
-        startY: 30,
+      head: [["Date", "Description", "Cost"]],
+      body: tableData,
+      startY: 30,
     });
 
     // Save the PDF
     doc.save("vehicle_maintenance_report.pdf");
-};
+  };
 
-
-  
-    
   return (
     <Layout>
       <div className="content-header">
-        <h2 className="content-title">Maintenances</h2>
+        <h2 className="content-title">Job Cards</h2>
         <div>
           <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Request Maintenance
+            <i className="material-icons md-plus"></i> Create Job Card
           </Link>
 
           <button onClick={exportToPDF} className="btn btn-success mx-2">
@@ -198,6 +184,7 @@ const Maintenance = () => {
           </button>
         </div>
       </div>
+      <ButtonBudges title="Status" buttons={statuses} />
       <div className="card mb-4">
         <header className="card-header">
           <div className="row gx-3">
@@ -226,20 +213,6 @@ const Maintenance = () => {
                 <option value="40">Show 40</option>
               </select>
             </div>
-            <div className="col-lg-2 col-md-3 col-6">
-              <select
-                id="vehicle-select"
-                className="form-select"
-                onChange={(e) => costsExportToPDF(e.target.value)}
-              >
-                <option>Calculate Cost</option>
-                {uniqueVehicles?.map((number_plate, index) => (
-                  <option key={index} value={number_plate}>
-                    {number_plate}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
         </header>
         <div className="card-body">
@@ -248,17 +221,12 @@ const Maintenance = () => {
               <thead>
                 <tr>
                   <th>Vehichle</th>
-                  <th>Service Tasks</th>
-                  <th>Total Cost</th>
-                  <th>Completed At</th>
-                  <th>Driver</th>
-                  <th>Repair Priority Class</th>
-                  <th>Meter</th>
-                  <th>Meter Unit</th>
-                  <th>Description</th>
-                  <th>Issues</th>
-                  <th>Work Order Number</th>
-                  <th className="text-center"> Action </th>
+                  <th>Status</th>
+                  <th>Issue Date</th>
+                  <th>Start Date</th>
+                  <th>Closing date</th>
+                  <th>Assigned To</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -272,29 +240,9 @@ const Maintenance = () => {
                         <td>{d.description}</td>
                         <td>{d.cost}</td>
                         <td>{new Date(d.date).toDateString()}</td>
-                        <td>Driver</td>
-                        <td>Priority Class</td>
-                        <td>Meter</td>
-                        <td>Meter Unit</td>
-                        <td>Description</td>
-                        <td>Issues</td>
-                        <td>Work Order Number</td>
-                        <td className="text-center" style={{whiteSpace:"noWrap"}}>
-                          <Link
-                            to={`edit/${d.id}`}
-                            className="btn btn-sm font-sm rounded btn-brand mx-4"
-                          >
-                            <i className="material-icons md-edit"></i>
-                            Edit
-                          </Link>
-                          <button
-                            onClick={() => handleDeleteMaintenance(d.id)}
-                            className="btn btn-sm font-sm rounded btn-danger"
-                          >
-                            <i className="material-icons md-delete"></i>
-                            Delete
-                          </button>
-                        </td>
+                        <td>{new Date(d.date).toDateString()}</td>
+                        <td>{new Date(d.date).toDateString()}</td>
+                        <td>Assigned To</td>
                       </tr>
                     ))}
               </tbody>
@@ -316,4 +264,4 @@ const Maintenance = () => {
   );
 };
 
-export default Maintenance;
+export default WorkOrder;

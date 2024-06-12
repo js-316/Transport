@@ -1,8 +1,6 @@
 import {
   createBrowserRouter as Router,
-  RouterProvider,Route,
-  useNavigate,
-  Routes,
+  RouterProvider, BrowserRouter,Routes,Route
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
@@ -16,13 +14,13 @@ import EditDriver from "./pages/EditDriver";
 import Vehichles from "./pages/Vehichles";
 import AddVehichle from "./pages/AddVehichle";
 import EditVehichle from "./pages/EditVehichle";
-import MeterHistory from "./pages/MeterHistory"
-import ExpensesHistory from "./pages/ExpensesHistory"
+import MeterHistory from "./pages/MeterHistory";
+import ExpensesHistory from "./pages/ExpensesHistory";
 import Logout from "./pages/Logout";
 import Maintenance from "./pages/Maintenance";
 import AddMaintenance from "./pages/AddMaintenance";
 import EditMaintenance from "./pages/EditMaintenance";
-import WorkOrder from "./pages/WorkOrder";
+import WorkOrder from "./pages/JobCard";
 import ViewCosts from "./pages/ViewCosts";
 import Fuel from "./pages/Fuel";
 import AddFuel from "./pages/AddFuel";
@@ -32,14 +30,12 @@ import Service_Reminders from "./pages/Service_Reminders";
 import Contact_Reminders from "./pages/Contact_Reminders";
 import Vehicle_Reminder from "./pages/Vehicle_Reminder";
 import Staff from "./pages/staff";
-import Equipment from "./pages/Equipment"
-import InspectionHistory from "./pages/InspectionHistory"
-import ItemFailures from "./pages/ItemFailures"
-import Schedules from "./pages/Schedules"
-import Issues from "./pages/Issues"
-import Faults from "./pages/Faults"
-import Contacts from "./pages/Contacts"
-import Parts from "./pages/Parts"
+import Equipment from "./pages/Equipment";
+import InspectionHistory from "./pages/InspectionHistory";
+import ItemFailures from "./pages/ItemFailures";
+import Schedules from "./pages/Schedules";
+import Contacts from "./pages/Contacts";
+import Parts from "./pages/Parts";
 import AddWorkOrder from "./pages/AddWorkOrder";
 import AddEquipment from "./pages/AddEquipment";
 import AddInspection from "./pages/AddInspection";
@@ -52,22 +48,12 @@ import AddContact from "./pages/AddContact";
 import AddExpense from "./pages/AddExpense";
 import AddPart from "./pages/AddPart";
 import AddMeter from "./pages/AddMeter";
-import { useSelector } from "react-redux";
-import { selectUser } from "./features/auth/authSlice";
-import { useRoutes } from 'react-router-dom';
+import ViewFuelRequests from "./pages/ViewFuelRequests"
+import UserDashboard from "./pages/User/UserDashboard"
+import EngineerDashboard from "./pages/User/EngineerDashboard"
 
 function App() {
 
-  // const user = useSelector(selectUser)
-  
-  const user = useSelector(selectUser);
-  console.log("Current User",user);
-  console.log("Is Driver:", user?.is_driver);
-  console.log("Is Staff:", user?.is_staff);
-  console.log("Is Engineer:",user?.is_engineer)
-  console.log("Is Admin:",user?.is_admin)
-
- 
   const routes = Router([
     {
       path: "",
@@ -137,7 +123,7 @@ function App() {
           path: "vehichles/fuel_view/:id",
           element: <ViewFuel />,
         },
-        
+
         {
           path: "vehichles/expenses_history",
           element: <ExpensesHistory />,
@@ -182,13 +168,14 @@ function App() {
           path: "service_reminders/add",
           element: <AddServiceReminder />,
         },
+
         {
           path: "contact_reminders",
-          element: < Contact_Reminders/>,
+          element: <Contact_Reminders />,
         },
         {
           path: "contact_reminders/add",
-          element: < AddContactReminder/>,
+          element: <AddContactReminder />,
         },
         {
           path: "vehicle_reminders",
@@ -200,57 +187,52 @@ function App() {
         },
         {
           path: "equipment",
-          element: <Equipment/>
+          element: <Equipment />,
         },
         {
           path: "equipment/add",
-          element: <AddEquipment/>
+          element: <AddEquipment />,
         },
         {
           path: "inspections/item_failures",
-          element: <ItemFailures />
+          element: <ItemFailures />,
         },
         {
           path: "inspections/schedules",
-          element: <Schedules />
+          element: <Schedules />,
         },
         {
           path: "inspections/inspection_history",
-          element: <InspectionHistory />
+          element: <InspectionHistory />,
         },
         {
           path: "inspections/inspection_history/add",
-          element: <AddInspection />
+          element: <AddInspection />,
         },
         {
-          path: "issues",
-          element: <Issues />
+          path: "fuel",
+          element: <Fuel  />,
         },
+       
         {
-          path: "issues/add",
-          element: <AddIssue />
-        },
-        {
-          path: "issues/faults",
-          element: <Faults />
+          path: "fuelrequests",
+          element: <ViewFuelRequests />,
         },
         {
           path: "issues/faults/add",
-          element: <AddFault />
+          element: <AddFault />,
         },
         {
           path: "contacts",
-          element: <Contacts />
+          element: <Contacts />,
         },
         {
           path: "contacts/add",
-          element: <AddContact />
+          element: <AddContact />,
         },
         {
           path: "fuel",
           element: <Fuel />,
-          display: user?.is_driver ? "Fuel" : null,
-          
         },
         {
           path: "fuel/add",
@@ -272,8 +254,6 @@ function App() {
           path: "logout",
           element: <Logout />,
         },
-
-
         {
           path: "service_reminders",
           element: <Service_Reminders />,
@@ -289,8 +269,12 @@ function App() {
           element: <Vehicle_Reminder />,
         },
         {
-          path: "staff",
-          element: <Staff/>,
+          path: "userdashboard",
+          element: <UserDashboard />,
+        },
+        {
+          path: "/dashboard/EngDashboard",
+          element: <EngineerDashboard />,
         },
         
       ],

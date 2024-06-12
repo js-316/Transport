@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { selectUser } from "../features/auth/authSlice";
 
 
@@ -46,6 +48,19 @@ const Sidebar = () => {
     }: null,
     user?.is_staff ?
     {
+      name: "DriverDashboard",
+      path: "/dashboard/userdashboard",
+      icon: "icon material-icons md-home",
+      active: location.pathname === "/dashboard/userdashboard",
+    } : null,
+    {
+      name: "EngDashboard",
+      path: "/dashboard/EngDashboard",
+      icon: "icon material-icons md-home",
+      active: location.pathname === "/dashboard/EngDashboard",
+    },
+    user?.is_staff ?
+    {
       name: "Drivers",
       path: "/dashboard/drivers",
       icon: "icon material-icons md-person",
@@ -53,19 +68,18 @@ const Sidebar = () => {
     } :null,
     
     {
-      name: "Service",
+      name: "Maintainance",
       icon: "icon material-icons md-home_repair_service",
       submenu: [
         {
-          name: "Service History",
+          name: "Mantainance Requests",
           path: "/dashboard/maintenance",
           active: location.pathname === "/dashboard/maintenance",
         },
         user?.is_staff || user?.is_engineer ?
         
         {
-
-          name: "Work Orders",
+          name: "Job Cards",
           path: "/dashboard/maintenance/work_order",
           active: location.pathname === "/dashboard/maintenance/work_order",
         } : null,
@@ -107,18 +121,19 @@ const Sidebar = () => {
     user?.is_staff || user?.is_driver ?
     
     {
-      name: "Issues",
-      icon: "icon material-icons md-warning",
+      name: "Fuel",
+      icon: "icon material-icons md-local_gas_station",
       submenu: [
         {
-          name: "Issues",
-          path: "/dashboard/issues",
-          active: location.pathname === "/dashboard/issues",
+          name: "Fuel history",
+          path: "/dashboard/fuel",
+          active: location.pathname === "/dashboard/fuel",
+          
         },
         {
-          name: "Faults",
-          path: "/dashboard/issues/faults",
-          active: location.pathname === "/dashboard/issues/faults",
+          name: "Fuel Requests",
+          path: "/dashboard/fuelrequests",
+          active: location.pathname === "/dashboard/fuelrequests",
         },
       ],
     } : null,
@@ -192,7 +207,7 @@ const Sidebar = () => {
   const toggleSubMenu = (link) => {
     const updatedMenuLinks = menuLinks.map((menuLink) => {
       if (menuLink === link) {
-        menuLink.active = true;
+        menuLink.active = !menuLink.active;
         setCurrentMenuItem(link);
       } else {
         menuLink.active = false;
@@ -203,7 +218,10 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="navbar-aside ps" id="offcanvas_aside">
+    <div
+      className={`navbar-aside ps ${toggleMenu ? "open" : ""}`}
+      id="offcanvas_aside"
+    >
       <div className="aside-top">
         <Link to="/dashboard" className="brand-wrap">
           Fleet Management
@@ -223,7 +241,7 @@ const Sidebar = () => {
             <li
               key={index}
               className={`${link.active ? "menu-item active" : "menu-item"}`}
-              onClick={index.onClick}
+              onClick={() => toggleSubMenu(link)}
             >
               <Link to={link.path} className="menu-link">
                 <i className={link.icon}></i>
@@ -236,7 +254,7 @@ const Sidebar = () => {
                 <ul className="submenu">
                   {link.submenu.map((submenuItem, submenuIndex) => (
                     <li key={submenuIndex}>
-                      <Link to={submenuItem.path} className="menu-link">
+                      <Link to={submenuItem.path} className="">
                         <span className="text">{submenuItem.name}</span>
                       </Link>
                     </li>

@@ -54,22 +54,26 @@ const AddIssue = () => {
   };
 
   const { errors } = formState;
+  const assigneesArray = [
+    { id: 1, name: "John Doe" },
+    { id: 2, name: "Jane Smith" },
+    // Add more assignees here
+  ];
 
   return (
     <Layout>
       <div className="row">
         <div className="col-9">
-        <div className="content-header">
+          <div className="content-header">
             <div>
               <div>
                 <Link to="/dashboard/issues">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Issues
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />
+                  Issues
                 </Link>
               </div>
-              <h2 className="content-title">
-                New Issue</h2>
+              <h2 className="content-title">New Issue</h2>
             </div>
-
           </div>
         </div>
         <div className="col-lg-12">
@@ -90,7 +94,7 @@ const AddIssue = () => {
                     <div className="mb-4">
                       <label className="form-label">Vehicle</label>
                       <div className="row gx-2">
-                      <select
+                        <select
                           placeholder="Select Vehichle"
                           className={`form-control ${
                             errors.fuel_plate ? "is-invalid" : ""
@@ -106,7 +110,6 @@ const AddIssue = () => {
                         </select>
                         {errors.fuel_plate && (
                           <div className="invalid-feedback">
-                            
                             {errors.fuel_plate?.message}
                           </div>
                         )}
@@ -133,7 +136,7 @@ const AddIssue = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Reported Date</label>
@@ -219,17 +222,23 @@ const AddIssue = () => {
                     <div className="mb-4">
                       <label className="form-label">Assigned To</label>
                       <div className="row gx-2">
-                        <input
-                          placeholder="Select Assigned to"
-                          type="text"
+                        <select
                           className={`form-control ${
                             errors.assigned_to ? "is-invalid" : ""
                           }`}
                           {...register("assigned_to")}
-                        />
-                        {errors.assigned_to && (
+                        >
+                          <option>Select Assignee</option>
+                          {assigneesArray?.map((assignee) => (
+                            <option key={assignee.id} value={assignee.id}>
+                              {assignee.name}
+                            </option>
+                          ))}
+                          ;
+                        </select>
+                        {errors.fuel_type && (
                           <div className="invalid-feedback">
-                            {errors.assigned_to?.message}
+                            {errors.fuel_type?.message}
                           </div>
                         )}
                       </div>
@@ -258,44 +267,42 @@ const AddIssue = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
-                        <label className="form-label">Photos</label>
-                        <div className="row gx-2">
-                            <input
-                             type="file"
-                            accept="image/*"
-                            className="form-control"
-                            {...register("photo")}
-                            />
-                                {errors.photo && (
-                                <div className="invalid-feedback">
-                                {errors.photo?.message}
-                                </div>
-                                     )}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-4">
-                            <div className="mb-4">
-                        <label className="form-label">Documents</label>
-                        <div className="row gx-2">
-                            <input
-                             type="file"
-                            accept=".pdf, .doc, .docx, .txt"
-                            className="form-control"
-                            {...register("documents")}
-                            />
-                                {errors.documents && (
-                                <div className="invalid-feedback">
-                                {errors.documents?.message}
-                                </div>
-                                     )}
-                                </div>
-                            </div>
-                        </div>
-                        
+                      <label className="form-label">Photos</label>
+                      <div className="row gx-2">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="form-control"
+                          {...register("photo")}
+                        />
+                        {errors.photo && (
+                          <div className="invalid-feedback">
+                            {errors.photo?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Documents</label>
+                      <div className="row gx-2">
+                        <input
+                          type="file"
+                          accept=".pdf, .doc, .docx, .txt"
+                          className="form-control"
+                          {...register("documents")}
+                        />
+                        {errors.documents && (
+                          <div className="invalid-feedback">
+                            {errors.documents?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                  
-                  
+
                 <button class="btn btn-primary" type="submit">
                   {isLoading ? "Adding..." : "Save Issue"}
                 </button>

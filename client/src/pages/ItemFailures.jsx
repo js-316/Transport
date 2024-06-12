@@ -199,7 +199,6 @@ const Vehichles = () => {
         <h2 className="content-title">Inspection Item Failures</h2>
         <div>
           <Link
-
             onClick={() => uploadRef.current.click()}
             to="#"
             className={
@@ -211,7 +210,10 @@ const Vehichles = () => {
             <i className="material-icons md-import_export"></i>
             Import
           </Link>
-          <Link to="/dashboard/inspections/inspection_history/add" className="btn btn-primary">
+          <Link
+            to="/dashboard/inspections/inspection_history/add"
+            className="btn btn-primary"
+          >
             <i className="material-icons md-plus"></i> Start Inspection
           </Link>
           <input
@@ -257,41 +259,44 @@ const Vehichles = () => {
           </div>
         </header>
         <div className="card-body">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Vehicle</th>
-                <th>Engine</th>
-                <th>Oil Left</th>
-                <th>Clutch</th>
-                <th>Fuel Level</th>
-                <th>Steering Mechanism</th>
-                <th>Horn</th>
-                <th>Tires</th>
-                <th>Wheels</th>
-                <th>Vehicle Condition</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading
-                ? [...Array(5)].map((_, i) => <TableLoader key={i} count={6} />)
-                : currentData?.map((d, index) => (
-
-                  <tr key={index}>
-                    <td>{d.number_plate}</td>
-                    <td>{d.driver.name}</td>
-                    <td>{d.mileage}</td>
-                    <td>{d.vehichle_type}</td>
-                    <td>{d.manufacturer}</td>
-                    <td>Steering Mechanism</td>
-                    <td>Horn</td>
-                    <td>Tires</td>
-                    <td>Wheels</td>
-                    <td>Vehicle Condition</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          <div className="table-responsive-lg">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Vehicle</th>
+                  <th>Engine</th>
+                  <th>Oil Left</th>
+                  <th>Clutch</th>
+                  <th>Fuel Level</th>
+                  <th>Steering Mechanism</th>
+                  <th>Horn</th>
+                  <th>Tires</th>
+                  <th>Wheels</th>
+                  <th>Vehicle Condition</th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading
+                  ? [...Array(5)].map((_, i) => (
+                      <TableLoader key={i} count={6} />
+                    ))
+                  : currentData?.map((d, index) => (
+                      <tr key={index}>
+                        <td>{d.number_plate}</td>
+                        <td>{d.driver.name}</td>
+                        <td>{d.mileage}</td>
+                        <td>{d.vehichle_type}</td>
+                        <td>{d.manufacturer}</td>
+                        <td>Steering Mechanism</td>
+                        <td>Horn</td>
+                        <td>Tires</td>
+                        <td>Wheels</td>
+                        <td>Vehicle Condition</td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div className="pagination-area mt-30 mb-50">

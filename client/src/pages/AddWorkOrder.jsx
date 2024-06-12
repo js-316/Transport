@@ -30,6 +30,8 @@ const AddWorkOrder = () => {
 
   const vehichlesArray = ids?.map((id) => entities[id]);
 
+   
+
   const handleAddFuel = async (data) => {
     setAppError(null);
     try {
@@ -63,11 +65,11 @@ const AddWorkOrder = () => {
             <div>
               <div>
                 <Link to="/dashboard/maintenance/work_order">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Work Orders
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />Job Cards
                 </Link>
               </div>
               <h2 className="content-title">
-                New Work Order</h2>
+                New Job Card</h2>
             </div>
 
           </div>
@@ -75,7 +77,7 @@ const AddWorkOrder = () => {
         <div className="col-lg-12">
           <div className="card mb-4">
             <div className="card-header">
-              <h4>Work Order Information</h4>
+              <h4>Job Card Information</h4>
             </div>
             <div className="card-body">
               {appError && (
@@ -128,26 +130,6 @@ const AddWorkOrder = () => {
                         {errors.status && (
                           <div className="invalid-feedback">
                             {errors.status?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Repair Priority Class</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="Emergency"
-                          type="text"
-                          className={`form-control ${
-                            errors.repair_priority_class ? "is-invalid" : ""
-                          }`}
-                          {...register("repair_priority_class")}
-                        />
-                        {errors.repair_priority_class && (
-                          <div className="invalid-feedback">
-                            {errors.repair_priority_class?.message}
                           </div>
                         )}
                       </div>
@@ -218,26 +200,6 @@ const AddWorkOrder = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Assigned To</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="Name"
-                          type="text"
-                          className={`form-control ${
-                            errors.assigned_to ? "is-invalid" : ""
-                          }`}
-                          {...register("assigned_to")}
-                        />
-                        {errors.fuel_type && (
-                          <div className="invalid-feedback">
-                            {errors.fuel_type?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
                         <label className="form-label">Photos</label>
                         <div className="row gx-2">
                             <input
@@ -295,7 +257,7 @@ const AddWorkOrder = () => {
                   
                   
                 <button class="btn btn-primary" type="submit">
-                  {isLoading ? "Adding..." : "Save Work Order"}
+                  {isLoading ? "Adding..." : "Save Job Card"}
                 </button>
               </form>
             </div>

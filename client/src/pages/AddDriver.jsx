@@ -36,6 +36,11 @@ const AddDriver = () => {
         phone_number: data.phone_number,
         age: data.age,
         date_hired: data.date_hired,
+        permit_number: data.permit_number,
+        permit_issue_date: data.permit_issue_date,
+        permit_expire_date: data.permit_expire_date,
+        vehicle_number: data.vehicle_number,
+        
       }).unwrap();
       if (res.driver) {
         navigate("/dashboard/drivers");
@@ -59,13 +64,12 @@ const AddDriver = () => {
             <div>
               <div>
                 <Link to="/dashboard/drivers">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Drivers
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />
+                  Drivers
                 </Link>
               </div>
-              <h2 className="content-title">
-                Add Driver</h2>
+              <h2 className="content-title">Add Driver</h2>
             </div>
-
           </div>
         </div>
         <div className="col-lg-12">
@@ -88,8 +92,9 @@ const AddDriver = () => {
                         <input
                           placeholder="John"
                           type="text"
-                          className={`form-control ${errors.first_name ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.first_name ? "is-invalid" : ""
+                          }`}
                           {...register("first_name")}
                         />
                         {errors.first_name && (
@@ -107,8 +112,9 @@ const AddDriver = () => {
                         <input
                           placeholder="Muteesa"
                           type="text"
-                          className={`form-control ${errors.last_name ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.last_name ? "is-invalid" : ""
+                          }`}
                           {...register("last_name")}
                         />
                         {errors.last_name && (
@@ -125,8 +131,9 @@ const AddDriver = () => {
                       <input
                         placeholder="0712345678"
                         type="text"
-                        className={`form-control ${errors.phone_number ? "is-invalid" : ""
-                          }`}
+                        className={`form-control ${
+                          errors.phone_number ? "is-invalid" : ""
+                        }`}
                         {...register("phone_number")}
                       />
                       {errors.phone_number && (
@@ -143,8 +150,9 @@ const AddDriver = () => {
                         <input
                           placeholder="40"
                           type="number"
-                          className={`form-control ${errors.age ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.age ? "is-invalid" : ""
+                          }`}
                           {...register("age")}
                         />
                         {errors.age && (
@@ -163,8 +171,9 @@ const AddDriver = () => {
                           placeholder="2022-02-02"
                           type="date"
                           max={new Date().toISOString().split("T")[0]}
-                          className={`form-control ${errors.date_hired ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.date_hired ? "is-invalid" : ""
+                          }`}
                           {...register("date_hired")}
                         />
                         {errors.date_hired && (
@@ -177,19 +186,85 @@ const AddDriver = () => {
                   </div>
                   <div className="col-lg-6">
                     <div className="mb-4">
-                      <label className="form-label">Date Hired</label>
+                      <label className="form-label">
+                        Permit(Licence) Number
+                      </label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="13326500"
+                          type="text"
+                          max={new Date().toISOString().split("T")[0]}
+                          className={`form-control ${
+                            errors.permit_number ? "is-invalid" : ""
+                          }`}
+                          {...register("permit_number")}
+                        />
+                        {errors.permit_number && (
+                          <div className="invalid-feedback">
+                            {errors.permit_number?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="mb-4">
+                      <label className="form-label">vehicle_number</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="UBU234G"
+                          type="text"
+                          max={new Date().toISOString().split("T")[0]}
+                          className={`form-control ${
+                            errors.permit_number ? "is-invalid" : ""
+                          }`}
+                          {...register("vehicle_number")}
+                        />
+                        {errors.vehicle_number && (
+                          <div className="invalid-feedback">
+                            {errors.vehicle_number?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="mb-4">
+                      <label className="form-label">Permit Issue Date</label>
                       <div className="row gx-2">
                         <input
                           placeholder="2022-02-02"
                           type="date"
                           max={new Date().toISOString().split("T")[0]}
-                          className={`form-control ${errors.date_hired ? "is-invalid" : ""
-                            }`}
-                          {...register("date_hired")}
+                          className={`form-control ${
+                            errors.date_hired ? "is-invalid" : ""
+                          }`}
+                          {...register("permit_issue_date")}
                         />
-                        {errors.date_hired && (
+                        {errors.permit_issue_date && (
                           <div className="invalid-feedback">
-                            {errors.date_hired?.message}
+                            {errors.permit_issue_date?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="mb-4">
+                      <label className="form-label">Permit Expire Date</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="2022-02-02"
+                          type="date"
+                          max={new Date().toISOString().split("T")[0]}
+                          className={`form-control ${
+                            errors.date_hired ? "is-invalid" : ""
+                          }`}
+                          {...register("permit_expire_date")}
+                        />
+                        {errors.permit_expire_date && (
+                          <div className="invalid-feedback">
+                            {errors.permit_expire_date?.message}
                           </div>
                         )}
                       </div>

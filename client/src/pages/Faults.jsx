@@ -1,47 +1,47 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout";
-import { useGetMaintenanceQuery, useDeleteMaintenanceMutation } from "../features/maintenance/maintenanceApiSlice";
+import {
+  useGetMaintenanceQuery,
+  useDeleteMaintenanceMutation,
+} from "../features/maintenance/maintenanceApiSlice";
 import { Link, useNavigate } from "react-router-dom";
 import TableLoader from "../components/TableLoader";
 import Pagination from "../components/Pagination";
 import errorParser from "../util/errorParser";
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import ButtonBudges from "../components/ButtonBudges";
-
 
 const WorkOrder = () => {
   const { isLoading, data, refetch } = useGetMaintenanceQuery();
 
   const { ids, entities } = data || {};
-  const maintenancesArray = ids?.map((id) => entities[id])
+  const maintenancesArray = ids?.map((id) => entities[id]);
   const [AppError, setAppError] = useState(null);
 
-  const [deleteMaintenance, { isLoading: isDeleting }] = useDeleteMaintenanceMutation();
+  const [deleteMaintenance, { isLoading: isDeleting }] =
+    useDeleteMaintenanceMutation();
 
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleDeleteMaintenance = async (id) => {
     setAppError(null);
     try {
       const result = await Swal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
       });
       if (result.isConfirmed) {
-
         const res = await deleteMaintenance(id).unwrap();
 
-
         refetch();
-
       }
     } catch (err) {
       console.error("Error deleting Maintenance:", err);
@@ -58,9 +58,8 @@ const WorkOrder = () => {
     const fleet = maintenance.fleet.number_plate.toLowerCase();
     const cost = maintenance.cost;
     const description = maintenance.description.toLowerCase();
-    const date = maintenance.date.toLowerCase()
+    const date = maintenance.date.toLowerCase();
     const search = searchQuery.toLowerCase();
-
 
     if (search) {
       return (
@@ -68,15 +67,17 @@ const WorkOrder = () => {
         (cost && cost.toString().includes(search)) ||
         description.includes(search) ||
         date.includes(search)
-      )
+      );
     } else {
       return maintenancesArray;
     }
   });
 
-  console.log('Filtered Maintenance Data:', maintenancesArray);
+  console.log("Filtered Maintenance Data:", maintenancesArray);
 
-  const uniqueVehicles = [...new Set(maintenancesArray?.map(m => m.fleet.number_plate))];
+  const uniqueVehicles = [
+    ...new Set(maintenancesArray?.map((m) => m.fleet.number_plate)),
+  ];
 
   const [dataPerPage, setDataPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -84,14 +85,11 @@ const WorkOrder = () => {
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
 
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleDataPerPage = (e) => {
     setDataPerPage(parseInt(e.target.value));
   };
-
-
 
   const exportToPDF = () => {
     const doc = new jsPDF();
@@ -113,39 +111,51 @@ const WorkOrder = () => {
   };
 
   const costsExportToPDF = (fleetNumberPlate) => {
-    console.log('Selected Fleet Number Plate:', fleetNumberPlate);
-    console.log('All Maintenance Records:', maintenancesArray);
+    console.log("Selected Fleet Number Plate:", fleetNumberPlate);
+    console.log("All Maintenance Records:", maintenancesArray);
 
     // Filter maintenance records for the selected fleet number plate
     const vehicleMaintenances = maintenancesArray.filter((maintenance) => {
       const maintenanceFleetNumberPlate = maintenance.fleet.number_plate;
-      console.log('Maintenance Fleet Number Plate:', maintenanceFleetNumberPlate);
-      console.log('Comparison:', maintenanceFleetNumberPlate === fleetNumberPlate);
+      console.log(
+        "Maintenance Fleet Number Plate:",
+        maintenanceFleetNumberPlate
+      );
+      console.log(
+        "Comparison:",
+        maintenanceFleetNumberPlate === fleetNumberPlate
+      );
       return maintenanceFleetNumberPlate === fleetNumberPlate;
     });
 
-    console.log('Maintenance Records for Selected Fleet:', vehicleMaintenances);
+    console.log("Maintenance Records for Selected Fleet:", vehicleMaintenances);
 
     // Check if there are any maintenance records for the selected fleet
     if (vehicleMaintenances.length === 0) {
-      console.error('No maintenance records found for the selected fleet.');
+      console.error("No maintenance records found for the selected fleet.");
       return;
     }
 
     // Calculate the total cost
-    const totalCost = vehicleMaintenances.reduce((acc, maintenance) => acc + maintenance.cost, 0);
+    const totalCost = vehicleMaintenances.reduce(
+      (acc, maintenance) => acc + maintenance.cost,
+      0
+    );
 
     // Create and configure the PDF
     const doc = new jsPDF();
-    doc.text(`Vehicle Maintenance Report For- ${vehicleMaintenances[0].fleet.number_plate}`, 10, 10);
+    doc.text(
+      `Vehicle Maintenance Report For- ${vehicleMaintenances[0].fleet.number_plate}`,
+      10,
+      10
+    );
     doc.text(`Total Cost: ${totalCost}`, 10, 20);
 
     // Prepare table data
-    const tableData = vehicleMaintenances.map((record) => [
+    const tableData = vehicleMaintenances?.map((record) => [
       record.date,
       record.description,
       record.cost,
-
     ]);
 
     // Generate the table in the PDF
@@ -158,9 +168,6 @@ const WorkOrder = () => {
     // Save the PDF
     doc.save("vehicle_maintenance_report.pdf");
   };
-
-
-
 
   return (
     <Layout>
@@ -176,7 +183,7 @@ const WorkOrder = () => {
           </button>
         </div>
       </div>
-      <ButtonBudges/>
+      <ButtonBudges />
       <div className="card mb-4">
         <header className="card-header">
           <div className="row gx-3">
@@ -205,7 +212,6 @@ const WorkOrder = () => {
                 <option value="40">Show 40</option>
               </select>
             </div>
-            
           </div>
         </header>
         <div className="card-body">
@@ -218,22 +224,23 @@ const WorkOrder = () => {
                 <th>Last Occured Date</th>
                 <th>Issue</th>
                 <th>Code</th>
-             
               </tr>
             </thead>
             <tbody>
               {isLoading
-                ? [...Array(5)].map((_, i) => <TableLoader key={i} count={5} />)
-                : currentData.map((d, index) => (
-                  <tr key={index}>
-                    <td>{d.fleet.number_plate}</td>
-                    <td>{d.description}</td>
-                    <td>{d.cost}</td>
-                    <td>{new Date(d.date).toDateString()}</td>
-                    <td>Issue</td>
-                    <td>Code</td>
-                  </tr>
-                ))}
+                ? [...Array(5)]?.map((_, i) => (
+                    <TableLoader key={i} count={5} />
+                  ))
+                : currentData?.map((d, index) => (
+                    <tr key={index}>
+                      <td>{d.fleet.number_plate}</td>
+                      <td>{d.description}</td>
+                      <td>{d.cost}</td>
+                      <td>{new Date(d.date).toDateString()}</td>
+                      <td>Issue</td>
+                      <td>Code</td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>

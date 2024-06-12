@@ -28,7 +28,7 @@ const AddPart = () => {
 
   const { ids, entities } = data || {};
 
-  const vehichlesArray = ids?.map((id) => entities[id]);
+  const vehichlesArray = ids?.map((id) => entities?.[id]);
 
   const handleAddFuel = async (data) => {
     setAppError(null);

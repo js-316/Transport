@@ -127,10 +127,13 @@ const Drivers = () => {
         record.phone_number,
         record.age,
         record.date_hired,
+        record.lisence_number,
+        record.lisence_issue_date,
+        record.lisence_expire_date,
       ]);
     });
     doc.autoTable({
-      head: [["Name", "Phone Number", "Age", "Date Hired"]],
+      head: [["Name", "Phone Number", "Age", "Date Hired" ,"License Number","Issue date", "Expire date"]],
       body: tableData,
     });
     doc.save("drivers.pdf");
@@ -142,7 +145,7 @@ const Drivers = () => {
       <div className="content-header">
         <h2 className="content-title">Drivers</h2>
         <div>
-        <Link
+          <Link
             // while uploading a file, disable the import button
             onClick={() => uploadRef.current.click()}
             to="#"
@@ -174,16 +177,16 @@ const Drivers = () => {
         <header className="card-header">
           <div className="row gx-3">
             <div className="col-lg-4 col-md-6 me-auto">
-            <div className="input-group">
-                  <span className="input-group-text">
+              <div className="input-group">
+                <span className="input-group-text">
                   <FontAwesomeIcon icon={faSearch} />
-                  </span>
-              <input
-                type="text"
-                placeholder="Search..."
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="form-control"
-              />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="form-control"
+                />
               </div>
             </div>
             <div className="col-lg-2 col-md-3 col-6">
@@ -201,47 +204,60 @@ const Drivers = () => {
           </div>
         </header>
         <div className="card-body">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Phone Number</th>
-                <th>Age</th>
-                <th>Date Hired</th>
-                <th className="text-end"> Action </th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading
-                ? [...Array(5)].map((_, i) => <TableLoader key={i} count={5} />)
-                : currentData?.map((d, index) => (
-                  <tr key={index}>
-                    <td>{d.name}</td>
-                    <td>{d.phone_number}</td>
-                    <td>{d.age}</td>
-                    <td>{new Date(d.date_hired).toDateString()}</td>
-                    
-                    <td className="text-end">
-                      <Link
-                        to={`edit/${d.id}`}
-                        className="btn btn-sm font-sm rounded btn-brand mx-4"
-                      >
-                        <i className="material-icons md-edit"></i>
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDeleteDriver(d.id)}
-                        className="btn btn-sm font-sm rounded btn-danger"
-                      >
-                        <i className="material-icons md-delete"></i>
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          
+          <div className="table-responsive-lg">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone Number</th>
+                  <th>Age</th>
+                  <th>Date Hired</th>
+                  <th>License Number</th>
+                  <th>vehicle Number</th>
+                  <th>Permit Issue Date</th>
+                  <th>Permit Expire date</th>
+                  <th className="text-center"> Action </th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading
+                  ? [...Array(5)].map((_, i) => (
+                      <TableLoader key={i} count={5} />
+                    ))
+                  : currentData?.map((d, index) => (
+                      <tr key={index}>
+                        <td>{d.name}</td>
+                        <td>{d.phone_number}</td>
+                        <td>{d.age}</td>
+                        <td>{new Date(d.date_hired).toDateString()}</td>
+                        <td>{d.lisence_number}</td>
+                        <td>{d.Vehicle_number}</td>
+                        <td>{d.permit_issue_Date}</td>
+                        <td>{d.permit_expire_date}</td>
+                        <td
+                          className="text-center"
+                          style={{ whiteSpace: "noWrap" }}
+                        >
+                          <Link
+                            to={`edit/${d.id}`}
+                            className="btn btn-sm font-sm rounded btn-brand mx-4"
+                          >
+                            <i className="material-icons md-edit"></i>
+                            Edit
+                          </Link>
+                          <button
+                            onClick={() => handleDeleteDriver(d.id)}
+                            className="btn btn-sm font-sm rounded btn-danger"
+                          >
+                            <i className="material-icons md-delete"></i>
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div className="pagination-area mt-30 mb-50">
