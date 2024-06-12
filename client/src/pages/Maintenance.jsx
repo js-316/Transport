@@ -10,9 +10,15 @@ import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import logo from '../assets/soliton.png'
+import { useSelector } from "react-redux";
+import { selectUser } from "../features/auth/authSlice";
+
 
 const Maintenance = () => {
+    const user = useSelector(selectUser)
     const { isLoading, data,refetch } = useGetMaintenanceQuery();
+    const [dataPerPage, setDataPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
     
     const { ids, entities} = data || {};
     const maintenancesArray = ids?.map((id) => entities[id])
@@ -77,8 +83,7 @@ const Maintenance = () => {
 
   const uniqueVehicles = [...new Set(maintenancesArray?.map(m => m.fleet.number_plate))];
 
-  const [dataPerPage, setDataPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
+  
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
@@ -258,7 +263,15 @@ const Maintenance = () => {
                   <th>Description</th>
                   <th>Issues</th>
                   <th>Work Order Number</th>
-                  <th className="text-center"> Action </th>
+                  {
+                    user?.is_staff ? (
+                      <>
+                        <th className="text-center"> Action </th>
+                      </>
+
+                    ):null
+                  }
+
                 </tr>
               </thead>
               <tbody>
@@ -279,7 +292,10 @@ const Maintenance = () => {
                         <td>Description</td>
                         <td>Issues</td>
                         <td>Work Order Number</td>
-                        <td className="text-center" style={{whiteSpace:"noWrap"}}>
+                        {
+                          user?.is_staff ? (
+                            <>
+                              <td className="text-center" style={{whiteSpace:"noWrap"}}>
                           <Link
                             to={`edit/${d.id}`}
                             className="btn btn-sm font-sm rounded btn-brand mx-4"
@@ -295,6 +311,10 @@ const Maintenance = () => {
                             Delete
                           </button>
                         </td>
+                            </>
+                          ):null
+                        }
+                        
                       </tr>
                     ))}
               </tbody>

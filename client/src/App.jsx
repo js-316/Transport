@@ -51,8 +51,13 @@ import AddMeter from "./pages/AddMeter";
 import ViewFuelRequests from "./pages/ViewFuelRequests"
 import UserDashboard from "./pages/User/UserDashboard"
 import EngineerDashboard from "./pages/User/EngineerDashboard"
+import { useSelector } from "react-redux";
+import { selectUser } from "./features/auth/authSlice";
+
 
 function App() {
+
+  const user = useSelector(selectUser)
 
   const routes = Router([
     {
@@ -67,15 +72,27 @@ function App() {
         },
       ],
     },
+    
     {
       path: "dashboard",
       element: <RequireAuth />,
       children: [
+        user?.is_staff ?
         {
           path: "",
           element: <Dashboard />,
         
-        },
+        } : null,
+        user?.is_driver ?
+        {
+          path: "",
+          element: <UserDashboard />,
+        } : null,
+        user?.is_engineer ? 
+        {
+          path: "",
+          element: <EngineerDashboard />,
+        } : null,
         
         {
           path: "drivers",

@@ -11,7 +11,7 @@ const UserDashboard = ({ children }) => {
     <Layout>
       <div className="content-header">
         <div>
-          <h2 className="content-title card-title">Dashboard</h2>
+          <h2 className="content-title card-title">Driver Dashboard</h2>
         </div>
       </div>
       <div className="row">

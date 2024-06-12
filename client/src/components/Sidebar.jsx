@@ -15,14 +15,13 @@ const Sidebar = () => {
  
   
   const [menuLinks, setMenuLinks] = useState([
-    
+    user?.is_staff ?
     {
       name: "Dashboard",
       path: "/dashboard",
       icon: "icon material-icons md-home",
       active: location.pathname === "/dashboard",
-      // display: user?.is_staff ? "inline" : "none"
-    },
+    } : null,
     user?.is_staff ?
     
     {
@@ -46,19 +45,21 @@ const Sidebar = () => {
         },
       ],
     }: null,
-    user?.is_staff ?
+
+    user?.is_driver ?
     {
-      name: "DriverDashboard",
-      path: "/dashboard/userdashboard",
+      name: "Dashboard",
+      path: "/dashboard",
       icon: "icon material-icons md-home",
-      active: location.pathname === "/dashboard/userdashboard",
+      active: location.pathname === "/dashboard",
     } : null,
+    user?.is_engineer ?
     {
-      name: "EngDashboard",
-      path: "/dashboard/EngDashboard",
+      name: "Dashboard",
+      path: "/dashboard",
       icon: "icon material-icons md-home",
-      active: location.pathname === "/dashboard/EngDashboard",
-    },
+      active: location.pathname === "/dashboard",
+    }:null,
     user?.is_staff ?
     {
       name: "Drivers",
