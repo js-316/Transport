@@ -1,6 +1,8 @@
 import {
   createBrowserRouter as Router,
   RouterProvider,Route,
+  useNavigate,
+  Routes,
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
@@ -50,15 +52,22 @@ import AddContact from "./pages/AddContact";
 import AddExpense from "./pages/AddExpense";
 import AddPart from "./pages/AddPart";
 import AddMeter from "./pages/AddMeter";
-import { useState } from "react";
-
-
-
+import { useSelector } from "react-redux";
+import { selectUser } from "./features/auth/authSlice";
+import { useRoutes } from 'react-router-dom';
 
 function App() {
 
+  // const user = useSelector(selectUser)
+  
+  const user = useSelector(selectUser);
+  console.log("Current User",user);
+  console.log("Is Driver:", user?.is_driver);
+  console.log("Is Staff:", user?.is_staff);
+  console.log("Is Engineer:",user?.is_engineer)
+  console.log("Is Admin:",user?.is_admin)
 
-
+ 
   const routes = Router([
     {
       path: "",
@@ -68,6 +77,7 @@ function App() {
         {
           path: "/",
           element: <Login />,
+         
         },
       ],
     },
@@ -78,11 +88,13 @@ function App() {
         {
           path: "",
           element: <Dashboard />,
-          display: true,
+        
         },
+        
         {
           path: "drivers",
           element: <Drivers />,
+          
          
         },
         {
@@ -237,6 +249,8 @@ function App() {
         {
           path: "fuel",
           element: <Fuel />,
+          display: user?.is_driver ? "Fuel" : null,
+          
         },
         {
           path: "fuel/add",
@@ -283,6 +297,20 @@ function App() {
     },
   ]);
 
+  const filteredRoutes = [];
+
+for (const route of Object.values(routes)) {
+  if (!route) continue; // skip if route is undefined
+  
+  if (route.path === "drivers" && !user.is_driver) continue;
+  filteredRoutes.push(route);
+}
+
+  // const filteredRoutes = routes.map((route) => {
+  //   const user = useSelector(selectUser);
+  //   if (route.path === "drivers" && !user.is_driver) return null;
+  //   return route;
+  // }).filter((route) => route !== null);
 
   return (
     <>
@@ -301,6 +329,9 @@ function App() {
       <RouterProvider router={routes} />
     </>
   );
+ 
+
+
 }
 
 export default App;

@@ -4,8 +4,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../util/validations";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../features/auth/authApiSlice";
-import { setCredentials } from "../features/auth/authSlice";
+import { setCredentials, setUser } from "../features/auth/authSlice";
 import { useDispatch } from "react-redux";
+
 
 const Login = () => {
   const [appError, setAppError] = React.useState(null);
@@ -22,6 +23,7 @@ const Login = () => {
     try {
       const { token, user } = await login(data).unwrap();
       dispatch(setCredentials({ token, user }));
+      //dispatch(setUser(user));
       navigate("/dashboard");
     } catch (err) {
       if (parseInt(err.status) !== err.status) {

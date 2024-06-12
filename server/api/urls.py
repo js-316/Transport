@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+# from . import views
 
 from .views import (
     UserCreateView,
@@ -57,7 +57,7 @@ urlpatterns = [
     path('fuel/<int:pk>/' ,FuelDetailView.as_view(), name ='fuel-detail'),
     path('fuel/create/', FuelCreateView.as_view(), name='fuel-create'),
     path('fuel/edit/<int:pk>', FuelEditView.as_view(), name='fuel-edit'),
-    path('driver_dashboard/', DriverDashboardView.as_view(), name='driver_dashboard'),
+    # path('driver_dashboard/', DriverDashboardView.as_view(), name='driver_dashboard'),
 
     
     

@@ -23,6 +23,19 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         return self.create_user(email, password, **extra_fields)
+    
+    def create_adminuser(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_admin",True)
+        return self.create_user(email, password, **extra_fields)
+        
+    def create_driveruser(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_driver",True)
+        return self.create_user(email, password, **extra_fields)
+    
+    def create_engineeruser(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_engineer",True)
+        return self.create_user(email, password, **extra_fields)
+    
 
 class User(AbstractUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
@@ -31,10 +44,11 @@ class User(AbstractUser, PermissionsMixin):
 
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_driver = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    is_driver = models.BooleanField(default=False)
     is_engineer = models.BooleanField(default=False)
 
-    groups = models.ManyToManyField(Group, related_name='users')
+    # groups = models.ManyToManyField(Group, related_name='users')
 
     objects = UserManager()
 
@@ -42,36 +56,11 @@ class User(AbstractUser, PermissionsMixin):
         return self.username
     
 
-
-# custom user model
-# usermanager, permissionsmixin, backend return(user role)
-# class User(AbstractUser,PermissionsMixin):
-#     email = models.EmailField(_('email address'), unique=True)
-
-#     USERNAME_FIELD = 'email'
-#     REQUIRED_FIELDS = ['username']
-    
-#     is_staff = models.BooleanField(default=False)
-#     is_driver = models.BooleanField(default=False)
-#     is_engineer = models.BooleanField(default=False)
-
-
-#     def __str__(self):
-#         return self.username
-    
-#     def is_staff_user(self):
-#         return self.is_staff
-
-#     def has_perm(self, perm, obj=None):
-#         if self.is_staff:
-#             return True
-#         return False
-
-#     def has_module_perms(self, app_label):
-#         if self.is_staff:
-#             return True
-#         return False
-
+# is_superuser: Superuser with all permissions
+# is_staff: Staff member with access to the Django admin site
+# is_admin: Custom admin role (not used by Django itself)
+# is_driver and is_engineer: Custom roles for drivers and engineers
+# groups: Association with one or more groups for permission assignment
 
 
 class ExtraMixin(object):

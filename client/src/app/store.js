@@ -13,4 +13,8 @@ export const store = configureStore({
     getDefaultMiddleware({}).concat([apiSlice.middleware]),
 });
 
+// export const setUser =(user) => {
+//   return { type: 'SET_USER', payload: user };
+// }
+
 setupListeners(store.dispatch);

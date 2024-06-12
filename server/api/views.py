@@ -10,7 +10,7 @@ from .models import User, Driver, Vehichle, Maintenance, Fuel
 from .serializers import UserSerializer, DriverSerializer, VehichleSerializer, MaintenanceSerializer,FuelSerializer
 from django import forms
 from datetime import datetime
-from .management.permissions import create_permissions
+# from .management.permissions import create_permissions
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -75,7 +75,12 @@ class CustomAuthToken(ObtainAuthToken):
             'user': {
             'user_id': user.pk,
             'email': user.email,
-            'is_staff': user.is_staff
+            'is_superuser': user.is_superuser,
+            'is_admin' : user.is_admin,
+            'is_staff': user.is_staff,
+            'is_driver': user.is_driver,
+            'is_engineer': user.is_engineer,
+            
             }
         })
 
@@ -83,13 +88,13 @@ class CustomAuthToken(ObtainAuthToken):
 class DriverListView(generics.ListAPIView):
     queryset = Driver.objects.all()
     serializer_class = DriverSerializer
-    permission_classes = []
+    permission_classes = (permissions.IsAuthenticated,)
     # permission_classes = [IsAdmin]
 
 class DriverDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Driver.objects.all()
     serializer_class = DriverSerializer
-    # permission_classes = [DriverPermissions]
+    permission_classes = (permissions.IsAuthenticated,)
    
 
 class DriverCreateView(generics.CreateAPIView):

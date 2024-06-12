@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import { selectUser } from "../features/auth/authSlice";
 
 
 const Sidebar = () => {
@@ -7,22 +9,20 @@ const Sidebar = () => {
   const location = useLocation();
   const [toggleMenu, setToggleMenu] = useState(false);
 
-  const token = localStorage.getItem('token');
-  const user = parseToken(token);
-
-  function parseToken(token) {
-    if (!token) return null;
-    const decoded = JSON.parse(atob(token.split('.')[1]));
-    return decoded.user;
-  }
+  const user = useSelector(selectUser);
  
+  
   const [menuLinks, setMenuLinks] = useState([
+    
     {
       name: "Dashboard",
       path: "/dashboard",
       icon: "icon material-icons md-home",
       active: location.pathname === "/dashboard",
+      // display: user?.is_staff ? "inline" : "none"
     },
+    user?.is_staff ?
+    
     {
       name: "Vehicles",
       icon: "icon material-icons md-directions_car",
@@ -43,13 +43,15 @@ const Sidebar = () => {
           active: location.pathname === "/dashboard/vehichles/expenses_history",
         },
       ],
-    },
+    }: null,
+    user?.is_staff ?
     {
       name: "Drivers",
       path: "/dashboard/drivers",
       icon: "icon material-icons md-person",
       active: location.pathname === "/dashboard/drivers",
-    },
+    } :null,
+    
     {
       name: "Service",
       icon: "icon material-icons md-home_repair_service",
@@ -59,21 +61,27 @@ const Sidebar = () => {
           path: "/dashboard/maintenance",
           active: location.pathname === "/dashboard/maintenance",
         },
+        user?.is_staff || user?.is_engineer ?
+        
         {
+
           name: "Work Orders",
           path: "/dashboard/maintenance/work_order",
           active: location.pathname === "/dashboard/maintenance/work_order",
-        },
-      ],
+        } : null,
+      ].filter(Boolean),
     },
-
+    user?.is_staff || user?.is_engineer ?
+    
     {
       name: "Equipment",
       path: "/dashboard/equipment",
       icon: "icon material-icons md-handyman",
       active: location.pathname === "/dashboard/equipment",
-      // display: user?.is_driver,
-    },
+
+    } : null,
+    user?.is_staff || user?.is_engineer ? 
+    
     {
       name: "Inspections",
       icon: "icon material-icons md-hourglass_bottom",
@@ -95,7 +103,9 @@ const Sidebar = () => {
           active: location.pathname === "/dashboard/inspections/schedules",
         },
       ],
-    },
+    } : null,
+    user?.is_staff || user?.is_driver ?
+    
     {
       name: "Issues",
       icon: "icon material-icons md-warning",
@@ -111,7 +121,9 @@ const Sidebar = () => {
           active: location.pathname === "/dashboard/issues/faults",
         },
       ],
-    },
+    } : null,
+    user?.is_staff || user?.is_driver ?
+    
     {
       name: "Reminders",
       icon: "icon material-icons md-notification_important",
@@ -132,32 +144,40 @@ const Sidebar = () => {
           active: location.pathname === "/dashboard/contact_reminders",
         },
       ],
-    },
+    } : null,
+    user?.is_staff ?
+    
     {
       name: "Contacts",
       path: "/dashboard/contacts",
       icon: "icon material-icons md-people",
       active: location.pathname === "/dashboard/contacts",
-    },
+    } : null,
+    user?.is_staff || user?.is_driver ?
     {
       name: "Fuel",
       path: "/dashboard/fuel",
       icon: "icon material-icons md-local_gas_station",
       active: location.pathname === "/dashboard/fuel",
-    },
+    } : null,
+    user?.is_staff || user?.is_engineer ?
+    
     {
       name: "Parts",
       path: "/dashboard/parts",
       icon: "icon material-icons md-local_shipping",
       active: location.pathname === "/dashboard/parts",
-    },
+    } : null,
     {
       name: "Logout",
       path: "/dashboard/logout",
       icon: "icon material-icons md-log_out",
       active: location.pathname === "/dashboard/logout",
     },
-  ]);
+  ].filter(Boolean)
+);
+
+
   const [currentMenuItem, setCurrentMenuItem] = useState(null);
 
   const toggleAside = () => {
