@@ -123,7 +123,6 @@ const Sidebar = () => {
       ],
     } : null,
     user?.is_staff || user?.is_driver ?
-    
     {
       name: "Reminders",
       icon: "icon material-icons md-notification_important",
