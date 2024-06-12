@@ -252,7 +252,7 @@ const Fuel = () => {
                       <td>Volume Unit</td>
                       <td>Costs Per Meter</td>
                       <td>Fuel Capacity Alert</td>
-                      <td className="text-end">
+                      <td className="text-center" style={{whiteSpace:"noWrap"}}>
                         <Link
                           to={`edit/${d.id}`}
                           className="btn btn-sm font-sm rounded btn-brand mx-4"
