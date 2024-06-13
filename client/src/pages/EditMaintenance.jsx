@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetMaintenanceByIdQuery, useEditMaintenanceMutation } from "../features/maintenance/maintenanceApiSlice";
 import { useGetVehichleByIdQuery, useEditVehichleMutation,useGetVehichlesQuery} from "../features/vehichle/vehicleApiSlice";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,9 @@ import Layout from "../components/Layout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { maintenanceSchema } from "../util/validations";
 import errorParser from "../util/errorParser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
+
 
 const EditMaintenance = () => {
   const [appError, setAppError] = useState(null);
@@ -51,7 +54,13 @@ const EditMaintenance = () => {
     <Layout>
       <div className="row">
         <div className="content-header">
-          <h2 className="content-title">Edit Maintenance</h2>
+          <div>
+            <Link to="/dashboard/maintenance">
+            <FontAwesomeIcon icon={faArrowCircleLeft} />Maintenance Requests
+            </Link>
+            <h2 className="content-title">Edit Maintenance</h2>
+          </div>
+
         </div>
         <div className="card mb-4">
           <div className="card-header">

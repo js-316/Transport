@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetDriverByIdQuery, useEditDriverMutation } from "../features/driver/driverApiSlice";
 import { useForm } from "react-hook-form";
 import Layout from "../components/Layout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { driverSchema } from "../util/validations";
 import errorParser from "../util/errorParser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
+
+
 
 
 const EditDriver = () => {
@@ -47,7 +51,14 @@ const EditDriver = () => {
     <Layout>
       <div className="row">
       <div className="content-header">
-        <h2 className="content-title">Edit Driver</h2>
+        <div>
+           <Link to="/dashboard/drivers">
+              <FontAwesomeIcon icon={faArrowCircleLeft} />Drivers
+            </Link>
+            <h2 className="content-title">Edit Driver</h2>
+        </div>
+          
+        
       </div>
       <div className="card mb-4">
         <div className="card-header">

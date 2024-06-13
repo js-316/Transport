@@ -15,7 +15,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import ButtonBudges from "../components/ButtonBudges";
 import { statuses } from "../data/chartData";
 
-const WorkOrder = () => {
+const JobCard = () => {
   const { isLoading, data, refetch } = useGetMaintenanceQuery();
 
   const { ids, entities } = data || {};
@@ -220,13 +220,14 @@ const WorkOrder = () => {
             <table className="table table-hover">
               <thead>
                 <tr>
-                  <th>Vehichle</th>
-                  <th>Status</th>
-                  <th>Issue Date</th>
-                  <th>Start Date</th>
-                  <th>Closing date</th>
-                  <th>Assigned To</th>
-                  <th>Action</th>
+                  <th>Vehicle</th>
+                  <th>Mileage</th>
+                  <th>Repair Request</th>
+                  <th>Date</th>
+                  <th>Machine Name</th>
+                  <th>Next Service</th>
+                  <th>Quantity</th>
+                  <th>Part</th>
                 </tr>
               </thead>
               <tbody>
@@ -237,12 +238,13 @@ const WorkOrder = () => {
                   : currentData?.map((d, index) => (
                       <tr key={index}>
                         <td>{d.fleet.number_plate}</td>
-                        <td>{d.description}</td>
                         <td>{d.cost}</td>
+                        <td>{d.description}</td>
                         <td>{new Date(d.date).toDateString()}</td>
+                        <td>Machine</td>
                         <td>{new Date(d.date).toDateString()}</td>
-                        <td>{new Date(d.date).toDateString()}</td>
-                        <td>Assigned To</td>
+                        <td>4</td>
+                        <td>Part</td>
                       </tr>
                     ))}
               </tbody>
@@ -264,4 +266,4 @@ const WorkOrder = () => {
   );
 };
 
-export default WorkOrder;
+export default JobCard;

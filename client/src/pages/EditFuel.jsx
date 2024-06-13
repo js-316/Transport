@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetFuelByIdQuery, useEditFuelMutation } from "../features/fuel/fuelApiSlice";
 import { useGetVehichlesQuery} from "../features/vehichle/vehicleApiSlice";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,10 @@ import Layout from "../components/Layout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { fuelSchema } from "../util/validations";
 import errorParser from "../util/errorParser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
+
+
 
 const EditFuel = () => {
   const [appError, setAppError] = useState(null);
@@ -50,11 +54,17 @@ const EditFuel = () => {
     <Layout>
       <div className="row">
         <div className="content-header">
-          <h2 className="content-title">Edit Fuel</h2>
+          <div>
+            <Link to="/dashboard/fuel">
+              <FontAwesomeIcon icon={faArrowCircleLeft} />Fuel Requests
+            </Link>
+            <h2 className="content-title">Edit Fuel Request</h2>
+          </div>
+
         </div>
         <div className="card mb-4">
           <div className="card-header">
-            <h4>Fuel Information</h4>
+            <h4>Fuel Request Information</h4>
           </div>
           <div className="card-body">
             {appError && (
@@ -109,7 +119,7 @@ const EditFuel = () => {
               </div>
               {errors && <span>{errors.message}</span>}
               <button className="btn btn-primary" type="submit">
-                {isEditingFuel  ? "Updating..." : "Update Fuel"}
+                {isEditingFuel  ? "Updating..." : "Update Fuel Request"}
               </button>
             </form>
           </div>

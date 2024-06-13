@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetVehichleByIdQuery, useEditVehichleMutation } from "../features/vehichle/vehicleApiSlice";
 import {  useEditDriverMutation,useGetDriversQuery} from "../features/driver/driverApiSlice";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,8 @@ import Layout from "../components/Layout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { vehichleSchema } from "../util/validations";
 import errorParser from "../util/errorParser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
 const EditVehichle = () => {
   const navigate = useNavigate();
@@ -50,7 +52,13 @@ const EditVehichle = () => {
     <Layout>
       <div className="row">
         <div className="content-header">
-          <h2 className="content-title">Edit Vehicle</h2>
+          <div>
+            <Link to="/dashboard/vehichles">
+            <FontAwesomeIcon icon={faArrowCircleLeft} />Vehicles
+            </Link>
+            <h2 className="content-title">Edit Vehicle</h2>
+          </div>
+          
         </div>
         <div className="card mb-4">
           <div className="card-header">

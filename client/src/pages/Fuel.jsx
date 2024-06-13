@@ -123,10 +123,10 @@ const Fuel = () => {
     return matchesSearchQuery && matchesNumberPlate;
   });
 
-  const uniqueNumberPlates = [
-    'All',
-    ...new Set(fuelArray?.map((fuel) => fuel.fuel_plate.number_plate)),
-  ];
+  // const uniqueNumberPlates = [
+  //   'All',
+  //   ...new Set(fuelArray?.map((fuel) => fuel.fuel_plate.number_plate)),
+  // ];
 
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
@@ -156,6 +156,7 @@ const Fuel = () => {
   return (
     <Layout>
       <div className="content-header">
+<<<<<<< HEAD
         <h2 className="content-title">Fuel History</h2>
         <div className="flex">
           <Link
@@ -183,6 +184,57 @@ const Fuel = () => {
           <button onClick={exportToPDF} className="btn btn-success mx-2">
             Export to PDF
           </button>
+=======
+        <h2 className="content-title">Fuel Requests</h2>
+        <div >
+          {
+            user?.is_staff || user?.is_driver ? (
+              <>
+                <div >
+                  <Link to="add" className="btn btn-primary">
+                    <i className="material-icons md-plus"></i> Request Fuel
+                  </Link>
+
+
+                  {
+                    user?.is_staff ? (
+                      <>
+                        <Link
+                          onClick={() => uploadRef.current.click()}
+                          to="#"
+                          className={
+                            isImporting
+                              ? "btn btn-light rounded mx-2 disabled"
+                              : "btn btn-light rounded mx-2"
+                          }
+                        >
+                          <i className="material-icons md-import_export" ></i>
+                          Import
+                        </Link>
+
+                        <input
+                          type="file"
+                          accept=".csv"
+                          ref={uploadRef}
+                          style={{ display: "none" }}
+                          onChange={handleFileUpload}
+                        />
+                        <button onClick={exportToPDF} className="btn btn-success mx-2">
+                          Export to PDF
+                        </button>
+                      </>
+                    ) : null
+                  }
+
+
+                </div>
+
+              </>
+            ) : null
+
+          }
+
+>>>>>>> 5b8cc83356001b7dbc3ab5bdcfcd618efaebace8
         </div>
       </div>
       <div className="card mb-4">
@@ -213,7 +265,7 @@ const Fuel = () => {
                 <option value="40">Show 40</option>
               </select>
             </div>
-            <div className="col-lg-2 col-md-3 col-6">
+            {/* <div className="col-lg-2 col-md-3 col-6">
               <select
                 onChange={(e) => setSelectedNumberPlate(e.target.value)}
                 value={selectedNumberPlate}
@@ -225,10 +277,11 @@ const Fuel = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </div>
         </header>
         <div className="card-body">
+<<<<<<< HEAD
           <div className="table-responsive-lg">
             <table className="table table-hover">
               <thead>
@@ -288,6 +341,70 @@ const Fuel = () => {
               </tbody>
             </table>
           </div>
+=======
+          <table className="table table-hover">
+            <thead>
+              <tr>
+                <th>Fuel Type</th>
+                <th>Number Plate</th>
+                <th>Date</th>
+                <th>Mileage</th>
+                <th>Amount</th>
+                {/* <th>Usage</th> */}
+                {/* <th>Volume Unit</th> */}
+                {/* <th>Fuel Capacity Alert</th> */}
+                { user?.is_staff ? (
+                  <>
+
+                    <th className="text-end"> Action </th>
+                  </>
+                ):null
+                }
+
+                
+
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading
+                ? [...Array(5)].map((_, i) => <TableLoader key={i} count={6} />)
+                : currentData?.map((d, index) => (
+                    <tr key={index}>
+                      <td>{d.fuel_type}</td>
+                      <td>{d.fuel_plate.number_plate}</td>
+                      <td>{new Date(d.date_of_fueling).toDateString()}</td>
+                      <td>{d.mileage}</td>
+                      <td>{d.amount}</td>
+                      {/* <td>Usage</td>
+                      <td>Volume Unit</td>
+                      <td>Fuel Capacity Alert</td> */}
+                    {
+                      user?.is_staff ? (
+                        <>
+                          <td className="text-end">
+                            <Link
+                              to={`edit/${d.id}`}
+                              className="btn btn-sm font-sm rounded btn-brand mx-4"
+                            >
+                              <i className="material-icons md-edit"></i>
+                              Edit
+                            </Link>
+                            <button
+                              onClick={() => handleDeleteFuel(d.id)}
+                              className="btn btn-sm font-sm rounded btn-danger"
+                            >
+                              <i className="material-icons md-delete"></i>
+                              Delete
+                            </button>
+                          </td>
+                        </>
+                      ) : null
+                    }
+                    </tr>
+                  ))}
+            </tbody>
+          </table>
+>>>>>>> 5b8cc83356001b7dbc3ab5bdcfcd618efaebace8
         </div>
       </div>
       <div className="pagination-area mt-30 mb-50">

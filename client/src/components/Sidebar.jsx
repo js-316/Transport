@@ -69,11 +69,11 @@ const Sidebar = () => {
     } : null,
     
     {
-      name: "Maintainance",
+      name: "Repairs",
       icon: "icon material-icons md-home_repair_service",
       submenu: [
         {
-          name: "Mantainance Requests",
+          name: "Repair Requests",
           path: "/dashboard/maintenance",
           active: location.pathname === "/dashboard/maintenance",
         },
@@ -86,6 +86,13 @@ const Sidebar = () => {
         } : null,
       ].filter(Boolean),
     },
+    user?.is_staff || user?.is_driver ?
+    {
+      name: "Fuel",
+      path: "/dashboard/fuel",
+      icon: "icon material-icons md-local_gas_station",
+      active: location.pathname === "/dashboard/fuel",
+    } : null,
     user?.is_staff || user?.is_engineer ?
     
     {
@@ -119,25 +126,25 @@ const Sidebar = () => {
         },
       ],
     } : null,
-    user?.is_staff || user?.is_driver ?
+    // user?.is_staff || user?.is_driver ?
     
-    {
-      name: "Fuel",
-      icon: "icon material-icons md-local_gas_station",
-      submenu: [
-        {
-          name: "Fuel history",
-          path: "/dashboard/fuel",
-          active: location.pathname === "/dashboard/fuel",
+    // {
+    //   name: "Fuel",
+    //   icon: "icon material-icons md-local_gas_station",
+    //   submenu: [
+    //     {
+    //       name: "Fuel history",
+    //       path: "/dashboard/fuel",
+    //       active: location.pathname === "/dashboard/fuel",
           
-        },
-        {
-          name: "Fuel Requests",
-          path: "/dashboard/fuelrequests",
-          active: location.pathname === "/dashboard/fuelrequests",
-        },
-      ],
-    } : null,
+    //     },
+    //     {
+    //       name: "Fuel Requests",
+    //       path: "/dashboard/fuelrequests",
+    //       active: location.pathname === "/dashboard/fuelrequests",
+    //     },
+    //   ],
+    // } : null,
     user?.is_staff || user?.is_driver ?
     {
       name: "Reminders",
@@ -168,13 +175,7 @@ const Sidebar = () => {
       icon: "icon material-icons md-people",
       active: location.pathname === "/dashboard/contacts",
     } : null,
-    user?.is_staff || user?.is_driver ?
-    {
-      name: "Fuel",
-      path: "/dashboard/fuel",
-      icon: "icon material-icons md-local_gas_station",
-      active: location.pathname === "/dashboard/fuel",
-    } : null,
+    
     user?.is_staff || user?.is_engineer ?
     
     {

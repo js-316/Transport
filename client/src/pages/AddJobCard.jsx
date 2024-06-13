@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
 
-const AddWorkOrder = () => {
+const AddJobCard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState(null);
@@ -117,19 +117,19 @@ const AddWorkOrder = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Status</label>
+                      <label className="form-label">Work To Be Done</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="Open"
+                          placeholder="Repair Request"
                           type="text"
                           className={`form-control ${
-                            errors.status ? "is-invalid" : ""
+                            errors.work_to_be_done ? "is-invalid" : ""
                           }`}
-                          {...register("status")}
+                          {...register("work_to_be_done")}
                         />
-                        {errors.status && (
+                        {errors.work_to_be_done && (
                           <div className="invalid-feedback">
-                            {errors.status?.message}
+                            {errors.work_to_be_done?.message}
                           </div>
                         )}
                       </div>
@@ -137,20 +137,65 @@ const AddWorkOrder = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Issue Date</label>
+                      <label className="form-label">Mileage</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="30,000"
+                          type="number"
+                          className={`form-control ${
+                            errors.mileage ? "is-invalid" : ""
+                          }`}
+                          {...register("mileage")}
+                        />
+                        {errors.mileage && (
+                          <div className="invalid-feedback">
+                            {errors.mileage?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Parts Needed</label>
+                      <div className="row gx-2">
+                        <div className="col-4">
+                          <input
+                            type="number"
+                            min="1"
+                            placeholder="6"
+                            className="form-control"
+                            {...register("parts_needed")}
+                          />
+                        </div>
+                        <div className="col-8">
+                        <input
+                            type="text"
+                            placeholder="H 70"
+                            className="form-control"
+                            {...register("parts_needed")}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Service Done</label>
                       <div className="row gx-2">
                         <input
                           placeholder="2022-02-02"
                           type="date"
                           max={new Date().toISOString().split("T")[0]}
                           className={`form-control ${
-                            errors.issue_date ? "is-invalid" : ""
+                            errors.service_done ? "is-invalid" : ""
                           }`}
-                          {...register("issue_date")}
+                          {...register("service_done")}
                         />
-                        {errors.issue_date && (
+                        {errors.service_done && (
                           <div className="invalid-feedback">
-                            {errors.issue_date?.message}
+                            {errors.service_done?.message}
                           </div>
                         )}
                       </div>
@@ -158,20 +203,19 @@ const AddWorkOrder = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Scheduled Start Date</label>
+                      <label className="form-label">Machine Name</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="2022-02-02"
-                          type="date"
-                          max={new Date().toISOString().split("T")[0]}
+                          placeholder="Machine Name"
+                          type="text"
                           className={`form-control ${
-                            errors.Scheduled_start_date ? "is-invalid" : ""
+                            errors.machine_name ? "is-invalid" : ""
                           }`}
-                          {...register("sccheduled_start_date")}
+                          {...register("machine_name")}
                         />
-                        {errors.scheduled_start_date && (
+                        {errors.machine_name && (
                           <div className="invalid-feedback">
-                            {errors.scheduled_start_date?.message}
+                            {errors.machine_name?.message}
                           </div>
                         )}
                       </div>
@@ -179,20 +223,41 @@ const AddWorkOrder = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Expected Completion Date</label>
+                      <label className="form-label">Date</label>
                       <div className="row gx-2">
                         <input
                           placeholder="2022-02-02"
                           type="date"
                           max={new Date().toISOString().split("T")[0]}
                           className={`form-control ${
-                            errors.expected_completion_date ? "is-invalid" : ""
+                            errors.date ? "is-invalid" : ""
                           }`}
-                          {...register("expected_completion_date")}
+                          {...register("date")}
                         />
-                        {errors.expected_completion_date && (
+                        {errors.date && (
                           <div className="invalid-feedback">
-                            {errors.expected_completion_date?.message}
+                            {errors.date?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Next Service</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="2022-02-02"
+                          type="date"
+                          max={new Date().toISOString().split("T")[0]}
+                          className={`form-control ${
+                            errors.next_service ? "is-invalid" : ""
+                          }`}
+                          {...register("next_service")}
+                        />
+                        {errors.next_service && (
+                          <div className="invalid-feedback">
+                            {errors.next_service?.message}
                           </div>
                         )}
                       </div>
@@ -216,24 +281,7 @@ const AddWorkOrder = () => {
                                 </div>
                             </div>
                         </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Document</label>
-                      <div className="row gx-2">
-                        <input
-                          type="file"
-                          accept=".pdf, .doc, .docx, .txt"
-                          className="form-control"
-                          {...register("document")}
-                        />
-                        {errors.document && (
-                          <div className="invalid-feedback">
-                            {errors.document?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  
                   <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Comments</label>
@@ -268,5 +316,5 @@ const AddWorkOrder = () => {
   );
 };
 
-export default AddWorkOrder;
+export default AddJobCard;
 

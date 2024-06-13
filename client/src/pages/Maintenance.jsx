@@ -192,16 +192,38 @@ const Maintenance = () => {
   return (
     <Layout>
       <div className="content-header">
-        <h2 className="content-title">Maintenances</h2>
+        <h2 className="content-title">Repair Requests</h2>
         <div>
-          <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Request Maintenance
-          </Link>
+        {
+          user?.is_staff || user?.is_driver ? (
+            <>
+              <div >
+                  <Link to="add" className="btn btn-primary">
+                    <i className="material-icons md-plus"></i> Request Repair
+                  </Link>
 
-          <button onClick={exportToPDF} className="btn btn-success mx-2">
-            Export to PDF
-          </button>
+
+                  {
+                    user?.is_staff ? (
+                      <>
+                        <button onClick={exportToPDF} className="btn btn-success mx-2">
+                          Export to PDF
+                        </button>
+                      </>
+                    ) : null
+                  }
+
+
+              </div>
+  
+            </>
+          ) : null
+
+        }
+        
         </div>
+        
+
       </div>
       <div className="card mb-4">
         <header className="card-header">
@@ -231,20 +253,7 @@ const Maintenance = () => {
                 <option value="40">Show 40</option>
               </select>
             </div>
-            <div className="col-lg-2 col-md-3 col-6">
-              <select
-                id="vehicle-select"
-                className="form-select"
-                onChange={(e) => costsExportToPDF(e.target.value)}
-              >
-                <option>Calculate Cost</option>
-                {uniqueVehicles?.map((number_plate, index) => (
-                  <option key={index} value={number_plate}>
-                    {number_plate}
-                  </option>
-                ))}
-              </select>
-            </div>
+            
           </div>
         </header>
         <div className="card-body">
@@ -253,16 +262,16 @@ const Maintenance = () => {
               <thead>
                 <tr>
                   <th>Vehichle</th>
-                  <th>Service Tasks</th>
-                  <th>Total Cost</th>
-                  <th>Completed At</th>
+                  <th>Repair Request</th>
+                  {/* <th>Total Cost</th> */}
+                  <th>Request Date</th>
                   <th>Driver</th>
-                  <th>Repair Priority Class</th>
-                  <th>Meter</th>
-                  <th>Meter Unit</th>
+                  {/* <th>Repair Priority Class</th> */}
+                  <th>Mileage</th>
+                  {/* <th>Meter Unit</th> */}
                   <th>Description</th>
-                  <th>Issues</th>
-                  <th>Work Order Number</th>
+                  {/* <th>Issues</th> */}
+                  {/* <th>Work Order Number</th> */}
                   {
                     user?.is_staff ? (
                       <>
@@ -283,15 +292,15 @@ const Maintenance = () => {
                       <tr key={index}>
                         <td>{d.fleet.number_plate}</td>
                         <td>{d.description}</td>
-                        <td>{d.cost}</td>
+                        {/* <td>{d.cost}</td> */}
                         <td>{new Date(d.date).toDateString()}</td>
                         <td>Driver</td>
-                        <td>Priority Class</td>
-                        <td>Meter</td>
-                        <td>Meter Unit</td>
+                        {/* <td>Priority Class</td> */}
+                        <td>{d.cost}</td>
+                        {/* <td>Meter Unit</td> */}
                         <td>Description</td>
-                        <td>Issues</td>
-                        <td>Work Order Number</td>
+                        {/* <td>Issues</td> */}
+                        {/* <td>Work Order Number</td> */}
                         {
                           user?.is_staff ? (
                             <>
