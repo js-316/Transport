@@ -63,11 +63,11 @@ const AddFuel = () => {
             <div>
               <div>
                 <Link to="/dashboard/fuel">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Fuel History
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />Fuel Requests
                 </Link>
               </div>
               <h2 className="content-title">
-                Add Fuel Record</h2>
+                Add Fuel Request</h2>
             </div>
 
           </div>
@@ -75,7 +75,7 @@ const AddFuel = () => {
         <div className="col-lg-12">
           <div className="card mb-4">
             <div className="card-header">
-              <h4>Fuel Information</h4>
+              <h4>Fuel Request Information</h4>
             </div>
             <div className="card-body">
               {appError && (
@@ -173,9 +173,9 @@ const AddFuel = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Date of Fueling</label>
+                      <label className="form-label">Date</label>
                       <div className="row gx-2">
                         <input
                           placeholder="2022-02-02"

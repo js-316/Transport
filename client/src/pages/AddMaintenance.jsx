@@ -61,11 +61,11 @@ const AddMaintenance = () => {
             <div>
               <div>
                 <Link to="/dashboard/maintenance">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Maintenance
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />Repair Requests
                 </Link>
               </div>
               <h2 className="content-title">
-                Add Maintenance</h2>
+                Add Repair Request</h2>
             </div>
 
           </div>
@@ -73,7 +73,7 @@ const AddMaintenance = () => {
         <div className="col-lg-12">
           <div className="card mb-4">
             <div className="card-header">
-              <h4>Maintenance Information</h4>
+              <h4>Repair Request Information</h4>
             </div>
             <div className="card-body">
               {appError && (
@@ -114,68 +114,47 @@ const AddMaintenance = () => {
                   </div>
                   <div className="col-lg-6">
                     <div className="mb-4">
-                      <label className="form-label">Completion Date</label>
+                      <label className="form-label">Repair Request</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="2022-02-02"
-                          type="date"
-                          className={`form-control ${
-                            errors.completion_date ? "is-invalid" : ""
-                          }`}
-                          {...register("completion_date")}
-                        />
-                        {errors.completion_date && (
-                          <div className="invalid-feedback">
-                            {errors.completion_date?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-6">
-                    <div className="mb-4">
-                      <label className="form-label">Service tasks</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="Service Task"
+                          placeholder="Oil Leak"
                           type="text"
                           className={`form-control ${
-                            errors.service_task ? "is-invalid" : ""
+                            errors.repair_request ? "is-invalid" : ""
                           }`}
-                          {...register("service_task")}
+                          {...register("repair_request")}
                         />
-                        {errors.service_task && (
+                        {errors.repair_request && (
                           <div className="invalid-feedback">
-                            {errors.service_task?.message}
+                            {errors.repair_request?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
-                  
                   <div className="col-lg-6">
                     <div className="mb-4">
-                      <label className="form-label">Cost</label>
+                      <label className="form-label">Description</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="40,000"
-                          type="number"
+                          placeholder="Oil leaking under the engine"
+                          type="text"
                           className={`form-control ${
-                            errors.cost ? "is-invalid" : ""
+                            errors.description ? "is-invalid" : ""
                           }`}
-                          {...register("cost")}
+                          {...register("description")}
                         />
-                        {errors.cost && (
+                        {errors.description && (
                           <div className="invalid-feedback">
-                            {errors.cost?.message}
+                            {errors.description?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-4">
+                  <div className="col-lg">
                     <div className="mb-4">
-                        <label className="form-label">Photos</label>
+                        <label className="form-label">Attach Photo</label>
                         <div className="row gx-2">
                             <input
                              type="file"
@@ -191,48 +170,32 @@ const AddMaintenance = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-4">
-                            <div className="mb-4">
-                        <label className="form-label">Document</label>
-                        <div className="row gx-2">
-                            <input
-                             type="file"
-                            accept=".pdf, .doc, .docx, .txt"
-                            className="form-control"
-                            {...register("document")}
-                            />
-                                {errors.document && (
-                                <div className="invalid-feedback">
-                                {errors.document?.message}
-                                </div>
-                                     )}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-4">
+                  <div className="col-lg-6">
                     <div className="mb-4">
-                      <label className="form-label">Comments</label>
+                      <label className="form-label">Request Date</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="Add Optional comment here"
-                          type="text"
+                          placeholder="2022-02-02"
+                          type="date"
                           className={`form-control ${
-                            errors.comments ? "is-invalid" : ""
+                            errors.request_date ? "is-invalid" : ""
                           }`}
-                          {...register("comments")}
+                          {...register("request_date")}
                         />
-                        {errors.comments && (
+                        {errors.request_date && (
                           <div className="invalid-feedback">
-                            {errors.comments?.message}
+                            {errors.request_date?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
 
+
+
                 </div>
                 <button className="btn btn-primary" type="submit">
-                  {isLoading ? "Adding..." : "Add Maintenance"}
+                  {isLoading ? "Requesting..." : "Request Repair"}
                 </button>
               </form>
             </div>

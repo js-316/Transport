@@ -36,7 +36,6 @@ import ItemFailures from "./pages/ItemFailures";
 import Schedules from "./pages/Schedules";
 import Contacts from "./pages/Contacts";
 import Parts from "./pages/Parts";
-import AddWorkOrder from "./pages/AddWorkOrder";
 import AddEquipment from "./pages/AddEquipment";
 import AddInspection from "./pages/AddInspection";
 import AddIssue from "./pages/AddIssue";
@@ -53,6 +52,7 @@ import UserDashboard from "./pages/User/UserDashboard"
 import EngineerDashboard from "./pages/User/EngineerDashboard"
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/auth/authSlice";
+import AddJobCard from "./pages/AddJobCard";
 
 
 function App() {
@@ -175,7 +175,7 @@ function App() {
         },
         {
           path: "maintenance/work_order/add",
-          element: <AddWorkOrder />,
+          element: <AddJobCard />,
         },
         {
           path: "service_reminders",
@@ -298,21 +298,7 @@ function App() {
     },
   ]);
 
-  const filteredRoutes = [];
-
-for (const route of Object.values(routes)) {
-  if (!route) continue; // skip if route is undefined
   
-  if (route.path === "drivers" && !user.is_driver) continue;
-  filteredRoutes.push(route);
-}
-
-  // const filteredRoutes = routes.map((route) => {
-  //   const user = useSelector(selectUser);
-  //   if (route.path === "drivers" && !user.is_driver) return null;
-  //   return route;
-  // }).filter((route) => route !== null);
-
   return (
     <>
       <Toaster

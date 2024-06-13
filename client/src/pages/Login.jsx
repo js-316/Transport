@@ -4,8 +4,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../util/validations";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../features/auth/authApiSlice";
-import { setCredentials, setUser } from "../features/auth/authSlice";
-import { useDispatch } from "react-redux";
+import { selectUser, setCredentials, setUser } from "../features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+
 
 
 const Login = () => {
