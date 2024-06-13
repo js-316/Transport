@@ -167,7 +167,7 @@ const Fuel = () => {
                 : "btn btn-light rounded mx-2"
             }
           >
-            <i className="material-icons md-import_export" ></i>
+            <i className="material-icons md-import_export"></i>
             Import
           </Link>
           <Link to="add" className="btn btn-primary">
@@ -229,68 +229,65 @@ const Fuel = () => {
           </div>
         </header>
         <div className="card-body">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Fuel Type</th>
-                <th>Number Plate</th>
-                <th>Date</th>
-                <th>Mileage</th>
-                <th>Amount</th>
-                <th>Usage</th>
-                <th>Volume Unit</th>
-                <th>Fuel Capacity Alert</th>
-                { user?.is_staff ? (
-                  <>
-
-                    <th className="text-end"> Action </th>
-                  </>
-                ):null
-                }
-
-                
-
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading
-                ? [...Array(5)].map((_, i) => <TableLoader key={i} count={6} />)
-                : currentData?.map((d, index) => (
-                    <tr key={index}>
-                      <td>{d.fuel_type}</td>
-                      <td>{d.fuel_plate.number_plate}</td>
-                      <td>{new Date(d.date_of_fueling).toDateString()}</td>
-                      <td>{d.mileage}</td>
-                      <td>{d.amount}</td>
-                      <td>Usage</td>
-                      <td>Volume Unit</td>
-                      <td>Fuel Capacity Alert</td>
-                    {
-                      user?.is_staff ? (
-                        <>
-                          <td className="text-end">
-                            <Link
-                              to={`edit/${d.id}`}
-                              className="btn btn-sm font-sm rounded btn-brand mx-4"
-                            >
-                              <i className="material-icons md-edit"></i>
-                              Edit
-                            </Link>
-                            <button
-                              onClick={() => handleDeleteFuel(d.id)}
-                              className="btn btn-sm font-sm rounded btn-danger"
-                            >
-                              <i className="material-icons md-delete"></i>
-                              Delete
-                            </button>
-                          </td>
-                        </>
-                      ) : null
-                    }
-                    </tr>
-                  ))}
-            </tbody>
-          </table>
+          <div className="table-responsive-lg">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Fuel Type</th>
+                  <th>Number Plate</th>
+                  <th>Date</th>
+                  <th>Mileage</th>
+                  <th>Amount</th>
+                  <th>Usage</th>
+                  <th>Volume Unit</th>
+                  <th>Fuel Capacity Alert</th>
+                  {user?.is_staff ? (
+                    <>
+                      <th className="text-end"> Action </th>
+                    </>
+                  ) : null}
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading
+                  ? [...Array(5)].map((_, i) => (
+                      <TableLoader key={i} count={6} />
+                    ))
+                  : currentData?.map((d, index) => (
+                      <tr key={index}>
+                        <td>{d.fuel_type}</td>
+                        <td>{d.fuel_plate.number_plate}</td>
+                        <td>{new Date(d.date_of_fueling).toDateString()}</td>
+                        <td>{d.mileage}</td>
+                        <td>{d.amount}</td>
+                        <td>Usage</td>
+                        <td>Volume Unit</td>
+                        <td>Fuel Capacity Alert</td>
+                        {user?.is_staff ? (
+                          <>
+                            <td className="text-center" style={{whiteSpace:"noWrap"}}>
+                              <Link
+                                to={`edit/${d.id}`}
+                                className="btn btn-sm font-sm rounded btn-brand mx-4"
+                              >
+                                <i className="material-icons md-edit"></i>
+                                Edit
+                              </Link>
+                              <button
+                                onClick={() => handleDeleteFuel(d.id)}
+                                className="btn btn-sm font-sm rounded btn-danger"
+                              >
+                                <i className="material-icons md-delete"></i>
+                                Delete
+                              </button>
+                            </td>
+                          </>
+                        ) : null}
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div className="pagination-area mt-30 mb-50">

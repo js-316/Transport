@@ -65,7 +65,7 @@ const Navbar = () => {
           data-trigger="#offcanvas_aside"
         >
           {" "}
-          <i className="material-icons md-apps "></i>{" "}
+          <i className="material-icons md-appsz "></i>{" "}
         </button>
 
         <ul className="nav">
