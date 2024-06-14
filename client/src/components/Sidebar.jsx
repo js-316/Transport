@@ -66,7 +66,7 @@ const Sidebar = () => {
       path: "/dashboard/drivers",
       icon: "icon material-icons md-person",
       active: location.pathname === "/dashboard/drivers",
-    } :null,
+    } : null,
     
     {
       name: "Repairs",

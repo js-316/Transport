@@ -97,11 +97,11 @@ const ViewCosts = () => {
 
         if (search) {
             return (
-                (startDate === null || startDate <= date) &&
-                (endDate === null || date <= endDate) &&
-                ((cost && cost.toString().includes(search)) ||
-                    description.includes(search) ||
-                    (date && date.toString().includes(search)))
+              (startDate === null || startDate <= date) &&
+              (endDate === null || date <= endDate) &&
+              ((cost && cost.toString().includes(search)) ||
+              description.includes(search) ||
+              (date && date.toString().includes(search)))
             );
         } else {
             return (

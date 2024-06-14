@@ -29,7 +29,7 @@ import ViewFuel from "./pages/ViewFuel";
 import Service_Reminders from "./pages/Service_Reminders";
 import Contact_Reminders from "./pages/Contact_Reminders";
 import Vehicle_Reminder from "./pages/Vehicle_Reminder";
-import Staff from "./pages/staff";
+import Staff from "./pages/Staff";
 import Equipment from "./pages/Equipment";
 import InspectionHistory from "./pages/InspectionHistory";
 import ItemFailures from "./pages/ItemFailures";

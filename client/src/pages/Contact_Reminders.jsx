@@ -213,20 +213,7 @@ const Contact_Reminders = () => {
                 <option value="40">Show 40</option>
               </select>
             </div>
-            <div className="col-lg-2 col-md-3 col-6">
-              <select
-                id="vehicle-select"
-                className="form-select"
-                onChange={(e) => costsExportToPDF(e.target.value)}
-              >
-                <option>Calculate Cost</option>
-                {uniqueVehicles?.map((number_plate, index) => (
-                  <option key={index} value={number_plate}>
-                    {number_plate}
-                  </option>
-                ))}
-              </select>
-            </div>
+
           </div>
         </header>
         <div className="card-body">

@@ -8,25 +8,34 @@ import errorParser from "../util/errorParser";
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPencil, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import logo from '../assets/soliton.png'
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/auth/authSlice";
 
 
 const Maintenance = () => {
-    const user = useSelector(selectUser)
-    const { isLoading, data,refetch } = useGetMaintenanceQuery();
-    const [dataPerPage, setDataPerPage] = useState(10);
-    const [currentPage, setCurrentPage] = useState(1);
-    
-    const { ids, entities} = data || {};
-    const maintenancesArray = ids?.map((id) => entities[id])
-    
 
-    const [deleteMaintenance, {isLoading: isDeleting}] = useDeleteMaintenanceMutation();
+  const user = useSelector(selectUser)
+  const { isLoading, data, refetch } = useGetMaintenanceQuery();
+  const [dataPerPage, setDataPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const[searchQuery, setSearchQuery] = useState('')
+  const [selectedStatus, setSelectedStatus] = useState('All')
+
+  const [deleteMaintenance, { isLoading: isDeleting }] = useDeleteMaintenanceMutation();
+
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
+
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
+  const { ids, entities } = data || {};
+  const maintenancesArray = ids?.map((id) => entities[id])
 
   const handleDeleteMaintenance = async (id) => {
     setAppError(null);
@@ -59,38 +68,79 @@ const Maintenance = () => {
     }
   };
 
-  const filteredData = maintenancesArray?.filter((maintenance) => {
-    const fleet = maintenance.fleet.number_plate.toLowerCase();
-    const cost = maintenance.cost;
-    const description = maintenance.description.toLowerCase();
-    const date = maintenance.date.toLowerCase()
-    const search = searchQuery.toLowerCase();
-    
-
-    if(search){
-      return(
-        fleet.includes(search) ||
-        (cost && cost.toString().includes(search)) ||
-        description.includes(search) ||
-        date.includes(search)
-      )
-    }else{
-    return maintenancesArray;
+  const handleDateRange = (dateRange) => {
+    if (dateRange) {
+        setStartDate([dateRange(0)]);
+        setEndDate([dateRange(1)]);
+    } else {
+        setStartDate(null);
+        setEndDate(null);
     }
-  });
+};
 
-  console.log('Filtered Maintenance Data:', maintenancesArray);
+const handleFilterStatus = (status) => {
+  setSelectedStatus(status);
+};
+const filteredData = maintenancesArray?.filter((maintenance) => {
+  const fleet = maintenance.fleet.number_plate.toLowerCase();
+  const cost = maintenance.cost;
+  const description = maintenance.description.toLowerCase();
+  const date = maintenance.date.toLowerCase()
+  const status = maintenance.status.toLowerCase();
+  const search = searchQuery.toLowerCase();
 
-  const uniqueVehicles = [...new Set(maintenancesArray?.map(m => m.fleet.number_plate))];
+  if (selectedStatus !== 'All') {
+    if (search) {
+      return (
+        (startDate === null || startDate <= date_of_date) &&
+        (endDate === null || date_of_date <= endDate) &&
+        (
+          ( fleet.includes(search) ||
+          (cost && cost.toString().includes(search)) ||
+          description.includes(search) ||
+          status.includes(search) ||
+          (date && date.toString().includes(search)))
+          
+        ) &&
+        status === selectedStatus
+      );
+    } else {
+      return (
+        (startDate === null || startDate <= date_of_date) &&
+        (endDate === null || date_of_date <= endDate) &&
+        status === selectedStatus
+      );
+    }
+  } else {
+    if (search) {
+      return (
+        (startDate === null || startDate <= date_of_date) &&
+        (endDate === null || date_of_date <= endDate) &&
+        (
+          ( fleet.includes(search) ||
+          (cost && cost.toString().includes(search)) ||
+          description.includes(search) ||
+          status.includes(search) ||
+          (date && date.toString().includes(search)))
+        )
+      );
+    } else {
+      return (
+        (startDate === null || startDate <= date_of_date) &&
+        (endDate === null || date_of_date <= endDate)
+      );
+    }
+  }
+});
 
-  
+
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
+  console.log('Filtered Maintenance Data:', maintenancesArray);
 
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  
+  
   const handleDataPerPage = (e) => {
     setDataPerPage(parseInt(e.target.value));
   };
@@ -138,57 +188,7 @@ const Maintenance = () => {
     
     doc.save("maintenance.pdf");
   };
-
-  const costsExportToPDF = (fleetNumberPlate) => {
-    console.log('Selected Fleet Number Plate:', fleetNumberPlate);
-    console.log('All Maintenance Records:', maintenancesArray);
-
-    // Filter maintenance records for the selected fleet number plate
-    const vehicleMaintenances = maintenancesArray.filter((maintenance) => {
-        const maintenanceFleetNumberPlate = maintenance.fleet.number_plate;
-        console.log('Maintenance Fleet Number Plate:', maintenanceFleetNumberPlate);
-        console.log('Comparison:', maintenanceFleetNumberPlate === fleetNumberPlate);
-        return maintenanceFleetNumberPlate === fleetNumberPlate;
-    });
-
-    console.log('Maintenance Records for Selected Fleet:', vehicleMaintenances);
-
-    // Check if there are any maintenance records for the selected fleet
-    if (vehicleMaintenances.length === 0) {
-        console.error('No maintenance records found for the selected fleet.');
-        return;
-    }
-
-    // Calculate the total cost
-    const totalCost = vehicleMaintenances.reduce((acc, maintenance) => acc + maintenance.cost, 0);
-
-    // Create and configure the PDF
-    const doc = new jsPDF();
-    doc.text(`Vehicle Maintenance Report For- ${vehicleMaintenances[0].fleet.number_plate}`, 10, 10);
-    doc.text(`Total Cost: ${totalCost}`, 10, 20);
-
-    // Prepare table data
-    const tableData = vehicleMaintenances?.map((record) => [
-        record.date,
-        record.description,
-        record.cost,
-       
-    ]);
-
-    // Generate the table in the PDF
-    doc.autoTable({
-        head: [["Date","Description", "Cost" ]],
-        body: tableData,
-        startY: 30,
-    });
-
-    // Save the PDF
-    doc.save("vehicle_maintenance_report.pdf");
-};
-
-
   
-    
   return (
     <Layout>
       <div className="content-header">
@@ -242,6 +242,26 @@ const Maintenance = () => {
               </div>
             </div>
             <div className="col-lg-2 col-md-3 col-6">
+                <input
+                  type="date"
+                  value={startDate}
+                  className="form-control"
+                  onChange={(e) => {
+                    setStartDate(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="col-lg-2 col-md-3 col-6">
+                <input
+                  type="date"
+                  value={endDate}
+                  className="form-control"
+                  onChange={(e) => {
+                    setEndDate(e.target.value);
+                  }}
+                />
+              </div>
+            <div className="col-lg-2 col-md-3 col-6">
               <select
                 onChange={handleDataPerPage}
                 value={dataPerPage}
@@ -254,6 +274,48 @@ const Maintenance = () => {
               </select>
             </div>
             
+          </div>
+          <div className="col-lg-4 md-6">
+            <div className="row gx-2 justify-content-between mt-1 mb-0 " style={{ height: 14 }}>
+              <div className="col-lg-1 col-md-1 col-1">
+                <button
+                  onClick={() => handleFilterStatus("All")}
+                  className="btn btn-sm rounded btn-gray btn-all"
+                  style={{ marginBottom: 0 }}
+                >
+                  All
+                </button>
+              </div>
+              <div className="col-lg-1 col-md-1 col-1">
+                <button
+                  onClick={() => handleFilterStatus("pending")}
+                  className="btn btn-sm rounded btn-blues btn-override mx-0"
+                  style={{ marginBottom: 0 }}
+                >
+                  Pending
+                </button>
+              </div>
+
+              <div className="col-lg-1 col-md-1 col-1">
+                <button
+                  onClick={() => handleFilterStatus("approved")}
+                  className="btn btn-sm rounded btn-success mx-0"
+                  style={{ marginBottom: 0 }}
+                >
+                  Approved
+                </button>
+              </div>
+
+              <div className="col-lg-1 col-md-1 col-1">
+                <button
+                  onClick={() => handleFilterStatus("rejected")}
+                  className="btn btn-sm rounded btn-danger"
+                  style={{ marginBottom: 0 }}
+                >
+                  Rejected
+                </button>
+              </div>
+            </div>
           </div>
         </header>
         <div className="card-body">
@@ -268,8 +330,9 @@ const Maintenance = () => {
                   <th>Driver</th>
                   {/* <th>Repair Priority Class</th> */}
                   <th>Mileage</th>
+                  <th>Status</th>
                   {/* <th>Meter Unit</th> */}
-                  <th>Description</th>
+                  {/* <th>Description</th> */}
                   {/* <th>Issues</th> */}
                   {/* <th>Work Order Number</th> */}
                   {
@@ -297,33 +360,38 @@ const Maintenance = () => {
                         <td>Driver</td>
                         {/* <td>Priority Class</td> */}
                         <td>{d.cost}</td>
+                        <td>{d.status}</td>
                         {/* <td>Meter Unit</td> */}
-                        <td>Description</td>
+                        {/* <td>Description</td> */}
                         {/* <td>Issues</td> */}
                         {/* <td>Work Order Number</td> */}
                         {
                           user?.is_staff ? (
-                            <>
-                              <td className="text-center" style={{whiteSpace:"noWrap"}}>
-                          <Link
-                            to={`edit/${d.id}`}
-                            className="btn btn-sm font-sm rounded btn-brand mx-4"
-                          >
-                            <i className="material-icons md-edit"></i>
-                            Edit
-                          </Link>
-                          <button
-                            onClick={() => handleDeleteMaintenance(d.id)}
-                            className="btn btn-sm font-sm rounded btn-danger"
-                          >
-                            <i className="material-icons md-delete"></i>
-                            Delete
-                          </button>
-                        </td>
-                            </>
-                          ):null
-                        }
-                        
+                          <>
+                            <td className="text-center action-column">
+                              <Link
+                                to={`view/${d.id}`}
+                                className="btn btn-sm font-sm rounded btn-blue mx-1"
+                              >
+                                <FontAwesomeIcon icon={faEye} title="View" />
+                              </Link>
+                              <Link
+                                to={`edit/${d.id}`}
+                                className="btn btn-sm font-sm rounded btn-brand mx-1"
+                              >
+                                <FontAwesomeIcon icon={faPencil} title="Edit" />
+                              </Link>
+                              <button
+                                onClick={() => handleDeleteMaintenance(d.id)}
+                                className="btn btn-sm font-sm rounded btn-danger"
+                              >
+                                <FontAwesomeIcon icon={faTrash} title="Delete" />
+                              </button>
+                            </td>
+                          </>
+                        ) : null
+                      }
+
                       </tr>
                     ))}
               </tbody>

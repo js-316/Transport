@@ -14,9 +14,8 @@ import Pagination from "../components/Pagination";
 import Swal from 'sweetalert2';
 import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPencil, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useGetFuelQuery } from "../features/fuel/fuelApiSlice";
-
 
 const Vehichles = () => {
   const [importError, setImportError] = useState(null);
@@ -34,7 +33,16 @@ const Vehichles = () => {
   const navigate = useNavigate();
   const [AppError, setAppError] = useState(null);
 
+  const [dataPerPage, setDataPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const [searchQuery, setSearchQuery] = useState('');
+
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const uploadRef = useRef(null);
 
   const [deleteVehichle, { isLoading: isDeleting }] = useDeleteVehichleMutation();
 
@@ -68,43 +76,55 @@ const Vehichles = () => {
     }
   };
 
+  const handleDateRange = (dateRange) => {
+    if (dateRange) {
+        setStartDate([dateRange(0)]);
+        setEndDate([dateRange(1)]);
+    } else {
+        setStartDate(null);
+        setEndDate(null);
+    }
+};
+
   const filteredData = vehichlesArray?.filter((vehichle) => {
     const number_plate = vehichle.number_plate.toLowerCase();
     const driver = vehichle.driver.name.toLowerCase();
     const mileage = vehichle.mileage
     const vehichle_type = vehichle.vehichle_type.toLowerCase()
     const manufacturer = vehichle.manufacturer.toLowerCase()
+    const date = vehichle.date_of_purchase.toLowerCase()
     const search = searchQuery.toLowerCase();
 
     if (search) {
       return (
-        number_plate.includes(search) ||
-        driver.includes(search) ||
-        (mileage && mileage.toString().includes(search)) || // convert mileage to string
-        vehichle_type.includes(search) ||
-        manufacturer.includes(search)
+        (startDate === null || startDate <= date) &&
+        (endDate === null || date <= endDate) &&
+        ((number_plate.includes(search) ||
+          driver.includes(search) ||
+          (mileage && mileage.toString().includes(search)) || 
+          vehichle_type.includes(search) ||
+          (date && date.toString().includes(search)) ||
+          manufacturer.includes(search)))
       );
     } else {
-      return vehichlesArray; // return all vehicles if search query is empty
+      return (
+        (startDate === null || startDate <= date) &&
+        (endDate === null || date <= endDate)
+      );
     }
+
+    
   });
 
-  const [dataPerPage, setDataPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
+  
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
-
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleDataPerPage = (e) => {
     setDataPerPage(parseInt(e.target.value));
   };
 
-
-
-  const uploadRef = useRef(null);
 
   // listen to click on uploadRef and the open file upload for only csv files
   const handleFileUpload = async (e) => {
@@ -242,6 +262,26 @@ const Vehichles = () => {
               </div>
             </div>
             <div className="col-lg-2 col-md-3 col-6">
+                <input
+                  type="date"
+                  value={startDate}
+                  className="form-control"
+                  onChange={(e) => {
+                    setStartDate(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="col-lg-2 col-md-3 col-6">
+                <input
+                  type="date"
+                  value={endDate}
+                  className="form-control"
+                  onChange={(e) => {
+                    setEndDate(e.target.value);
+                  }}
+                />
+              </div>
+            <div className="col-lg-2 col-md-3 col-6">
               <select
                 onChange={handleDataPerPage}
                 value={dataPerPage}
@@ -262,15 +302,15 @@ const Vehichles = () => {
                 <tr>
                   <th>Vehicle</th>
                   <th>Driver</th>
-                  <th>Current Mileage</th>
+                  <th>Mileage</th>
                   <th>Year</th>
                   <th>Type</th>
                   <th>Manufacturer</th>
                   <th>Total Service</th>
                   <th>Total Fuel</th>
-                  <th>Status</th>
+                  {/* <th>Status</th>
                   <th>Group</th>
-                  <th>Watchers</th>
+                  <th>Watchers</th> */}
                   <th className="text-center"> Action </th>
                 </tr>
               </thead>
@@ -297,26 +337,31 @@ const Vehichles = () => {
                             {fuelPerVehicle[d.number_plate] || 0}
                           </Link>
                         </td>
-                        <td>Status</td>
+                        {/* <td>Status</td>
                         <td>Group</td>
-                        <td>Watchers</td>
+                        <td>Watchers</td> */}
                         <td
-                          className="text-center"
-                          style={{ whiteSpace: "noWrap" }}
-                        >
+                          className="action-column text-center"
+                          
+                      >
+                        <Link to={`view/${d.id}`} className="btn btn-sm rounded btn-blue mx-1">
+                          <FontAwesomeIcon icon={faEye} title="View" icon-size="sm" />
+                        </Link>
                           <Link
                             to={`edit/${d.id}`}
-                            className="btn btn-sm font-sm rounded btn-brand mx-4"
+                            className="btn btn-sm rounded btn-brand mx-1"
                           >
-                            <i className="material-icons md-edit"></i>
-                            Edit
+                            <FontAwesomeIcon icon={faPencil} title="Edit" icon-size="sm"  />
+                            {/* <i className="material-icons md-edit"></i>
+                            Edit */}
                           </Link>
                           <button
                             onClick={() => handleDeleteVehichle(d.id)}
-                            className="btn btn-sm font-sm rounded btn-danger"
+                            className="btn btn-sm rounded btn-danger"
                           >
-                            <i className="material-icons md-delete"></i>
-                            Delete
+                            <FontAwesomeIcon icon={faTrash} title="Delete" icon-size="sm"  />
+                            {/* <i className="material-icons md-delete"></i> */}
+                           
                           </button>
                         </td>
                       </tr>

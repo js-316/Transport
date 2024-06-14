@@ -115,6 +115,14 @@ const EditFuel = () => {
                     </div>
                   </div>
                 </div>
+                <div className="col-lg-4">
+                  <div className="mb-4">
+                    <label className="form-label">Status</label>
+                    <div className="row-gx-2">
+                      <input type="text" className="form-control" defaultValue={fuel.status} {...register("status")}></input>
+                    </div>
+                  </div>
+                </div>
                 
               </div>
               {errors && <span>{errors.message}</span>}
