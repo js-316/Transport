@@ -213,20 +213,7 @@ const Service_Reminders = () => {
                 <option value="40">Show 40</option>
               </select>
             </div>
-            <div className="col-lg-2 col-md-3 col-6">
-              <select
-                id="vehicle-select"
-                className="form-select"
-                onChange={(e) => costsExportToPDF(e.target.value)}
-              >
-                <option>Calculate Cost</option>
-                {uniqueVehicles?.map((number_plate, index) => (
-                  <option key={index} value={number_plate}>
-                    {number_plate}
-                  </option>
-                ))}
-              </select>
-            </div>
+
           </div>
         </header>
         <div className="card-body">
@@ -234,12 +221,12 @@ const Service_Reminders = () => {
             <thead>
               <tr>
                 <th>Vehicle</th>
-                <th>Service Task</th>
-                <th>Status</th>
-                <th>Next Due</th>
-                <th>Active Work Order</th>
-                <th>Last Completed</th>
-                <th>Notificaton</th>
+                <th>Mileage</th>
+                <th>Service On</th>
+                {/* <th>Notificaton</th> */}
+                {/* <th>Active Work Order</th>
+                <th>Last Completed</th> */}
+                
               </tr>
             </thead>
             <tbody>
@@ -250,12 +237,12 @@ const Service_Reminders = () => {
                 : currentData?.map((d, index) => (
                     <tr key={index}>
                       <td>{d.fleet.number_plate}</td>
-                      <td>{d.description}</td>
                       <td>{d.cost}</td>
-                      <td>{new Date(d.date).toDateString()}</td>
+                      <td>{d.description}</td>
+                      {/* <td>{new Date(d.date).toDateString()}</td>
                       <td>Active Work Order</td>
                       <td>{new Date(d.date).toDateString()}</td>
-                      <td>Notification</td>
+                      <td>Notification</td> */}
                     </tr>
                   ))}
             </tbody>

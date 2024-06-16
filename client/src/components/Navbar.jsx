@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import LetteredAvatar from "react-lettered-avatar";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/auth/authSlice";
@@ -9,22 +9,26 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const user = useSelector(selectUser)
+  const [searchQuery, setSearchQuery] = useState('')
+  const search = searchQuery
+
+
   return (
     <header className="main-header navbar">
-    <div className="col-lg-4 col-md-6 me-auto">
-    <div className="input-group">
-    <Link to="/dashboard" className="input-group-text">
-    <FontAwesomeIcon icon={faCar} 
-    size="lg" 
-    style={{ fontSize: 24, color: '#008000' }} 
-    />
-    <span>
-      
-    </span>
-    </Link>
+      <div className="col-lg-4 col-md-6 me-auto">
+        <div className="input-group">
+          <Link to="/dashboard" className="input-group-text">
+            <FontAwesomeIcon icon={faCar}
+              size="lg"
+              style={{ fontSize: 24, color: '#008000' }}
+            />
+            <span>
+
+            </span>
+          </Link>
 
 
-    {/* <span className="input-group-text">
+    <span className="input-group-text">
       <FontAwesomeIcon icon={faSearch} />
     </span>
     <input
@@ -32,7 +36,7 @@ const Navbar = () => {
       placeholder="Search..."
       onChange={(e) => setSearchQuery(e.target.value)}
       className="form-control"
-    /> */}
+    />
 
   </div>
 </div>
@@ -65,7 +69,7 @@ const Navbar = () => {
           data-trigger="#offcanvas_aside"
         >
           {" "}
-          <i className="material-icons md-apps "></i>{" "}
+          <i className="material-icons md-appsz "></i>{" "}
         </button>
 
         <ul className="nav">
@@ -74,7 +78,7 @@ const Navbar = () => {
             title={user.username || user.email}
             href="#" className="requestfullscreen nav-link btn-icon">
               <LetteredAvatar
-                size={48}
+                size={50}
                 name={user.username || user.email}
                 color="#fff"
                 background="#000"

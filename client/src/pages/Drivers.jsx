@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import "jspdf-autotable";
 import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPencil, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -23,12 +23,25 @@ const Drivers = () => {
   const [importDrivers, { isLoading: isImporting }] =
     useImportDriversMutation();
   const navigate = useNavigate();
+  const uploadRef = useRef(null);
+
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
+
   const [AppError, setAppError] = useState(null);
+
+  const [dataPerPage, setDataPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   const { ids, entities } = data || {};
   const driversArray = ids?.map((id) => entities[id]);
   
-
-  const [searchQuery, setSearchQuery] = useState('');
 
   // New hook deleteDriver to handle deleting drivers
   const [deleteDriver, { isLoading: isDeleting }] = useDeleteDriverMutation();
@@ -63,29 +76,46 @@ const Drivers = () => {
     }
   };
   
+  const handleDateRange = (dateRange) => {
+    if (dateRange) {
+        setStartDate([dateRange(0)]);
+        setEndDate([dateRange(1)]);
+    } else {
+        setStartDate(null);
+        setEndDate(null);
+    }
+};
   const filteredData = driversArray?.filter((driver) => {
     const name = driver.name.toLowerCase();
     const phoneNumber = driver.phone_number.toLowerCase();
+    const date = driver.date_hired.toLowerCase()
     const search = searchQuery.toLowerCase();
-  
-    return name.includes(search) || phoneNumber.includes(search);
-  });
 
-  const [dataPerPage, setDataPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
+    if (search) {
+      return (
+        (startDate === null || startDate <= date) &&
+        (endDate === null || date <= endDate) &&
+        (name.includes(search) ||
+          phoneNumber.includes(search))
+      );
+    } else {
+      return (
+        (startDate === null || startDate <= date) &&
+        (endDate === null || date <= endDate)
+      );
+    }
+  });
 
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   const handleDataPerPage = (e) => {
     setDataPerPage(parseInt(e.target.value));
   };
   
-  const uploadRef = useRef(null);
-  // listen to click on uploadRef and the open file upload for only csv files
+  
+  
   const handleFileUpload = async (e) => {
     setImportError(null);
     const file = e.target.files[0];
@@ -108,7 +138,7 @@ const Drivers = () => {
         setImportError(error?.data?.message || parsedError);
         toast.error(importError, {
           style: {
-            // handle error message overflow
+            
             minWidth: "300px",
             height: "auto",
           },
@@ -190,6 +220,26 @@ const Drivers = () => {
               </div>
             </div>
             <div className="col-lg-2 col-md-3 col-6">
+                <input
+                  type="date"
+                  value={startDate}
+                  className="form-control"
+                  onChange={(e) => {
+                    setStartDate(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="col-lg-2 col-md-3 col-6">
+                <input
+                  type="date"
+                  value={endDate}
+                  className="form-control"
+                  onChange={(e) => {
+                    setEndDate(e.target.value);
+                  }}
+                />
+              </div>
+            <div className="col-lg-2 col-md-3 col-6">
               <select
                 onChange={handleDataPerPage}
                 value={dataPerPage}
@@ -212,10 +262,10 @@ const Drivers = () => {
                   <th>Phone Number</th>
                   <th>Age</th>
                   <th>Date Hired</th>
-                  <th>License Number</th>
-                  <th>vehicle Number</th>
+                  <th>Permit Number</th>
+                  {/*<th>vehicle Number</th> 
                   <th>Permit Issue Date</th>
-                  <th>Permit Expire date</th>
+                  <th>Permit Expire date</th> */}
                   <th className="text-center"> Action </th>
                 </tr>
               </thead>
@@ -230,27 +280,27 @@ const Drivers = () => {
                         <td>{d.phone_number}</td>
                         <td>{d.age}</td>
                         <td>{new Date(d.date_hired).toDateString()}</td>
-                        <td>{d.lisence_number}</td>
-                        <td>{d.Vehicle_number}</td>
+                        <td>{d.permit_number}</td>
+                        {/* <td>{d.Vehicle_number}</td>
                         <td>{d.permit_issue_Date}</td>
-                        <td>{d.permit_expire_date}</td>
+                        <td>{d.permit_expire_date}</td>  */}
                         <td
-                          className="text-center"
-                          style={{ whiteSpace: "noWrap" }}
+                          className="action-column text-center"
                         >
+                        <Link to={`view/${d.id}`} className="btn btn-sm rounded btn-blue mx-1">
+                          <FontAwesomeIcon icon={faEye} title="View" icon-size="sm" />
+                        </Link>
                           <Link
                             to={`edit/${d.id}`}
-                            className="btn btn-sm font-sm rounded btn-brand mx-4"
+                            className="btn btn-sm rounded btn-brand mx-1"
                           >
-                            <i className="material-icons md-edit"></i>
-                            Edit
+                            <FontAwesomeIcon icon={faPencil} title="Edit"/>
                           </Link>
                           <button
                             onClick={() => handleDeleteDriver(d.id)}
-                            className="btn btn-sm font-sm rounded btn-danger"
+                            className="btn btn-sm rounded btn-danger"
                           >
-                            <i className="material-icons md-delete"></i>
-                            Delete
+                            <FontAwesomeIcon icon={faTrash} title="Delete"/>
                           </button>
                         </td>
                       </tr>

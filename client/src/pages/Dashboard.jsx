@@ -180,7 +180,7 @@ const Dashboard = () => {
                         <td>{v.mileage}</td>
                         <td>{v.manufacturer}</td>
                         <td>{v.date_of_purchase}</td>
-                        <td className="text-center" style={{whiteSpace:"noWrap"}}>
+                        <td className="text-center">
                           <Link
                             to={`/vehichles/${v.id}`}
                             className="btn btn-sm font-sm rounded btn-brand mx-4"

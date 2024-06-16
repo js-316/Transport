@@ -115,6 +115,33 @@ const AddFuel = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
+                      <label className="form-label">Fuel Station</label>
+                      <div className="row gx-2">
+                      <select
+                          placeholder="Fuel Station"
+                          className={`form-control ${
+                            errors.fuel_station ? "is-invalid" : ""
+                          }`}
+                          {...register("fuel_station")}
+                        >
+                          <option>Select Fuel Station</option>
+                          {vehichlesArray?.map((d, index) => (
+                            <option key={index} value={d.id}>
+                              {d.number_plate}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.fuel_station && (
+                          <div className="invalid-feedback">
+                            
+                            {errors.fuel_plate?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
                       <label className="form-label">Mileage</label>
                       <div className="row gx-2">
                         <input
@@ -128,26 +155,6 @@ const AddFuel = () => {
                         {errors.mileage && (
                           <div className="invalid-feedback">
                             {errors.mileage?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Amount</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="50,000"
-                          type="number"
-                          className={`form-control ${
-                            errors.amount ? "is-invalid" : ""
-                          }`}
-                          {...register("amount")}
-                        />
-                        {errors.amount && (
-                          <div className="invalid-feedback">
-                            {errors.amount?.message}
                           </div>
                         )}
                       </div>
@@ -173,6 +180,27 @@ const AddFuel = () => {
                       </div>
                     </div>
                   </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Amount</label>
+                      <div className="row gx-2">
+                        <input
+                          placeholder="50,000"
+                          type="number"
+                          className={`form-control ${
+                            errors.amount ? "is-invalid" : ""
+                          }`}
+                          {...register("amount")}
+                        />
+                        {errors.amount && (
+                          <div className="invalid-feedback">
+                            {errors.amount?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Date</label>

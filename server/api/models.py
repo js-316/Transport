@@ -95,6 +95,7 @@ class Maintenance(models.Model, ExtraMixin):
     description = models.CharField(max_length=100)
     date = models.DateField()
     cost = models.FloatField()
+    status = models.CharField(max_length=20, default='Pending')
     
     def __str__(self):
         return self.description
@@ -106,8 +107,21 @@ class Fuel(models.Model, ExtraMixin):
     date_of_fueling = models.DateField()
     amount = models.FloatField()
     mileage = models.FloatField(default=0)
+    status = models.CharField(max_length=20, default='Pending')
 
     def __str__(self):
         return self.fuel_type
     
+class Engineer(models.Model, ExtraMixin):
+    vehichle_attached = models.ForeignKey('Vehichle', on_delete=models.CASCADE, related_name='engineers')
+    name = models.CharField(max_length=20)
+    phone_number = models.CharField(max_length=20)
+    age = models.IntegerField()
+    date_hired = models.DateField()
+    email = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
+
+
 
