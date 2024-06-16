@@ -25,7 +25,6 @@ import Listgroups from "../components/Listgroups";
 import DonutChart from "../components/DonutChart";
 import { issues, workorder, items, activities } from "../data/chartData";
 import RecentActivity from "../components/RecentActivity";
-import ResponsiveContent from "../components/ResponsiveContent";
 
 const Dashboard = () => {
   const { isLoading, data } = useGetVehichlesQuery();
@@ -152,8 +151,9 @@ const Dashboard = () => {
             </div>
           </div>
         </header>
-        <div className="table-responsive-sm">
-          <div className="card-body">
+
+        <div className="card-body">
+          <div className="table-responsive-sm">
             <table
               className="table table-hover"
               style={{ whiteSpace: "noWrap" }}
@@ -180,7 +180,7 @@ const Dashboard = () => {
                         <td>{v.mileage}</td>
                         <td>{v.manufacturer}</td>
                         <td>{v.date_of_purchase}</td>
-                        <td className="text-center">
+                        <td className="text-center" style={{whiteSpace:"noWrap"}}>
                           <Link
                             to={`/vehichles/${v.id}`}
                             className="btn btn-sm font-sm rounded btn-brand mx-4"
