@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link} from "react-router-dom";
 import { fuelSchema } from "../util/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,9 +10,11 @@ import errorParser from "../util/errorParser";
 import { useGetVehichlesQuery } from "../features/vehichle/vehicleApiSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
+import { selectUser } from "../features/auth/authSlice";
 
 
 const AddFuel = () => {
+  const user = useSelector(selectUser)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState(null);
@@ -113,6 +115,38 @@ const AddFuel = () => {
                       </div>
                     </div>
                   </div>
+                  {
+                    user?.is_staff ? (
+                      <><div className="col-lg-4">
+                      <div className="mb-4">
+                        <label className="form-label">Select Driver</label>
+                        <div className="row gx-2">
+                        <select
+                            placeholder="Select Driver"
+                            className={`form-control ${
+                              errors.driver ? "is-invalid" : ""
+                            }`}
+                            {...register("driver")}
+                          >
+                            <option>Select Driver</option>
+                            {vehichlesArray?.map((d, index) => (
+                              <option key={index} value={d.id}>
+                                {d.number_plate}
+                              </option>
+                            ))}
+                          </select>
+                          {errors.driver && (
+                            <div className="invalid-feedback">
+                              
+                              {errors.driver?.message}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                      </>
+                    ): null
+                  }
                   <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Fuel Station</label>
@@ -222,6 +256,7 @@ const AddFuel = () => {
                       </div>
                     </div>
                   </div>
+                  
                 </div>
                 <button class="btn btn-primary" type="submit">
                   {isLoading ? "Adding..." : "Add Fuel"}

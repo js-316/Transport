@@ -6,6 +6,8 @@ import {
   useGetFuelQuery,
   useImportFuelMutation,
   useDeleteFuelMutation,
+  useApproveFuelMutation,
+  useRejectFuelMutation,
 } from "../features/fuel/fuelApiSlice";
 import TableLoader from "../components/TableLoader";
 import errorParser from "../util/errorParser";
@@ -14,7 +16,7 @@ import Swal from "sweetalert2";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPencil, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faEye, faPencil, faSearch, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/auth/authSlice";
 
@@ -44,8 +46,11 @@ const Fuel = () => {
   const [endDate, setEndDate] = useState(null);  
   
   const { ids, entities } = data || {};
-  const fuelArray = ids?.map((id) => entities[id]);
-  
+  const fuelArray = ids?.map((id) => entities[id]).reverse();
+
+  const [approveFuel, {isLoading: isApproving}] = useApproveFuelMutation()
+  const [rejectFuel, {isLoading:isRejecting}] = useRejectFuelMutation()
+ 
  
   const handleFileUpload = async (e) => {
     setImportError(null);
@@ -202,6 +207,27 @@ const filteredData = fuelArray?.filter((fuel) => {
     doc.save("fuel_records.pdf");
   };
 
+  const handleApprove = async (id) => {
+    setAppError(null)
+    try {
+      
+      const result = await approveFuel(id).unwrap();
+      refetch();
+    } catch (error) {
+      console.error("Error approving fuel:", error);
+    }
+  };
+  
+  const handleReject = async (id) => {
+    try {
+      const result = await rejectFuel(id).unwrap();
+      refetch();
+    } catch (error) {
+      console.error("Error rejecting fuel:", error);
+    }
+  };
+
+  
   return (
     <Layout>
       <div className="content-header">
@@ -417,6 +443,18 @@ const filteredData = fuelArray?.filter((fuel) => {
                             >
                               <FontAwesomeIcon icon={faTrash} title="Delete" />
 
+                            </button>
+                            <button
+                              onClick={() => handleApprove(d.id)}
+                              className="btn btn-sm rounded btn-success mx-1"
+                            >
+                              <FontAwesomeIcon icon={faCheckCircle} title="Approve"/>
+                            </button>
+                            <button
+                              onClick={() => handleReject(d.id)}
+                              className="btn btn-sm rounded btn-danger"
+                            >
+                              <FontAwesomeIcon icon={faTimesCircle} title="Reject"/>
                             </button>
                           </td>
                         </>

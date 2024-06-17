@@ -24,7 +24,8 @@ from .views import (
     FuelListView,
     FuelDetailView,
     FuelEditView,
-    DriverDashboardView
+    DriverDashboardView,
+    
 
 )
 
@@ -53,11 +54,11 @@ urlpatterns = [
     path('search/vehichle/', SearchVehichle.as_view(), name='search-vehichle'),
     path('search/maintenance/', SearchMaintenance.as_view(), name='search-maintenance'),
     path('import/vehichle/', ImportVehichle.as_view(), name='import-vehichle'),
-    path('fuels/',FuelListView.as_view(), name='fuel'),
+    path('fuel/',FuelListView.as_view(), name='fuel'),
     path('fuel/<int:pk>/' ,FuelDetailView.as_view(), name ='fuel-detail'),
     path('fuel/create/', FuelCreateView.as_view(), name='fuel-create'),
     path('fuel/edit/<int:pk>', FuelEditView.as_view(), name='fuel-edit'),
-    # path('driver_dashboard/', DriverDashboardView.as_view(), name='driver_dashboard'),
+   
 
     
     

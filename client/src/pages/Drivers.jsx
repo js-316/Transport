@@ -40,7 +40,7 @@ const Drivers = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const { ids, entities } = data || {};
-  const driversArray = ids?.map((id) => entities[id]);
+  const driversArray = ids?.map((id) => entities[id]).reverse();
   
 
   // New hook deleteDriver to handle deleting drivers

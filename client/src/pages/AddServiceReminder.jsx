@@ -115,19 +115,19 @@ const AddServiceReminder = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Service Task</label>
+                      <label className="form-label">Next Service Mileage</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="Please select"
-                          type="text"
+                          placeholder="35,000"
+                          type="number"
                           className={`form-control ${
-                            errors.service_task ? "is-invalid" : ""
+                            errors.next_service_mileage ? "is-invalid" : ""
                           }`}
-                          {...register("service_task")}
+                          {...register("next_service_mileage")}
                         />
-                        {errors.service_task && (
+                        {errors.next_service_mileage && (
                           <div className="invalid-feedback">
-                            {errors.service_task?.message}
+                            {errors.next_service_mileage?.message}
                           </div>
                         )}
                       </div>
@@ -188,19 +188,19 @@ const AddServiceReminder = () => {
                   
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Watcher To be Notified</label>
+                      <label className="form-label">Driver To be Notified</label>
                       <div className="row gx-2">
                         <input
-                          placeholder="Select Watcher"
+                          placeholder="Select Driver"
                           type="text"
                           className={`form-control ${
-                            errors.watcher ? "is-invalid" : ""
+                            errors.driver ? "is-invalid" : ""
                           }`}
-                          {...register("watcher")}
+                          {...register("driver")}
                         />
-                        {errors.watcher && (
+                        {errors.driver && (
                           <div className="invalid-feedback">
-                            {errors.watcher?.message}
+                            {errors.driver?.message}
                           </div>
                         )}
                       </div>

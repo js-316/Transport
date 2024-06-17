@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import Layout from "../components/Layout";
-import { useGetMaintenanceQuery, useDeleteMaintenanceMutation} from "../features/maintenance/maintenanceApiSlice";
+import { useGetMaintenanceQuery, useDeleteMaintenanceMutation, useRejectRepairMutation, useApproveRepairMutation} from "../features/maintenance/maintenanceApiSlice";
 import { Link, useNavigate } from "react-router-dom";
 import TableLoader from "../components/TableLoader";
 import Pagination from "../components/Pagination";
@@ -8,7 +8,7 @@ import errorParser from "../util/errorParser";
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPencil, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faEye, faPencil, faSearch, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import logo from '../assets/soliton.png'
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/auth/authSlice";
@@ -35,7 +35,10 @@ const Maintenance = () => {
 
 
   const { ids, entities } = data || {};
-  const maintenancesArray = ids?.map((id) => entities[id])
+  const maintenancesArray = ids?.map((id) => entities[id]).reverse()
+
+  const [approveRepair, {isLoading: isApproving}] = useApproveRepairMutation()
+  const [rejectRepair, {isLoading: isRejecting}] = useRejectRepairMutation()
 
   const handleDeleteMaintenance = async (id) => {
     setAppError(null);
@@ -92,8 +95,8 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
   if (selectedStatus !== 'All') {
     if (search) {
       return (
-        (startDate === null || startDate <= date_of_date) &&
-        (endDate === null || date_of_date <= endDate) &&
+        (startDate === null || startDate <= date) &&
+        (endDate === null || date <= endDate) &&
         (
           ( fleet.includes(search) ||
           (cost && cost.toString().includes(search)) ||
@@ -106,16 +109,16 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
       );
     } else {
       return (
-        (startDate === null || startDate <= date_of_date) &&
-        (endDate === null || date_of_date <= endDate) &&
+        (startDate === null || startDate <= date) &&
+        (endDate === null || date <= endDate) &&
         status === selectedStatus
       );
     }
   } else {
     if (search) {
       return (
-        (startDate === null || startDate <= date_of_date) &&
-        (endDate === null || date_of_date <= endDate) &&
+        (startDate === null || startDate <= date) &&
+        (endDate === null || date <= endDate) &&
         (
           ( fleet.includes(search) ||
           (cost && cost.toString().includes(search)) ||
@@ -126,8 +129,8 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
       );
     } else {
       return (
-        (startDate === null || startDate <= date_of_date) &&
-        (endDate === null || date_of_date <= endDate)
+        (startDate === null || startDate <= date) &&
+        (endDate === null || date <= endDate)
       );
     }
   }
@@ -188,6 +191,26 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
     
     doc.save("maintenance.pdf");
   };
+
+  const handleApprove = async (id) => {
+    try {
+      
+      const result = await approveRepair(id).unwrap();
+      refetch();
+    } catch (error) {
+      console.error("Error approving repair:", error);
+    }
+  };
+  
+  const handleReject = async (id) => {
+    try {
+      const result = await rejectRepair(id).unwrap();
+      refetch();
+    } catch (error) {
+      console.error("Error rejecting repair:", error);
+    }
+  };
+
   
   return (
     <Layout>
@@ -387,6 +410,18 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
                               >
                                 <FontAwesomeIcon icon={faTrash} title="Delete" />
                               </button>
+                              <button
+                              onClick={() => handleApprove(d.id)}
+                              className="btn btn-sm rounded btn-success mx-1"
+                            >
+                              <FontAwesomeIcon icon={faCheckCircle} title="Approve"/>
+                            </button>
+                            <button
+                              onClick={() => handleReject(d.id)}
+                              className="btn btn-sm rounded btn-danger"
+                            >
+                              <FontAwesomeIcon icon={faTimesCircle} title="Reject"/>
+                            </button>
                             </td>
                           </>
                         ) : null

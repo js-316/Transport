@@ -22,7 +22,7 @@ const Vehichles = () => {
 
   const { isLoading, data, refetch } = useGetVehichlesQuery();
   const { ids, entities } = data || {};
-  const vehichlesArray = ids?.map((id) => entities[id]);
+  const vehichlesArray = ids?.map((id) => entities[id]).reverse();
 
   const [importVehichles, { isLoading: isImporting }] =
     useImportVehichlesMutation();

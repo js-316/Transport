@@ -222,10 +222,10 @@ const JobCard = () => {
                 <tr>
                   <th>Vehicle</th>
                   <th>Mileage</th>
-                  <th>Repair Request</th>
+                  <th>Work To Be Done</th>
                   <th>Date</th>
-                  <th>Machine Name</th>
-                  <th>Next Service</th>
+                  {/* <th>Machine Name</th> */}
+                  {/* <th>Next Service</th> */}
                   <th>Quantity</th>
                   <th>Part</th>
                 </tr>
@@ -241,8 +241,8 @@ const JobCard = () => {
                         <td>{d.cost}</td>
                         <td>{d.description}</td>
                         <td>{new Date(d.date).toDateString()}</td>
-                        <td>Machine</td>
-                        <td>{new Date(d.date).toDateString()}</td>
+                        {/* <td>Machine</td> */}
+                        {/* <td>{new Date(d.date).toDateString()}</td> */}
                         <td>4</td>
                         <td>Part</td>
                       </tr>
