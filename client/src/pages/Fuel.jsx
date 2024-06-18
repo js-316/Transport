@@ -44,7 +44,7 @@ const Fuel = () => {
   const [endDate, setEndDate] = useState(null);  
   
   const { ids, entities } = data || {};
-  const fuelArray = ids?.map((id) => entities[id]);
+  const fuelArray = ids?.map((id) => entities[id]).reverse();
   
  
   const handleFileUpload = async (e) => {

@@ -194,36 +194,27 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
       <div className="content-header">
         <h2 className="content-title">Repair Requests</h2>
         <div>
-        {
-          user?.is_staff || user?.is_driver ? (
+          {user?.is_staff || user?.is_driver ? (
             <>
-              <div >
-                  <Link to="add" className="btn btn-primary">
-                    <i className="material-icons md-plus"></i> Request Repair
-                  </Link>
+              <div>
+                <Link to="add" className="btn btn-primary">
+                  <i className="material-icons md-plus"></i> Request Repair
+                </Link>
 
-
-                  {
-                    user?.is_staff ? (
-                      <>
-                        <button onClick={exportToPDF} className="btn btn-success mx-2">
-                          Export to PDF
-                        </button>
-                      </>
-                    ) : null
-                  }
-
-
+                {user?.is_staff ? (
+                  <>
+                    <button
+                      onClick={exportToPDF}
+                      className="btn btn-success mx-2"
+                    >
+                      Export to PDF
+                    </button>
+                  </>
+                ) : null}
               </div>
-  
             </>
-          ) : null
-
-        }
-        
+          ) : null}
         </div>
-        
-
       </div>
       <div className="card mb-4">
         <header className="card-header">
@@ -242,25 +233,25 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
               </div>
             </div>
             <div className="col-lg-2 col-md-3 col-6">
-                <input
-                  type="date"
-                  value={startDate}
-                  className="form-control"
-                  onChange={(e) => {
-                    setStartDate(e.target.value);
-                  }}
-                />
-              </div>
-              <div className="col-lg-2 col-md-3 col-6">
-                <input
-                  type="date"
-                  value={endDate}
-                  className="form-control"
-                  onChange={(e) => {
-                    setEndDate(e.target.value);
-                  }}
-                />
-              </div>
+              <input
+                type="date"
+                value={startDate}
+                className="form-control"
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                }}
+              />
+            </div>
+            <div className="col-lg-2 col-md-3 col-6">
+              <input
+                type="date"
+                value={endDate}
+                className="form-control"
+                onChange={(e) => {
+                  setEndDate(e.target.value);
+                }}
+              />
+            </div>
             <div className="col-lg-2 col-md-3 col-6">
               <select
                 onChange={handleDataPerPage}
@@ -273,46 +264,52 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
                 <option value="40">Show 40</option>
               </select>
             </div>
-            
           </div>
           <div className="col-lg-4 md-6">
-            <div className="row gx-2 justify-content-between mt-1 mb-0 " style={{ height: 14 }}>
-              <div className="col-lg-1 col-md-1 col-1">
+            <div
+              className="row gx-2 justify-content-between mt-1 mb-0 "
+              style={{ height: 14 }}
+            >
+              <div className="col-lg-1 col-md-1 col-1 ">
                 <button
                   onClick={() => handleFilterStatus("All")}
-                  className="btn btn-sm rounded btn-gray btn-all"
+                  className="btn btn-sm rounded btn-gray btn-all d-flex justify-content-between"
                   style={{ marginBottom: 0 }}
                 >
-                  All
+                  <span style={{ marginRight: "10px" }}>All</span>
+                  <span className={`badge bg-white text-black`}>4</span>
                 </button>
               </div>
               <div className="col-lg-1 col-md-1 col-1">
                 <button
                   onClick={() => handleFilterStatus("pending")}
-                  className="btn btn-sm rounded btn-blues btn-override mx-0"
+                  className="btn btn-sm rounded btn-blues  btn-all d-flex justify-content-between"
                   style={{ marginBottom: 0 }}
                 >
-                  Pending
+                  <span style={{ marginRight: "10px" }}>Pending</span>
+                  <span className={`badge bg-white text-black`}>4</span>
                 </button>
               </div>
 
-              <div className="col-lg-1 col-md-1 col-1">
+              <div className="col-lg-1 col-md-1 col-1 ">
                 <button
                   onClick={() => handleFilterStatus("approved")}
-                  className="btn btn-sm rounded btn-success mx-0"
+                  className="btn btn-sm rounded btn-success mx-0  d-flex justify-content-between"
                   style={{ marginBottom: 0 }}
                 >
-                  Approved
+                  <span style={{ marginRight: "10px" }}>Approved</span>
+                  <span className="badge bg-white text-black">4</span>
                 </button>
               </div>
 
               <div className="col-lg-1 col-md-1 col-1">
                 <button
                   onClick={() => handleFilterStatus("rejected")}
-                  className="btn btn-sm rounded btn-danger"
-                  style={{ marginBottom: 0 }}
+                  className="btn btn-sm rounded btn-danger d-flex justify-content-between"
+                  style={{ marginRight: "10px" }}
                 >
-                  Rejected
+                  <span style={{ marginRight: "10px" }}>Rejected</span>
+                  <span className="badge bg-white text-black">4</span>
                 </button>
               </div>
             </div>
@@ -335,15 +332,11 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
                   {/* <th>Description</th> */}
                   {/* <th>Issues</th> */}
                   {/* <th>Work Order Number</th> */}
-                  {
-                    user?.is_staff ? (
-                      <>
-                        <th className="text-center"> Action </th>
-                      </>
-
-                    ):null
-                  }
-
+                  {user?.is_staff ? (
+                    <>
+                      <th className="text-center"> Action </th>
+                    </>
+                  ) : null}
                 </tr>
               </thead>
               <tbody>
@@ -365,8 +358,7 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
                         {/* <td>Description</td> */}
                         {/* <td>Issues</td> */}
                         {/* <td>Work Order Number</td> */}
-                        {
-                          user?.is_staff ? (
+                        {user?.is_staff ? (
                           <>
                             <td className="text-center action-column">
                               <Link
@@ -385,13 +377,14 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
                                 onClick={() => handleDeleteMaintenance(d.id)}
                                 className="btn btn-sm font-sm rounded btn-danger"
                               >
-                                <FontAwesomeIcon icon={faTrash} title="Delete" />
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  title="Delete"
+                                />
                               </button>
                             </td>
                           </>
-                        ) : null
-                      }
-
+                        ) : null}
                       </tr>
                     ))}
               </tbody>
