@@ -382,10 +382,22 @@ class FuelListView(generics.ListAPIView):
     serializer_class = FuelSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-class FuelDetailView(generics.RetrieveDestroyAPIView):
+class FuelDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Fuel.objects.all()
     serializer_class = FuelSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
+    # def patch(self, request, *args, **kwargs):
+    #     fuel = self.get_object()
+    #     if 'approve' in request.data:
+    #         fuel.status = 'Approved'
+    #         fuel.save()
+    #         return Response({'message': 'Fuel approved successfully'})
+    #     elif 'reject' in request.data:
+    #         fuel.status = 'Rejected'
+    #         fuel.save()
+    #         return Response({'message': 'Fuel rejected successfully'})
+    #     return Response({'error': 'Invalid request'})
 
 class FuelEditView(APIView):
     def put(self, request, pk):
@@ -395,4 +407,4 @@ class FuelEditView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
-    
+

@@ -103,14 +103,14 @@ class Maintenance(models.Model, ExtraMixin):
 
 class Fuel(models.Model, ExtraMixin):
     fuel_type = models.CharField(max_length=20, default ="Petrol")
-    fuel_plate= models.ForeignKey('Vehichle', on_delete=models.CASCADE, related_name='fuels')
+    fuel_plate= models.ForeignKey('Vehichle', on_delete=models.CASCADE, related_name='Fuel')
     date_of_fueling = models.DateField()
     amount = models.FloatField()
     mileage = models.FloatField(default=0)
     status = models.CharField(max_length=20, default='Pending')
 
     def __str__(self):
-        return self.fuel_type
+        return self.status
     
 class Engineer(models.Model, ExtraMixin):
     vehichle_attached = models.ForeignKey('Vehichle', on_delete=models.CASCADE, related_name='engineers')

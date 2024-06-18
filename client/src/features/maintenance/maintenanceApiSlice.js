@@ -60,9 +60,33 @@ export const maintenanceApiSlice = apiSlice.injectEndpoints({
         { type: "Maintenance", id: arg },
       ],
       }),
+      approveRepair: builder.mutation({
+        query: (id) => ({
+          url: `/maintenance/${id}/`,
+          method: "PATCH",
+          body: { status: "Approved" }, // Send the updated status
+        }),
+        invalidatesTags: ["Maintenance"],
+      }),
+      
+      rejectRepair: builder.mutation({
+        query: (id) => ({
+          url: `/maintenance/${id}/`,
+          method: "PATCH",
+          body: { status: "Rejected" }, // Send the updated status
+        }),
+        invalidatesTags: ["Maintenance"],
+      }),
    
   }),
 });
 
-export const { useAddMaintenanceMutation, useGetMaintenanceQuery, useEditMaintenanceMutation, useGetMaintenanceByIdQuery, useDeleteMaintenanceMutation} =
+export const { useAddMaintenanceMutation, 
+  useGetMaintenanceQuery, 
+  useEditMaintenanceMutation, 
+  useGetMaintenanceByIdQuery, 
+  useDeleteMaintenanceMutation,
+  useApproveRepairMutation,
+  useRejectRepairMutation,
+} =
   maintenanceApiSlice;

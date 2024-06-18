@@ -17,7 +17,7 @@ export const fuelApiSlice = apiSlice.injectEndpoints({
     }),
     getFuel: builder.query({
       query: () => ({
-        url: "/fuels/",
+        url: "/fuel/",
       }),
       validateStatus: (response, result) => {
         return response.status === 200 && !result.isError;
@@ -67,6 +67,23 @@ export const fuelApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Fuel"],
     }),
+    approveFuel: builder.mutation({
+      query: (id) => ({
+        url: `/fuel/${id}/`,
+        method: "PATCH",
+        body: { status: "Approved" }, // Send the updated status
+      }),
+      invalidatesTags: ["Fuel"],
+    }),
+    
+    rejectFuel: builder.mutation({
+      query: (id) => ({
+        url: `/fuel/${id}/`,
+        method: "PATCH",
+        body: { status: "Rejected" }, // Send the updated status
+      }),
+      invalidatesTags: ["Fuel"],
+    }),
     importFuel: builder.mutation({
       query: (body) => ({
         url: "/import/fuel/",
@@ -86,4 +103,6 @@ export const {
   useEditFuelMutation,
   useGetFuelByIdQuery,
   useDeleteFuelMutation,
+  useApproveFuelMutation,
+  useRejectFuelMutation,
 } = fuelApiSlice;

@@ -1396,6 +1396,22 @@ textarea.form-control {
 .action-column .btn + .btn {
   margin-left: 0 !important;
 }
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button-container button {
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.vehicle-box {
+  margin-bottom: 20px;
+}
 
 .border-bottom {
   border-bottom: 1px solid #eee !important;

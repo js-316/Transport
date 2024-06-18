@@ -14,9 +14,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import ButtonBudges from "../components/ButtonBudges";
 import { Service_statuses } from "../data/chartData";
+import { useSelector } from "react-redux";
+import { selectUser } from "../features/auth/authSlice";
 
 const Service_Reminders = () => {
   const { isLoading, data, refetch } = useGetMaintenanceQuery();
+
+  const user = useSelector(selectUser)
 
   const { ids, entities } = data || {};
   const maintenancesArray = ids?.map((id) => entities[id]);
@@ -174,15 +178,22 @@ const Service_Reminders = () => {
     <Layout>
       <div className="content-header">
         <h2 className="content-title">Service Reminders</h2>
-        <div>
-          <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Add Reminders
-          </Link>
+        {
+          user?.is_staff ? (
+            <>
+              <div>
+                <Link to="add" className="btn btn-primary">
+                  <i className="material-icons md-plus"></i> Add Reminders
+                </Link>
 
-          <button onClick={exportToPDF} className="btn btn-success mx-2">
-            Export to PDF
-          </button>
-        </div>
+                <button onClick={exportToPDF} className="btn btn-success mx-2">
+                  Export to PDF
+                </button>
+              </div>
+            </>
+          ) : null
+        }
+
       </div>
       <ButtonBudges title="Satus" buttons={Service_statuses} />
       <div className="card mb-4">
@@ -221,7 +232,7 @@ const Service_Reminders = () => {
             <thead>
               <tr>
                 <th>Vehicle</th>
-                <th>Mileage</th>
+                <th>Next Service Mileage</th>
                 <th>Service On</th>
                 {/* <th>Notificaton</th> */}
                 {/* <th>Active Work Order</th>
