@@ -13,8 +13,9 @@ import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 const EditVehichle = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+
   const { data: vehichle, isLoading: vehichleLoading} = useGetVehichleByIdQuery(id);
-  
+
   const { isLoading: driverLoading, data } = useGetDriversQuery();
 
   const { ids, entities } = data || {};
@@ -58,7 +59,6 @@ const EditVehichle = () => {
             </Link>
             <h2 className="content-title">Edit Vehicle</h2>
           </div>
-          
         </div>
         <div className="card mb-4">
           <div className="card-header">

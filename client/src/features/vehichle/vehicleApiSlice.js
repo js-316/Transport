@@ -59,7 +59,7 @@ export const vehicleApiSlice = apiSlice.injectEndpoints({
       providesTags: (result, error, vehichleId) => [{ type: "Vehichle", id: vehichleId }],
     }),
     getVehichleById: builder.query({
-      query: (id) => `/vehichle/${id}`, // Assuming this is the correct endpoint for fetching a single driver by ID
+      query: (id) => `/vehichle/${id}`, // the correct endpoint for fetching a single driver by ID
       providesTags: (result, error, id) => [{ type: "Vehichle", id }], // Tags for caching
     }),
     importVehichles: builder.mutation({
@@ -90,6 +90,4 @@ export const {
   useEditVehichleMutation,
   useGetVehichleByIdQuery,
   useDeleteVehichleMutation,
- 
-
 } = vehicleApiSlice;

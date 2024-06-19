@@ -1,6 +1,11 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCar, faUser, faWrench, faTint } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCar,
+  faUser,
+  faWrench,
+  faTint,
+} from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 export const cardsData = [
   {
@@ -32,7 +37,7 @@ export const cardsData = [
     numbers: 2,
   },
 ];
- 
+
 export const UsernotificatioData = [
   {
     id: 1,
@@ -109,3 +114,21 @@ export const DriversnotificatioData = [
   },
 ];
 
+export const VehichlelistColumns = [
+  "Number Plate",
+  "Model",
+  "Manufacturer",
+  "Year Make",
+  "Fuel Type",
+  "Milage",
+];
+export const Vehichlelistdata = [
+  {
+    "Number Plate": "UBY200M",
+    "Model": "Harrier",
+    "Manufacturer": "Toyota",
+    "Year Make": "2000",
+    "Fuel Type": "Diesel",
+    "Milage": "187453",
+  },
+];

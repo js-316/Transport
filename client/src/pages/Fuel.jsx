@@ -46,7 +46,7 @@ const Fuel = () => {
   const [endDate, setEndDate] = useState(null);  
   
   const { ids, entities } = data || {};
-  const fuelArray = ids?.map((id) => entities[id]).reverse();
+  const fuelArray = ids?.map((id) => entities[id]).reverse().reverse();
 
   const [approveFuel, {isLoading: isApproving}] = useApproveFuelMutation()
   const [rejectFuel, {isLoading:isRejecting}] = useRejectFuelMutation()
@@ -279,7 +279,7 @@ const filteredData = fuelArray?.filter((fuel) => {
             ) : null
 
           }
-
+m
         </div>
       </div>
       <div className="card mb-4">
