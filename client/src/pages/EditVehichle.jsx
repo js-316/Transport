@@ -15,6 +15,7 @@ const EditVehichle = () => {
   const { id } = useParams();
 
   const { data: vehichle, isLoading: vehichleLoading} = useGetVehichleByIdQuery(id);
+  console.log("Vehichle loaded",vehichle)
 
   const { isLoading: driverLoading, data } = useGetDriversQuery();
 

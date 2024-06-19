@@ -4,23 +4,28 @@ import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "react-bootstrap/Modal";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { useGetVehichleByIdQuery } from "../features/vehichle/vehicleApiSlice";
-function VehicleModal({ id ,title, columns }) {
-  const [vehicleDetails, setVehicleDetails] = useState({});
+import { useGetVehichleByIdQuery, useGetVehichlesQuery } from "../features/vehichle/vehicleApiSlice";
 
+function VehicleModal({id, title, columns }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
 
   const handleShow = () => setShow(true);
 
-  const { id: vehicleId } = useParams(); // Extract vehicle ID from URL params
+  // const {data : vehicles} = useGetVehichlesQuery()
+  // console.log("Vehicles",vehicles);
+
+  var { id } = useParams(); // Extract vehicle ID from URL params
+
+  
   const [vehicleList, setVehicleList] = useState([]);
   const {
-    data: vehicle,
-    error,
-    isLoading,
-  } = useGetVehichleByIdQuery(vehicleId);
+    data : vehicle,
+    isLoading: vehicleLoading,
+  } = useGetVehichleByIdQuery(id);
+
+  console.log('Vehicle data:',vehicle)
 
   const Fetchdata = async () => {
     try {
@@ -35,7 +40,7 @@ function VehicleModal({ id ,title, columns }) {
     }
   };
 
-  if (isLoading) {
+  if (vehicleLoading) {
     return <div>Loading....</div>;
   }
   if (!vehicle) {
@@ -44,12 +49,11 @@ function VehicleModal({ id ,title, columns }) {
 
   return (
     <>
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error fetching vehicle data</p>}
+      {/* {isLoading && <p>Loading...</p>}
+      {error && <p>Error fetching vehicle data</p>} */}
 
       <button
         onClick={() => {
-          Fetchdata();
           handleShow();
         }}
         className="btn btn-sm rounded btn-blue mx-1"
@@ -65,6 +69,7 @@ function VehicleModal({ id ,title, columns }) {
           <table className="table striped bordered hover">
             <thead className="table-dark">
               <tr>
+                <th>Vehicle</th>
                 {columns.map((column, index) => (
                   <th key={index}>{column}</th>
                 ))}

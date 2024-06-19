@@ -1,64 +1,71 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Layout from "../components/Layout";
-import { useGetMaintenanceQuery, useDeleteMaintenanceMutation, useRejectRepairMutation, useApproveRepairMutation} from "../features/maintenance/maintenanceApiSlice";
+import {
+  useGetMaintenanceQuery,
+  useDeleteMaintenanceMutation,
+  useRejectRepairMutation,
+  useApproveRepairMutation,
+} from "../features/maintenance/maintenanceApiSlice";
 import { Link, useNavigate } from "react-router-dom";
 import TableLoader from "../components/TableLoader";
 import Pagination from "../components/Pagination";
 import errorParser from "../util/errorParser";
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faEye, faPencil, faSearch, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
-import logo from '../assets/soliton.png'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheckCircle,
+  faEye,
+  faPencil,
+  faSearch,
+  faTimesCircle,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+import logo from "../assets/soliton.png";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/auth/authSlice";
 
-
 const Maintenance = () => {
-
-  const user = useSelector(selectUser)
+  const user = useSelector(selectUser);
   const { isLoading, data, refetch } = useGetMaintenanceQuery();
   const [dataPerPage, setDataPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [selectedStatus, setSelectedStatus] = useState('All')
+  const [selectedStatus, setSelectedStatus] = useState("All");
 
-  const [deleteMaintenance, { isLoading: isDeleting }] = useDeleteMaintenanceMutation();
+  const [deleteMaintenance, { isLoading: isDeleting }] =
+    useDeleteMaintenanceMutation();
 
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const [startDate, setStartDate] = useState(null)
-  const [endDate, setEndDate] = useState(null)
-
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
   const { ids, entities } = data || {};
-  const maintenancesArray = ids?.map((id) => entities[id]).reverse()
+  const maintenancesArray = ids?.map((id) => entities[id]).reverse();
 
-  const [approveRepair, {isLoading: isApproving}] = useApproveRepairMutation()
-  const [rejectRepair, {isLoading: isRejecting}] = useRejectRepairMutation()
+  const [approveRepair, { isLoading: isApproving }] =
+    useApproveRepairMutation();
+  const [rejectRepair, { isLoading: isRejecting }] = useRejectRepairMutation();
 
   const handleDeleteMaintenance = async (id) => {
     setAppError(null);
     try {
       const result = await Swal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
       });
       if (result.isConfirmed) {
-        
-        const res = await deleteMaintenance( id ).unwrap();
-        
+        const res = await deleteMaintenance(id).unwrap();
 
         refetch();
-        
       }
     } catch (err) {
       console.error("Error deleting Maintenance:", err);
@@ -73,99 +80,89 @@ const Maintenance = () => {
 
   const handleDateRange = (dateRange) => {
     if (dateRange) {
-        setStartDate([dateRange(0)]);
-        setEndDate([dateRange(1)]);
+      setStartDate([dateRange(0)]);
+      setEndDate([dateRange(1)]);
     } else {
-        setStartDate(null);
-        setEndDate(null);
+      setStartDate(null);
+      setEndDate(null);
     }
-};
+  };
 
-const handleFilterStatus = (status) => {
-  setSelectedStatus(status);
-};
-const filteredData = maintenancesArray?.filter((maintenance) => {
-  const fleet = maintenance.fleet.number_plate.toLowerCase();
-  const cost = maintenance.cost;
-  const description = maintenance.description.toLowerCase();
-  const date = maintenance.date.toLowerCase()
-  const status = maintenance.status.toLowerCase();
-  const search = searchQuery.toLowerCase();
+  const handleFilterStatus = (status) => {
+    setSelectedStatus(status);
+  };
+  const filteredData = maintenancesArray?.filter((maintenance) => {
+    const fleet = maintenance.fleet.number_plate.toLowerCase();
+    const cost = maintenance.cost;
+    const description = maintenance.description.toLowerCase();
+    const date = maintenance.date.toLowerCase();
+    const status = maintenance.status.toLowerCase();
+    const search = searchQuery.toLowerCase();
 
-  if (selectedStatus !== 'All') {
-    if (search) {
-      return (
-        (startDate === null || startDate <= date) &&
-        (endDate === null || date <= endDate) &&
-        (
-          ( fleet.includes(search) ||
-          (cost && cost.toString().includes(search)) ||
-          description.includes(search) ||
-          status.includes(search) ||
-          (date && date.toString().includes(search)))
-          
-        ) &&
-        status === selectedStatus
-      );
+    if (selectedStatus !== "All") {
+      if (search) {
+        return (
+          (startDate === null || startDate <= date) &&
+          (endDate === null || date <= endDate) &&
+          (fleet.includes(search) ||
+            (cost && cost.toString().includes(search)) ||
+            description.includes(search) ||
+            status.includes(search) ||
+            (date && date.toString().includes(search))) &&
+          status === selectedStatus
+        );
+      } else {
+        return (
+          (startDate === null || startDate <= date) &&
+          (endDate === null || date <= endDate) &&
+          status === selectedStatus
+        );
+      }
     } else {
-      return (
-        (startDate === null || startDate <= date) &&
-        (endDate === null || date <= endDate) &&
-        status === selectedStatus
-      );
+      if (search) {
+        return (
+          (startDate === null || startDate <= date) &&
+          (endDate === null || date <= endDate) &&
+          (fleet.includes(search) ||
+            (cost && cost.toString().includes(search)) ||
+            description.includes(search) ||
+            status.includes(search) ||
+            (date && date.toString().includes(search)))
+        );
+      } else {
+        return (
+          (startDate === null || startDate <= date) &&
+          (endDate === null || date <= endDate)
+        );
+      }
     }
-  } else {
-    if (search) {
-      return (
-        (startDate === null || startDate <= date) &&
-        (endDate === null || date <= endDate) &&
-        (
-          ( fleet.includes(search) ||
-          (cost && cost.toString().includes(search)) ||
-          description.includes(search) ||
-          status.includes(search) ||
-          (date && date.toString().includes(search)))
-        )
-      );
-    } else {
-      return (
-        (startDate === null || startDate <= date) &&
-        (endDate === null || date <= endDate)
-      );
-    }
-  }
-});
-
+  });
 
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
-  console.log('Filtered Maintenance Data:', maintenancesArray);
+  console.log("Filtered Maintenance Data:", maintenancesArray);
 
-  
-  
   const handleDataPerPage = (e) => {
     setDataPerPage(parseInt(e.target.value));
   };
 
-  
-
   const exportToPDF = () => {
     const doc = new jsPDF();
-    
-     // Add logo
-     doc.addImage(logo, 'PNG', 10, 10, 20, 20);
-      
-     // Add header text
-     doc.text(`Soliton Telmec`, 40, 15);
-     doc.text(`Address: Bugolobi Plot 10, Mizindalo Road`, 40, 20);
-     doc.text(`Phone: +256 700 777 003`, 40, 25);
-     doc.text(`Email: info@soliton.co.ug`, 40, 30);
-   
-     // Add a newline
-     doc.text(`\n`, 10, 35);
 
-    doc.text("Service History", 10, 40)
+    // Add logo
+    doc.addImage(logo, "PNG", 10, 10, 20, 20);
+
+    // Add header text
+    doc.text(`Soliton Telmec`, 40, 15);
+    doc.text(`Address: Bugolobi Plot 10, Mizindalo Road`, 40, 20);
+    doc.text(`Phone: +256 700 777 003`, 40, 25);
+    doc.text(`Email: info@soliton.co.ug`, 40, 30);
+
+    // Add a newline
+    doc.text(`\n`, 10, 35);
+
+    doc.text("Service History", 10, 40);
     const tableData = [];
     filteredData.forEach((record) => {
       tableData.push([
@@ -179,29 +176,39 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
         record.meter_unit,
         record.work_order_number,
         record.labels,
-        
-
       ]);
     });
     doc.autoTable({
-      head: [["Vehicle", "Description", "Cost", "Date","Driver","Repair Priority Class","Meter","Meter Unit","Work Order Number","Labels"]],
+      head: [
+        [
+          "Vehicle",
+          "Description",
+          "Cost",
+          "Date",
+          "Driver",
+          "Repair Priority Class",
+          "Meter",
+          "Meter Unit",
+          "Work Order Number",
+          "Labels",
+        ],
+      ],
       body: tableData,
       startY: 50,
     });
-    
+
     doc.save("maintenance.pdf");
   };
 
   const handleApprove = async (id) => {
     try {
-      
       const result = await approveRepair(id).unwrap();
       refetch();
     } catch (error) {
       console.error("Error approving repair:", error);
     }
   };
-  
+
   const handleReject = async (id) => {
     try {
       const result = await rejectRepair(id).unwrap();
@@ -211,7 +218,6 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
     }
   };
 
-  
   return (
     <Layout>
       <div className="content-header">
@@ -241,7 +247,7 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
       </div>
       <div className="card mb-4">
         <header className="card-header">
-          <div className="row gx-3">
+          <div className="row gx-3 mb-3">
             <div className="col-lg-4 col-md-6 me-auto">
               <div className="input-group">
                 <span className="input-group-text">
@@ -255,7 +261,7 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
                 />
               </div>
             </div>
-            <div className="col-lg-2 col-md-3 col-6">
+            <div className="col-lg-2 col-md-3 col-6 ">
               <input
                 type="date"
                 value={startDate}
@@ -288,50 +294,58 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
               </select>
             </div>
           </div>
-          <div className="col-lg-4 md-6">
+          <div className="row gx-4  mb-7 mt-6 me-3">
             <div
-              className="row gx-2 justify-content-between mt-1 mb-0 "
+              className="row gx-4 justify-content-between mb-2"
               style={{ height: 14 }}
             >
-              <div className="col-lg-1 col-md-1 col-1 ">
+              <div className="col-lg-0 col-md-1 col-2">
                 <button
                   onClick={() => handleFilterStatus("All")}
-                  className="btn btn-sm rounded btn-gray btn-all d-flex justify-content-between"
-                  style={{ marginBottom: 0 }}
+                  className="btn btn-sm rounded btn-gray btn-all d-flex"
+                  style={{ marginRight: "5px" }}
                 >
-                  <span style={{ marginRight: "10px" }}>All</span>
+                  <span style={{ marginRight: "10px" }}>
+                    All
+                  </span>
                   <span className={`badge bg-white text-black`}>4</span>
                 </button>
               </div>
-              <div className="col-lg-1 col-md-1 col-1">
+              <div className="col-lg-0 col-md-2  col-sm-3 col-4">
                 <button
                   onClick={() => handleFilterStatus("pending")}
-                  className="btn btn-sm rounded btn-blues  btn-all d-flex justify-content-between"
+                  className="btn btn-sm rounded btn-blues  d-flex"
                   style={{ marginBottom: 0 }}
                 >
-                  <span style={{ marginRight: "10px" }}>Pending</span>
+                  <span style={{ marginRight: "10px" }}>
+                    Pending
+                  </span>
                   <span className={`badge bg-white text-black`}>4</span>
                 </button>
               </div>
 
-              <div className="col-lg-1 col-md-1 col-1 ">
+              <div className="col-lg-0 col-md-2  col-4 ">
                 <button
                   onClick={() => handleFilterStatus("approved")}
-                  className="btn btn-sm rounded btn-success mx-0  d-flex justify-content-between"
+                  className="btn btn-sm rounded btn-success mx-0  d-flex"
                   style={{ marginBottom: 0 }}
                 >
-                  <span style={{ marginRight: "10px" }}>Approved</span>
+                  <span style={{ marginRight: "10px" }}>
+                    Approved
+                  </span>
                   <span className="badge bg-white text-black">4</span>
                 </button>
               </div>
 
-              <div className="col-lg-1 col-md-1 col-1">
+              <div className="col-lg-0 col-md-2 col-4">
                 <button
                   onClick={() => handleFilterStatus("rejected")}
-                  className="btn btn-sm rounded btn-danger d-flex justify-content-between"
+                  className="btn btn-sm rounded btn-danger d-flex"
                   style={{ marginRight: "10px" }}
                 >
-                  <span style={{ marginRight: "10px" }}>Rejected</span>
+                  <span style={{ marginRight: "10px" }}>
+                    Rejected
+                  </span>
                   <span className="badge bg-white text-black">4</span>
                 </button>
               </div>
@@ -406,17 +420,23 @@ const filteredData = maintenancesArray?.filter((maintenance) => {
                                 />
                               </button>
                               <button
-                              onClick={() => handleApprove(d.id)}
-                              className="btn btn-sm rounded btn-success mx-1"
-                            >
-                              <FontAwesomeIcon icon={faCheckCircle} title="Approve"/>
-                            </button>
-                            <button
-                              onClick={() => handleReject(d.id)}
-                              className="btn btn-sm rounded btn-danger"
-                            >
-                              <FontAwesomeIcon icon={faTimesCircle} title="Reject"/>
-                            </button>
+                                onClick={() => handleApprove(d.id)}
+                                className="btn btn-sm rounded btn-success mx-1"
+                              >
+                                <FontAwesomeIcon
+                                  icon={faCheckCircle}
+                                  title="Approve"
+                                />
+                              </button>
+                              <button
+                                onClick={() => handleReject(d.id)}
+                                className="btn btn-sm rounded btn-danger"
+                              >
+                                <FontAwesomeIcon
+                                  icon={faTimesCircle}
+                                  title="Reject"
+                                />
+                              </button>
                             </td>
                           </>
                         ) : null}
