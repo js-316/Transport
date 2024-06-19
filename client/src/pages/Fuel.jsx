@@ -26,6 +26,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/auth/authSlice";
+import FuelModal from "../components/FuelModal";
+
 
 const Fuel = () => {
   const user = useSelector(selectUser);
@@ -210,25 +212,7 @@ const Fuel = () => {
     doc.save("fuel_records.pdf");
   };
 
-  const handleApprove = async (id) => {
-    setAppError(null);
-    try {
-      const result = await approveFuel(id).unwrap();
-      refetch();
-    } catch (error) {
-      console.error("Error approving fuel:", error);
-    }
-  };
-
-  const handleReject = async (id) => {
-    try {
-      const result = await rejectFuel(id).unwrap();
-      refetch();
-    } catch (error) {
-      console.error("Error rejecting fuel:", error);
-    }
-  };
-
+  
   return (
     <Layout>
       <div className="content-header">
@@ -386,12 +370,12 @@ const Fuel = () => {
             <table className="table table-hover">
               <thead>
                 <tr>
-                  <th>Fuel Station</th>
-                  <th>Fuel Type</th>
-                  <th>Number Plate</th>
-                  <th>Date</th>
+                  {/* <th>Fuel Station</th> */}
+                  {/* <th>Fuel Type</th> */}
+                  <th>Vehicle</th>
                   <th>Mileage</th>
                   <th>Amount</th>
+                  <th>Date</th>
                   <th>Status</th>
                   {/* <th>Usage</th> */}
                   {/* <th>Volume Unit</th> */}
@@ -410,12 +394,12 @@ const Fuel = () => {
                     ))
                   : currentData?.map((d, index) => (
                       <tr key={index}>
-                        <th>Shell Moyo</th>
-                        <td>{d.fuel_type}</td>
+                        {/* <th>Shell Moyo</th> */}
+                        {/* <td>{d.fuel_type}</td> */}
                         <td>{d.fuel_plate.number_plate}</td>
-                        <td>{new Date(d.date_of_fueling).toDateString()}</td>
                         <td>{d.mileage}</td>
                         <td>{d.amount}</td>
+                        <td>{new Date(d.date_of_fueling).toDateString()}</td>
                         <td>{d.status}</td>
                         {/* <td>Usage</td>
                       <td>Volume Unit</td>
@@ -423,12 +407,7 @@ const Fuel = () => {
                         {user?.is_staff ? (
                           <>
                             <td className="text-center action-column">
-                              <Link
-                                to={`view/${d.id}`}
-                                className="btn btn-sm rounded btn-blue mx-1"
-                              >
-                                <FontAwesomeIcon icon={faEye} title="View" />
-                              </Link>
+                            <FuelModal id={d.id} columns={["Vehicle","Driver","Fuel Station","Fuel Type","Mileage","Amount","Date","Status","Action"]} title="Fuel Details"/>
                               <Link
                                 to={`edit/${d.id}`}
                                 className="btn btn-sm rounded btn-brand mx-1"
@@ -444,24 +423,8 @@ const Fuel = () => {
                                   title="Delete"
                                 />
                               </button>
-                              <button
-                                onClick={() => handleApprove(d.id)}
-                                className="btn btn-sm rounded btn-success mx-1"
-                              >
-                                <FontAwesomeIcon
-                                  icon={faCheckCircle}
-                                  title="Approve"
-                                />
-                              </button>
-                              <button
-                                onClick={() => handleReject(d.id)}
-                                className="btn btn-sm rounded btn-danger"
-                              >
-                                <FontAwesomeIcon
-                                  icon={faTimesCircle}
-                                  title="Reject"
-                                />
-                              </button>
+                             
+
                             </td>
                           </>
                         ) : null}

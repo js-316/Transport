@@ -24,6 +24,8 @@ import {
 import logo from "../assets/soliton.png";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/auth/authSlice";
+import MaintenanceModal from "../components/MaintenanceModal";
+
 
 const Maintenance = () => {
   const user = useSelector(selectUser);
@@ -361,7 +363,7 @@ const Maintenance = () => {
                   <th>Repair Request</th>
                   {/* <th>Total Cost</th> */}
                   <th>Request Date</th>
-                  <th>Driver</th>
+                  {/* <th>Driver</th> */}
                   {/* <th>Repair Priority Class</th> */}
                   <th>Mileage</th>
                   <th>Status</th>
@@ -387,7 +389,7 @@ const Maintenance = () => {
                         <td>{d.description}</td>
                         {/* <td>{d.cost}</td> */}
                         <td>{new Date(d.date).toDateString()}</td>
-                        <td>Driver</td>
+                        {/* <td>Driver</td> */}
                         {/* <td>Priority Class</td> */}
                         <td>{d.cost}</td>
                         <td>{d.status}</td>
@@ -398,12 +400,13 @@ const Maintenance = () => {
                         {user?.is_staff ? (
                           <>
                             <td className="text-center action-column">
-                              <Link
+                              {/* <Link
                                 to={`view/${d.id}`}
                                 className="btn btn-sm font-sm rounded btn-blue mx-1"
                               >
                                 <FontAwesomeIcon icon={faEye} title="View" />
-                              </Link>
+                              </Link> */}
+                              <MaintenanceModal id={d.id} columns={["Vehicle","Driver","Repair Request" ,"Description","Date","Status","Photo","Action"]} title="Repair Details"/>
                               <Link
                                 to={`edit/${d.id}`}
                                 className="btn btn-sm font-sm rounded btn-brand mx-1"
@@ -419,7 +422,7 @@ const Maintenance = () => {
                                   title="Delete"
                                 />
                               </button>
-                              <button
+                              {/* <button
                                 onClick={() => handleApprove(d.id)}
                                 className="btn btn-sm rounded btn-success mx-1"
                               >
@@ -436,7 +439,7 @@ const Maintenance = () => {
                                   icon={faTimesCircle}
                                   title="Reject"
                                 />
-                              </button>
+                              </button> */}
                             </td>
                           </>
                         ) : null}

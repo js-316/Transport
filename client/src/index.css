@@ -1412,7 +1412,11 @@ textarea.form-control {
 .vehicle-box {
   margin-bottom: 20px;
 }
-
+.logo-image {
+  width: 70px; /* adjust the width to your liking */
+  height: auto;
+  margin: 0 auto; /* centers the image in the table cell */
+}
 .border-bottom {
   border-bottom: 1px solid #eee !important;
 }
