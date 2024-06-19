@@ -16,6 +16,8 @@ import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPencil, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useGetFuelQuery } from "../features/fuel/fuelApiSlice";
+import VehicleModal from "../components/VehicleModal";
+import { VehichlelistColumns } from "../data/data";
 
 const Vehichles = () => {
   const [importError, setImportError] = useState(null);
@@ -344,9 +346,10 @@ const Vehichles = () => {
                           className="action-column text-center"
                           
                       >
-                        <Link to={`view/${d.id}`} className="btn btn-sm rounded btn-blue mx-1">
+                        {/* <Link to={`view/${d.id}`} className="btn btn-sm rounded btn-blue mx-1">
                           <FontAwesomeIcon icon={faEye} title="View" icon-size="sm" />
-                        </Link>
+                        </Link> */}
+                        <VehicleModal id ={d.id} columns = {VehichlelistColumns} />
                           <Link
                             to={`edit/${d.id}`}
                             className="btn btn-sm rounded btn-brand mx-1"

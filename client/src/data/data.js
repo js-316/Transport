@@ -79,9 +79,9 @@ export const UsernotificatioData = [
 export const DriversnotificatioData = [
   {
     id: 1,
-    title: "Issues",
-    text: "Previous car Issues",
-    Link: "/dashboard/issues",
+    title: "Repairs",
+    text: "Previous Car Repairs",
+    Link: "/dashboard/Maintenance",
     numbers: 5,
   },
   {
@@ -113,6 +113,45 @@ export const DriversnotificatioData = [
     numbers: 2,
   },
 ];
+
+export const EngnotificatioData = [
+  {
+    id: 1,
+    title: "Repairs",
+    text: "Previous Car Repairs",
+    Link: "/dashboard/Maintenance",
+    numbers: 5,
+  },
+  {
+    id: 2,
+    title: "Active Issues",
+    text: "Current Car Issues",
+    Link: "/dashboard/issues",
+    numbers: 4,
+  },
+  {
+    id: 2,
+    title: "Job cards",
+    text: "Created Job Cards",
+    Link: "/dashboard/maintenance/work_order",
+    numbers: 4,
+  },
+  {
+    id: 3,
+    title: "Services History",
+    text: "Times its been Serviced",
+    Link: "/dashboard/maintenance",
+    numbers: 3,
+  },
+  {
+    id: 4,
+    title: "Inspections",
+    text: "Make Car Inspections",
+    Link: "/dashboard/inspections/",
+    numbers: 2,
+  },
+];
+
 
 export const VehichlelistColumns = [
   "Number Plate",
