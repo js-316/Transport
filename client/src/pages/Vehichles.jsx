@@ -19,8 +19,14 @@ import { useGetFuelQuery } from "../features/fuel/fuelApiSlice";
 import VehicleModal from "../components/VehicleModal";
 import { VehichlelistColumns } from "../data/data";
 
+
 const Vehichles = () => {
   const [importError, setImportError] = useState(null);
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
 
   const { isLoading, data, refetch } = useGetVehichlesQuery();
   const { ids, entities } = data || {};
@@ -303,13 +309,13 @@ const Vehichles = () => {
               <thead>
                 <tr>
                   <th>Vehicle</th>
-                  <th>Driver</th>
-                  <th>Mileage</th>
-                  <th>Year</th>
-                  <th>Type</th>
+                  {/* <th>Driver</th> */}
+                  {/* <th>Year</th> */}
                   <th>Manufacturer</th>
-                  <th>Total Service</th>
-                  <th>Total Fuel</th>
+                  <th>Type</th>
+                  <th>Mileage</th>
+                  {/* <th>Total Service</th>
+                  <th>Total Fuel</th> */}
                   {/* <th>Status</th>
                   <th>Group</th>
                   <th>Watchers</th> */}
@@ -324,12 +330,12 @@ const Vehichles = () => {
                   : currentData?.map((d, index) => (
                       <tr key={index}>
                         <td>{d.number_plate}</td>
-                        <td>{d.driver.name}</td>
-                        <td>{d.mileage}</td>
-                        <td>{new Date(d.date_of_purchase).toDateString()}</td>
-                        <td>{d.vehichle_type}</td>
+                        {/* <td>{d.driver.name}</td> */}
+                        {/* <td>{new Date(d.date_of_purchase).toDateString()}</td> */}
                         <td>{d.manufacturer}</td>
-                        <td>
+                        <td>{d.vehichle_type}</td>
+                        <td>{d.mileage}</td>
+                        {/* <td>
                           <Link to={`costs_view/${d.id}`}>
                             {costsPerVehicle[d.number_plate] || 0}
                           </Link>
@@ -338,7 +344,7 @@ const Vehichles = () => {
                           <Link to={`fuel_view/${d.id}`}>
                             {fuelPerVehicle[d.number_plate] || 0}
                           </Link>
-                        </td>
+                        </td> */}
                         {/* <td>Status</td>
                         <td>Group</td>
                         <td>Watchers</td> */}
@@ -346,10 +352,9 @@ const Vehichles = () => {
                           className="action-column text-center"
                           
                       >
-                        {/* <Link to={`view/${d.id}`} className="btn btn-sm rounded btn-blue mx-1">
-                          <FontAwesomeIcon icon={faEye} title="View" icon-size="sm" />
-                        </Link> */}
-                        <VehicleModal id ={d.id} columns = {VehichlelistColumns} />
+                
+                        <VehicleModal id={d.id} columns={["Number Plate", "Driver", "Maker","Car Type","Fuel Type","Year","Total Repair Expense","Total Fuel Cost","Photo"]} title="Vehicle Details" />
+                        
                           <Link
                             to={`edit/${d.id}`}
                             className="btn btn-sm rounded btn-brand mx-1"
