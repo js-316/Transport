@@ -59,34 +59,52 @@ export const maintenanceApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: (result, error, arg) => [
         { type: "Maintenance", id: arg },
       ],
+    }),
+    ongoingRepair: builder.mutation({
+      query: (id) => ({
+        url: `/maintenance/${id}/`,
+        method: "PATCH",
+        body: { status: "Ongoing" }, // Send the updated status
       }),
-      approveRepair: builder.mutation({
-        query: (id) => ({
-          url: `/maintenance/${id}/`,
-          method: "PATCH",
-          body: { status: "Approved" }, // Send the updated status
-        }),
-        invalidatesTags: ["Maintenance"],
+      invalidatesTags: ["Maintenance"],
+    }),
+    approveRepair: builder.mutation({
+      query: (id) => ({
+        url: `/maintenance/${id}/`,
+        method: "PATCH",
+        body: { status: "Approved" }, // Send the updated status
       }),
-      
-      rejectRepair: builder.mutation({
-        query: (id) => ({
-          url: `/maintenance/${id}/`,
-          method: "PATCH",
-          body: { status: "Rejected" }, // Send the updated status
-        }),
-        invalidatesTags: ["Maintenance"],
+      invalidatesTags: ["Maintenance"],
+    }),
+
+    doneRepair: builder.mutation({
+      query: (id) => ({
+        url: `/maintenance/${id}/`,
+        method: "PATCH",
+        body: { status: "Done" }, // Send the updated status
       }),
-   
+      invalidatesTags: ["Maintenance"],
+    }),
+
+    completedRepair: builder.mutation({
+      query: (id) => ({
+        url: `/maintenance/${id}/`,
+        method: "PATCH",
+        body: { status: "Completed" }, // Send the updated status
+      }),
+      invalidatesTags: ["Maintenance"],
+    }),
   }),
 });
 
-export const { useAddMaintenanceMutation, 
-  useGetMaintenanceQuery, 
-  useEditMaintenanceMutation, 
-  useGetMaintenanceByIdQuery, 
+export const {
+  useAddMaintenanceMutation,
+  useGetMaintenanceQuery,
+  useEditMaintenanceMutation,
+  useGetMaintenanceByIdQuery,
   useDeleteMaintenanceMutation,
-  useApproveRepairMutation,
-  useRejectRepairMutation,
-} =
-  maintenanceApiSlice;
+useApproveRepairMutation,
+  useOngoingRepairMutation,
+  useDoneRepairMutation,
+  useCompletedRepairMutation,
+} = maintenanceApiSlice;

@@ -3,8 +3,8 @@ import Layout from "../components/Layout";
 import {
   useGetMaintenanceQuery,
   useDeleteMaintenanceMutation,
-  useRejectRepairMutation,
-  useApproveRepairMutation,
+  useCompletedRepairMutation,
+  useOngoingRepairMutation,
 } from "../features/maintenance/maintenanceApiSlice";
 import { Link, useNavigate } from "react-router-dom";
 import TableLoader from "../components/TableLoader";
@@ -25,7 +25,6 @@ import logo from "../assets/soliton.png";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/auth/authSlice";
 import MaintenanceModal from "../components/MaintenanceModal";
-
 
 const Maintenance = () => {
   const user = useSelector(selectUser);
@@ -48,10 +47,7 @@ const Maintenance = () => {
   const { ids, entities } = data || {};
   const maintenancesArray = ids?.map((id) => entities[id]).reverse();
 
-  const [approveRepair, { isLoading: isApproving }] =
-    useApproveRepairMutation();
-  const [rejectRepair, { isLoading: isRejecting }] = useRejectRepairMutation();
-
+ 
   const handleDeleteMaintenance = async (id) => {
     setAppError(null);
     try {
@@ -202,21 +198,19 @@ const Maintenance = () => {
     doc.save("maintenance.pdf");
   };
 
-  const handleApprove = async (id) => {
-    try {
-      const result = await approveRepair(id).unwrap();
-      refetch();
-    } catch (error) {
-      console.error("Error approving repair:", error);
-    }
-  };
+  
 
-  const handleReject = async (id) => {
-    try {
-      const result = await rejectRepair(id).unwrap();
-      refetch();
-    } catch (error) {
-      console.error("Error rejecting repair:", error);
+  const getStatusStyle = (st) => {
+    if (st === "pending") {
+      return { color: "gray", fontWeight: "bold" };
+    } else if (st === "Ongoing") {
+      return { color: "blue", fontWeight: "bold" };
+    } else if (st === "Completed") {
+      return { color: "green", fontWeight: "bold" };
+    } else if (st === "Approved") {
+      return { color: "#176B87", fontWeight: "bold" };
+    } else {
+      return { color: "red", fontWeight: "bold" };
     }
   };
 
@@ -307,47 +301,39 @@ const Maintenance = () => {
                   className="btn btn-sm rounded btn-gray btn-all d-flex"
                   style={{ marginRight: "5px" }}
                 >
-                  <span style={{ marginRight: "10px" }}>
-                    All
-                  </span>
+                  <span style={{ marginRight: "10px" }}>All</span>
                   <span className={`badge bg-white text-black`}>4</span>
                 </button>
               </div>
               <div className="col-lg-0 col-md-2  col-sm-3 col-4">
                 <button
                   onClick={() => handleFilterStatus("pending")}
-                  className="btn btn-sm rounded btn-blues  d-flex"
+                  className="btn btn-sm rounded btn-danger  d-flex"
                   style={{ marginBottom: 0 }}
                 >
-                  <span style={{ marginRight: "10px" }}>
-                    Pending
-                  </span>
+                  <span style={{ marginRight: "10px" }}>Pending</span>
                   <span className={`badge bg-white text-black`}>4</span>
                 </button>
               </div>
 
               <div className="col-lg-0 col-md-2  col-4 ">
                 <button
-                  onClick={() => handleFilterStatus("approved")}
-                  className="btn btn-sm rounded btn-success mx-0  d-flex"
+                  onClick={() => handleFilterStatus("ongoing")}
+                  className="btn btn-sm rounded btn-blues mx-0  d-flex"
                   style={{ marginBottom: 0 }}
                 >
-                  <span style={{ marginRight: "10px" }}>
-                    Approved
-                  </span>
+                  <span style={{ marginRight: "10px" }}>Ongoing</span>
                   <span className="badge bg-white text-black">4</span>
                 </button>
               </div>
 
               <div className="col-lg-0 col-md-2 col-4">
                 <button
-                  onClick={() => handleFilterStatus("rejected")}
-                  className="btn btn-sm rounded btn-danger d-flex"
+                  onClick={() => handleFilterStatus("Completed")}
+                  className="btn btn-sm rounded btn-success d-flex"
                   style={{ marginRight: "10px" }}
                 >
-                  <span style={{ marginRight: "10px" }}>
-                    Rejected
-                  </span>
+                  <span style={{ marginRight: "10px" }}>Completed</span>
                   <span className="badge bg-white text-black">4</span>
                 </button>
               </div>
@@ -387,16 +373,10 @@ const Maintenance = () => {
                       <tr key={index}>
                         <td>{d.fleet.number_plate}</td>
                         <td>{d.description}</td>
-                        {/* <td>{d.cost}</td> */}
                         <td>{new Date(d.date).toDateString()}</td>
-                        {/* <td>Driver</td> */}
-                        {/* <td>Priority Class</td> */}
                         <td>{d.cost}</td>
-                        <td>{d.status}</td>
-                        {/* <td>Meter Unit</td> */}
-                        {/* <td>Description</td> */}
-                        {/* <td>Issues</td> */}
-                        {/* <td>Work Order Number</td> */}
+                        <td style={getStatusStyle(d.status)}>{d.status}</td>
+
                         {user?.is_staff ? (
                           <>
                             <td className="text-center action-column">
@@ -406,7 +386,20 @@ const Maintenance = () => {
                               >
                                 <FontAwesomeIcon icon={faEye} title="View" />
                               </Link> */}
-                              <MaintenanceModal id={d.id} columns={["Vehicle","Driver","Repair Request" ,"Description","Date","Status","Photo","Action"]} title="Repair Details"/>
+                              <MaintenanceModal
+                                id={d.id}
+                                columns={[
+                                  "Vehicle",
+                                  "Driver",
+                                  "Repair Request",
+                                  "Description",
+                                  "Date",
+                                  "Status",
+                                  "Photo",
+                                  "Action",
+                                ]}
+                                title="Repair Details"
+                              />
                               <Link
                                 to={`edit/${d.id}`}
                                 className="btn btn-sm font-sm rounded btn-brand mx-1"
@@ -422,24 +415,7 @@ const Maintenance = () => {
                                   title="Delete"
                                 />
                               </button>
-                              {/* <button
-                                onClick={() => handleApprove(d.id)}
-                                className="btn btn-sm rounded btn-success mx-1"
-                              >
-                                <FontAwesomeIcon
-                                  icon={faCheckCircle}
-                                  title="Approve"
-                                />
-                              </button>
-                              <button
-                                onClick={() => handleReject(d.id)}
-                                className="btn btn-sm rounded btn-danger"
-                              >
-                                <FontAwesomeIcon
-                                  icon={faTimesCircle}
-                                  title="Reject"
-                                />
-                              </button> */}
+                              
                             </td>
                           </>
                         ) : null}
