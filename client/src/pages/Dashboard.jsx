@@ -51,8 +51,9 @@ const Dashboard = () => {
     { text: "Vehicle Renewals", badge: 1 },
   ];
   const issues = [
-    { text: "vehicle Failures", badge: 14 },
-    { text: "Faults", badge: 2 },
+    { text: "Pending", badge: 14 },
+    { text: "Ongoing", badge: 14 },
+    { text: "Completed", badge: 2 },
   ];
 
   return (
@@ -82,7 +83,7 @@ const Dashboard = () => {
           <div className="col-md-4">
             <div className="card mb-3">
               <article className="card-body">
-                <Listgroups title="Issues" items={issues} />
+                <Listgroups title="Repair requests" items={issues} />
               </article>
             </div>
           </div>

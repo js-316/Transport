@@ -26,7 +26,8 @@ export const issues = [
 ];
 export const workorder = [
   { text: "Pending", badge: 14 },
-  { text: "Done", badge: 14 },
+  { text: "Approved", badge: 14 },
+  { text: "Procured", badge: 2 },
 ];
 
 export const activities = [

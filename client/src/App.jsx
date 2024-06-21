@@ -171,11 +171,16 @@ function App() {
           element: <AddMaintenance />,
         },
         {
+<<<<<<< HEAD
           path: "maintenance/work_order",
           element: <JobCard />,
+=======
+          path: "maintenance/job_card",
+          element: <WorkOrder />,
+>>>>>>> d67d85d1ed29b8661826f057ba8bede3097d22f4
         },
         {
-          path: "maintenance/work_order/add",
+          path: "maintenance/job_card/add",
           element: <AddJobCard />,
         },
         {
@@ -261,11 +266,11 @@ function App() {
           element: <EditFuel />,
         },
         {
-          path: "parts",
+          path: "charts",
           element: <Parts />,
         },
         {
-          path: "parts/add",
+          path: "charts/add",
           element: <AddPart />,
         },
         {

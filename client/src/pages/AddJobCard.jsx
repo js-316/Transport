@@ -10,13 +10,15 @@ import errorParser from "../util/errorParser";
 import { useGetVehichlesQuery } from "../features/vehichle/vehicleApiSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
-
+import DynamicTable from "../components/DynamicTable";
 
 const AddJobCard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState(null);
   const [addedVehicles, setAddedVehicles] = useState([]);
+  // Initialize the current date
+  const [currentDate] = useState(new Date().toISOString().split("T")[0]);
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(fuelSchema),
@@ -26,12 +28,9 @@ const AddJobCard = () => {
 
   const [addFuel, { isLoading, isSuccess }] = useAddFuelMutation();
 
-
   const { ids, entities } = data || {};
 
   const vehichlesArray = ids?.map((id) => entities[id]);
-
-
 
   const handleAddFuel = async (data) => {
     setAppError(null);
@@ -60,9 +59,7 @@ const AddJobCard = () => {
 
   const { watch } = useForm();
 
- 
   const handleAddPart = () => {
-   
     // const vehicleId = watch('vehicle_id');
     // console.log('vehicleId:', vehicleId);
     // const quantity = watch('quantity');
@@ -84,13 +81,12 @@ const AddJobCard = () => {
             <div>
               <div>
                 <Link to="/dashboard/maintenance/work_order">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Job Cards
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />
+                  Job Cards
                 </Link>
               </div>
-              <h2 className="content-title">
-                New Job Card</h2>
+              <h2 className="content-title">New Job Card</h2>
             </div>
-
           </div>
         </div>
         <div className="col-lg-12">
@@ -113,8 +109,9 @@ const AddJobCard = () => {
                       <div className="row gx-2">
                         <select
                           placeholder="Select Vehichle"
-                          className={`form-control ${errors.fuel_plate ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.fuel_plate ? "is-invalid" : ""
+                          }`}
                           {...register("fuel_plate")}
                         >
                           <option>Select Vehicle</option>
@@ -126,7 +123,6 @@ const AddJobCard = () => {
                         </select>
                         {errors.fuel_plate && (
                           <div className="invalid-feedback">
-
                             {errors.fuel_plate?.message}
                           </div>
                         )}
@@ -140,8 +136,9 @@ const AddJobCard = () => {
                         <input
                           placeholder="Repair Request"
                           type="text"
-                          className={`form-control ${errors.work_to_be_done ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.work_to_be_done ? "is-invalid" : ""
+                          }`}
                           {...register("work_to_be_done")}
                         />
                         {errors.work_to_be_done && (
@@ -159,8 +156,9 @@ const AddJobCard = () => {
                         <input
                           placeholder="30,000"
                           type="number"
-                          className={`form-control ${errors.mileage ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.mileage ? "is-invalid" : ""
+                          }`}
                           {...register("mileage")}
                         />
                         {errors.mileage && (
@@ -172,27 +170,6 @@ const AddJobCard = () => {
                     </div>
                   </div>
 
-
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Service Done</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="2022-02-02"
-                          type="date"
-                          max={new Date().toISOString().split("T")[0]}
-                          className={`form-control ${errors.service_done ? "is-invalid" : ""
-                            }`}
-                          {...register("service_done")}
-                        />
-                        {errors.service_done && (
-                          <div className="invalid-feedback">
-                            {errors.service_done?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Machine Name</label>
@@ -200,8 +177,9 @@ const AddJobCard = () => {
                         <input
                           placeholder="Machine Name"
                           type="text"
-                          className={`form-control ${errors.machine_name ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.machine_name ? "is-invalid" : ""
+                          }`}
                           {...register("machine_name")}
                         />
                         {errors.machine_name && (
@@ -220,9 +198,11 @@ const AddJobCard = () => {
                           placeholder="2022-02-02"
                           type="date"
                           max={new Date().toISOString().split("T")[0]}
-                          className={`form-control ${errors.date ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.date ? "is-invalid" : ""
+                          }`}
                           {...register("date")}
+                          defaultValue={currentDate}
                         />
                         {errors.date && (
                           <div className="invalid-feedback">
@@ -251,8 +231,9 @@ const AddJobCard = () => {
                         <input
                           placeholder="Add Optional comment here"
                           type="text"
-                          className={`form-control ${errors.comments ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.comments ? "is-invalid" : ""
+                          }`}
                           {...register("comments")}
                         />
                         {errors.comments && (
@@ -265,53 +246,8 @@ const AddJobCard = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Parts Needed</label>
-                      <div className="row gx-2">
-                        <div className="col-5">
-                          <input
-                            type="number"
-                            min="1"
-                            placeholder="Quantity"
-                            className="form-control"
-                            {...register("quantity")}
-                          />
-                        </div>
-                        <div className="col-7">
-                          <div className="vehicle-box">
-                          <select
-                            className="form-control"
-                            {...register("vehicle_id")}
-                          >
-                            <option value="">Select Part</option>
-                            {vehichlesArray?.map((d, index) => (
-                              <option key={index} value={d.id}>{d.number_plate}</option>
-                            ))}
-                          </select>
-
-                            <button
-                              className="material-icons md-plus btn btn-primary btn-sm mt-1"
-                              type="button"
-                              onClick={() => handleAddPart()}
-                              style={{
-                                position: 'absolute',
-                                
-                                right: '5px',
-                                padding: '5px 10px',
-                                fontSize: '10px',
-                                borderRadius: '5px',
-                                margin: '10px'
-                              }}
-                            >
-                              Add Part
-                            </button>
-                          
-                          </div>
-
-                          
-
-                          
-                        </div>
-                      </div>
+                      <label className="form-label">Parts</label>
+                      <DynamicTable />
                     </div>
                   </div>
                 </div>
@@ -323,8 +259,8 @@ const AddJobCard = () => {
             </div>
           </div>
         </div>
-      </div >
-    </Layout >
+      </div>
+    </Layout>
   );
 };
 

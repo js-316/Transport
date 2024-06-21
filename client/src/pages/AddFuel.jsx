@@ -14,10 +14,12 @@ import { selectUser } from "../features/auth/authSlice";
 
 
 const AddFuel = () => {
-  const user = useSelector(selectUser)
+  const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState(null);
+  // Initialize the current date
+  const [currentDate] = useState(new Date().toISOString().split("T")[0]);
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(fuelSchema),
@@ -26,7 +28,6 @@ const AddFuel = () => {
   const { isLoading: loading, data } = useGetVehichlesQuery();
 
   const [addFuel, { isLoading, isSuccess }] = useAddFuelMutation();
-
 
   const { ids, entities } = data || {};
 
@@ -61,17 +62,16 @@ const AddFuel = () => {
     <Layout>
       <div className="row">
         <div className="col-9">
-        <div className="content-header">
+          <div className="content-header">
             <div>
               <div>
                 <Link to="/dashboard/fuel">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Fuel Requests
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />
+                  Fuel Requests
                 </Link>
               </div>
-              <h2 className="content-title">
-                Add Fuel Request</h2>
+              <h2 className="content-title">Add Fuel Request</h2>
             </div>
-
           </div>
         </div>
         <div className="col-lg-12">
@@ -92,7 +92,7 @@ const AddFuel = () => {
                     <div className="mb-4">
                       <label className="form-label">Vehichle</label>
                       <div className="row gx-2">
-                      <select
+                        <select
                           placeholder="Select Vehichle"
                           className={`form-control ${
                             errors.fuel_plate ? "is-invalid" : ""
@@ -108,50 +108,47 @@ const AddFuel = () => {
                         </select>
                         {errors.fuel_plate && (
                           <div className="invalid-feedback">
-                            
                             {errors.fuel_plate?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
-                  {
-                    user?.is_staff ? (
-                      <><div className="col-lg-4">
-                      <div className="mb-4">
-                        <label className="form-label">Select Driver</label>
-                        <div className="row gx-2">
-                        <select
-                            placeholder="Select Driver"
-                            className={`form-control ${
-                              errors.driver ? "is-invalid" : ""
-                            }`}
-                            {...register("driver")}
-                          >
-                            <option>Select Driver</option>
-                            {vehichlesArray?.map((d, index) => (
-                              <option key={index} value={d.id}>
-                                {d.number_plate}
-                              </option>
-                            ))}
-                          </select>
-                          {errors.driver && (
-                            <div className="invalid-feedback">
-                              
-                              {errors.driver?.message}
-                            </div>
-                          )}
+                  {user?.is_staff ? (
+                    <>
+                      <div className="col-lg-4">
+                        <div className="mb-4">
+                          <label className="form-label">Select Driver</label>
+                          <div className="row gx-2">
+                            <select
+                              placeholder="Select Driver"
+                              className={`form-control ${
+                                errors.driver ? "is-invalid" : ""
+                              }`}
+                              {...register("driver")}
+                            >
+                              <option>Select Driver</option>
+                              {vehichlesArray?.map((d, index) => (
+                                <option key={index} value={d.id}>
+                                  {d.number_plate}
+                                </option>
+                              ))}
+                            </select>
+                            {errors.driver && (
+                              <div className="invalid-feedback">
+                                {errors.driver?.message}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                      </>
-                    ): null
-                  }
+                    </>
+                  ) : null}
                   <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Fuel Station</label>
                       <div className="row gx-2">
-                      <select
+                        <select
                           placeholder="Fuel Station"
                           className={`form-control ${
                             errors.fuel_station ? "is-invalid" : ""
@@ -167,7 +164,32 @@ const AddFuel = () => {
                         </select>
                         {errors.fuel_station && (
                           <div className="invalid-feedback">
-                            
+                            {errors.fuel_plate?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Project Name</label>
+                      <div className="row gx-2">
+                        <select
+                          placeholder="Project"
+                          className={`form-control ${
+                            errors.fuel_station ? "is-invalid" : ""
+                          }`}
+                          {...register("project")}
+                        >
+                          <option>Select Project</option>
+                          {vehichlesArray?.map((d, index) => (
+                            <option key={index} value={d.id}>
+                              {d.number_plate}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.fuel_station && (
+                          <div className="invalid-feedback">
                             {errors.fuel_plate?.message}
                           </div>
                         )}
@@ -194,6 +216,7 @@ const AddFuel = () => {
                       </div>
                     </div>
                   </div>
+
                   <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Fuel Type</label>
@@ -247,6 +270,7 @@ const AddFuel = () => {
                             errors.date_of_fueling ? "is-invalid" : ""
                           }`}
                           {...register("date_of_fueling")}
+                          defaultValue={currentDate}
                         />
                         {errors.date_of_fueling && (
                           <div className="invalid-feedback">
@@ -256,7 +280,6 @@ const AddFuel = () => {
                       </div>
                     </div>
                   </div>
-                  
                 </div>
                 <button class="btn btn-primary" type="submit">
                   {isLoading ? "Adding..." : "Add Fuel"}

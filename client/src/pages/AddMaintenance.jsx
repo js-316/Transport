@@ -22,6 +22,7 @@ const AddMaintenance = () => {
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(maintenanceSchema),
   });
+ const [currentDate] = useState(new Date().toISOString().split("T")[0]);
 
   const [addMaintenance, { isLoading, isSuccess }] =
     useAddMaintenanceMutation();
@@ -64,13 +65,12 @@ const AddMaintenance = () => {
             <div>
               <div>
                 <Link to="/dashboard/maintenance">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Repair Requests
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />
+                  Repair Requests
                 </Link>
               </div>
-              <h2 className="content-title">
-                Add Repair Request</h2>
+              <h2 className="content-title">Add Repair Request</h2>
             </div>
-
           </div>
         </div>
         <div className="col-lg-12">
@@ -95,8 +95,9 @@ const AddMaintenance = () => {
                       <div className="row gx-2">
                         <select
                           placeholder="Select Vehicle"
-                          className={`form-control ${errors.fleet ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.fleet ? "is-invalid" : ""
+                          }`}
                           {...register("fleet")}
                         >
                           <option>Select Vehicle</option>
@@ -114,38 +115,36 @@ const AddMaintenance = () => {
                       </div>
                     </div>
                   </div>
-                  {
-                    user?.is_staff ? (
-                      <>
-                        <div className="col-lg-6">
-                          <div className="mb-4">
-                            <label className="form-label">Driver</label>
-                            <div className="row gx-2">
-                              <select
-                                placeholder="Select Driver"
-                                className={`form-control ${errors.fleet ? "is-invalid" : ""
-                                  }`}
-                                {...register("driver")}
-                              >
-                                <option>Select Driver</option>
-                                {vehichlesArray?.map((d, index) => (
-                                  <option key={index} value={d.id}>
-                                    {d.number_plate}
-                                  </option>
-                                ))}
-                              </select>
-                              {errors.driver && (
-                                <div className="invalid-feedback">
-                                  {errors.driver?.message}
-                                </div>
-                              )}
-                            </div>
+                  {user?.is_staff ? (
+                    <>
+                      <div className="col-lg-6">
+                        <div className="mb-4">
+                          <label className="form-label">Driver</label>
+                          <div className="row gx-2">
+                            <select
+                              placeholder="Select Driver"
+                              className={`form-control ${
+                                errors.fleet ? "is-invalid" : ""
+                              }`}
+                              {...register("driver")}
+                            >
+                              <option>Select Driver</option>
+                              {vehichlesArray?.map((d, index) => (
+                                <option key={index} value={d.id}>
+                                  {d.number_plate}
+                                </option>
+                              ))}
+                            </select>
+                            {errors.driver && (
+                              <div className="invalid-feedback">
+                                {errors.driver?.message}
+                              </div>
+                            )}
                           </div>
                         </div>
-
-                      </>
-                    ) : null
-                  }
+                      </div>
+                    </>
+                  ) : null}
                   <div className="col-lg-6">
                     <div className="mb-4">
                       <label className="form-label">Repair Request</label>
@@ -153,8 +152,9 @@ const AddMaintenance = () => {
                         <input
                           placeholder="Oil Leak"
                           type="text"
-                          className={`form-control ${errors.repair_request ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.repair_request ? "is-invalid" : ""
+                          }`}
                           {...register("repair_request")}
                         />
                         {errors.repair_request && (
@@ -172,8 +172,9 @@ const AddMaintenance = () => {
                         <input
                           placeholder="Oil leaking under the engine"
                           type="text"
-                          className={`form-control ${errors.description ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.description ? "is-invalid" : ""
+                          }`}
                           {...register("description")}
                         />
                         {errors.description && (
@@ -209,9 +210,11 @@ const AddMaintenance = () => {
                         <input
                           placeholder="2022-02-02"
                           type="date"
-                          className={`form-control ${errors.request_date ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.request_date ? "is-invalid" : ""
+                          }`}
                           {...register("request_date")}
+                          defaultValue={currentDate}
                         />
                         {errors.request_date && (
                           <div className="invalid-feedback">
@@ -221,9 +224,6 @@ const AddMaintenance = () => {
                       </div>
                     </div>
                   </div>
-
-
-
                 </div>
                 <button className="btn btn-primary" type="submit">
                   {isLoading ? "Requesting..." : "Request Repair"}
