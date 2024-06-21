@@ -58,9 +58,6 @@ const Fuel = () => {
     .reverse()
     
 
-  const [approveFuel, { isLoading: isApproving }] = useApproveFuelMutation();
-  const [rejectFuel, { isLoading: isRejecting }] = useRejectFuelMutation();
-
   const handleFileUpload = async (e) => {
     setImportError(null);
     const file = e.target.files[0];
@@ -133,6 +130,9 @@ const Fuel = () => {
     }
   };
 
+
+  
+  
   const filteredData = fuelArray?.filter((fuel) => {
     const fuel_type = fuel.fuel_type.toLowerCase();
     const fuel_plate = fuel.fuel_plate.number_plate.toLowerCase();
@@ -142,6 +142,8 @@ const Fuel = () => {
     const status = fuel.status.toLowerCase();
     const search = searchQuery.toLowerCase();
 
+  
+  
     if (selectedStatus !== "All") {
       if (search) {
         return (
@@ -212,6 +214,21 @@ const Fuel = () => {
     doc.save("fuel_records.pdf");
   };
 
+  const getStatusStyle = (st) => {
+    if (st === "pending") {
+      return { color: "gray", fontWeight: "bold" };
+    } else if (st === "Ongoing") {
+      return { color: "blue", fontWeight: "bold" };
+    } else if (st === "Completed") {
+      return { color: "green", fontWeight: "bold" };
+    } else if (st === "Approved") {
+      return { color: "#176B87", fontWeight: "bold" };
+    } else if (st === "Pending") {
+        return { color: "#FFA500", fontWeight: "bold" };
+    } else {
+      return { color: "red", fontWeight: "bold" };
+    }
+  };
   
   return (
     <Layout>
@@ -333,7 +350,7 @@ const Fuel = () => {
               <div className="col-lg-0 col-md-2  col-sm-3 col-4">
                 <button
                   onClick={() => handleFilterStatus("pending")}
-                  className="btn btn-sm rounded btn-blues  d-flex"
+                  className="btn btn-sm rounded btn-orange  d-flex"
                   style={{ marginBottom: 0 }}
                 >
                   <span style={{ marginRight: "10px" }}>Pending</span>
@@ -354,7 +371,7 @@ const Fuel = () => {
 
               <div className="col-lg-0 col-md-2 col-4">
                 <button
-                  onClick={() => handleFilterStatus("Rejected")}
+                  onClick={() => handleFilterStatus("rejected")}
                   className="btn btn-sm rounded btn-danger d-flex"
                   style={{ marginRight: "10px" }}
                 >
@@ -400,7 +417,7 @@ const Fuel = () => {
                         <td>{d.mileage}</td>
                         <td>{d.amount}</td>
                         <td>{new Date(d.date_of_fueling).toDateString()}</td>
-                        <td>{d.status}</td>
+                        <td style={getStatusStyle(d.status)}>{d.status}</td>
                         {/* <td>Usage</td>
                       <td>Volume Unit</td>
                       <td>Fuel Capacity Alert</td> */}

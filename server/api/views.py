@@ -410,10 +410,11 @@ class JobcardCreateView(generics.CreateAPIView):
         data = request.data
         
         jobcard = Jobcard.objects.create(
-            jobcard_plate = Vehichle.objects.get(id=data['vehichle']),
+            jobcard_plate=Vehichle.objects.get(id=data['vehichle']),
             date_of_jobcard =data['date_of_jobcard'],
             machine_name=data['machine_name'],
-            parts_needed=data['parts_needed'],
+            # repair = Maintenance.objects.get(id=data['maintenance']),
+            # parts_needed=data['parts_needed'],
             # status = data['status'],
         )
         return Response({

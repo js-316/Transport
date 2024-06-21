@@ -45,11 +45,15 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email', 'is_staff','is_driver', 'is_engineer')
 
 class EngineerSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Engineer
         fields = '__all__'
 
 class JobcardSerializer(serializers.ModelSerializer):
+    jobcard_plate = VehichleSerializer(read_only=True)
+    repair = MaintenanceSerializer(read_only=True)
+
     class Meta:
         model = Jobcard
         fields = '__all__'

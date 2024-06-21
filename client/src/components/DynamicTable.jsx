@@ -6,7 +6,7 @@ function DynamicTable() {
   const addRow = () => {
     const newRow = {
       id: rows.length > 0 ? rows[rows.length - 1].id + 1 : 1,
-      equipment: "",
+      part: "",
       quantity: 0,
     };
     setRows([...rows, newRow]);
@@ -14,7 +14,7 @@ function DynamicTable() {
 
   const handleEquipmentChange = (id, value) => {
     const updatedRows = rows.map((row) =>
-      row.id === id ? { ...row, equipment: value } : row
+      row.id === id ? { ...row, part: value } : row
     );
     setRows(updatedRows);
   };
@@ -37,8 +37,8 @@ function DynamicTable() {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Equipment</th>
             <th>Quantity</th>
+            <th>Part</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -48,19 +48,19 @@ function DynamicTable() {
               <td>{row.id}</td>
               <td>
                 <input
-                  type="text"
-                  value={row.equipment}
+                  type="number"
+                  value={row.quantity}
                   onChange={(e) =>
-                    handleEquipmentChange(row.id, e.target.value)
+                    handleQuantityChange(row.id, parseInt(e.target.value))
                   }
                 />
               </td>
               <td>
                 <input
-                  type="number"
-                  value={row.quantity}
+                  type="text"
+                  value={row.part}
                   onChange={(e) =>
-                    handleQuantityChange(row.id, parseInt(e.target.value))
+                    handleEquipmentChange(row.id, e.target.value)
                   }
                 />
               </td>

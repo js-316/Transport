@@ -124,10 +124,10 @@ class Engineer(models.Model, ExtraMixin):
 
 
 class Jobcard(models.Model, ExtraMixin):
-    jobcard_plate= models.ForeignKey('Vehichle', on_delete=models.CASCADE, related_name='jobcard')
     machine_name = models.CharField(max_length=20)
+    jobcard_plate= models.ForeignKey('Vehichle', on_delete=models.CASCADE, related_name="jobcards")
     date_of_jobcard = models.DateField()
-    # repair_request= models.ForeignKey('Maintenance', on_delete=models.CASCADE, related_name='repair_request')
+    repair= models.ForeignKey('Maintenance', on_delete=models.CASCADE, related_name='repair',default=55)
     parts_needed = models.CharField(max_length=50)
     status = models.CharField(max_length=20, default="Pending")
     

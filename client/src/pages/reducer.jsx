@@ -1,205 +1,4 @@
 import React, { useState } from "react";
-import Layout from "../components/Layout";
-import {
-  useGetMaintenanceQuery,
-  useDeleteMaintenanceMutation,
-} from "../features/maintenance/maintenanceApiSlice";
-import { Link, useNavigate } from "react-router-dom";
-import TableLoader from "../components/TableLoader";
-import Pagination from "../components/Pagination";
-import errorParser from "../util/errorParser";
-import Swal from "sweetalert2";
-import jsPDF from "jspdf";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import ButtonBudges from "../components/ButtonBudges";
-import { statuses } from "../data/chartData";
-import { useGetJobcardByIdQuery, useGetJobcardQuery } from "../features/jobcard/jobcardApiSlice";
-
-
-const JobCard = () => {
-  const { isLoading, data, refetch } = useGetJobcardQuery();
-
-  const { ids, entities } = data || {};
-  const jobcardsArray = ids?.map((id) => entities[id]).reverse();
-  const [AppError, setAppError] = useState(null);
-
-  
-  console.log("Job card",data)
- 
-  const [deleteMaintenance, { isLoading: isDeleting }] =
-    useDeleteMaintenanceMutation();
-
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleDeleteMaintenance = async (id) => {
-    setAppError(null);
-    try {
-      const result = await Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      });
-      if (result.isConfirmed) {
-        const res = await deleteMaintenance(id).unwrap();
-
-        refetch();
-      }
-    } catch (err) {
-      console.error("Error deleting Maintenance:", err);
-      if (parseInt(err.status) !== err.status) {
-        setAppError("Network Error");
-      } else {
-        const parsedError = errorParser(err?.data);
-        setAppError(err?.data?.message || parsedError);
-      }
-    }
-  };
-
-  const filteredData = jobcardsArray?.filter((jobcard) => {
-    const jobcard_plate = jobcard.jobcard_plate.number_plate;
-    const machine_name = jobcard.machine_name.toLowerCase();
-    //const repair_request = jobcard.repair_request.description
-    const date_of_jobcard = jobcard.date_of_jobcard.toLowerCase();
-    const parts_needed = jobcard.parts_needed.toLowerCase()
-    const search = searchQuery.toLowerCase();
-
-    if (search) {
-      return (
-
-        jobcard_plate.includes(search) ||
-        (parts_needed && parts_needed.toString().includes(search)) ||
-        repair_request.includes(search)||
-        machine_name.includes(search) ||
-        date_of_jobcard.includes(search)
-      );
-    } else {
-      return jobcardsArray;
-    }
-  });
-
-  console.log("Job Card Data:", jobcardsArray);
-
-  
-  const [dataPerPage, setDataPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
-  const indexOfLastData = currentPage * dataPerPage;
-  const indexOfFirstData = indexOfLastData - dataPerPage;
-  const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const handleDataPerPage = (e) => {
-    setDataPerPage(parseInt(e.target.value));
-  };
-
-  
-  return (
-    <Layout>
-      <div className="content-header">
-        <h2 className="content-title">Job Cards</h2>
-        <div>
-          <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Create Job Card
-          </Link>
-
-          {/* <button onClick={exportToPDF} className="btn btn-success mx-2">
-            Export to PDF
-          </button> */}
-        </div>
-      </div>
-      <ButtonBudges title="Status" buttons={statuses} />
-      <div className="card mb-4">
-        <header className="card-header">
-          <div className="row gx-3">
-            <div className="col-lg-4 col-md-6 me-auto">
-              <div className="input-group">
-                <span className="input-group-text">
-                  <FontAwesomeIcon icon={faSearch} />
-                </span>
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="form-control"
-                />
-              </div>
-            </div>
-            <div className="col-lg-2 col-md-3 col-6">
-              <select
-                onChange={handleDataPerPage}
-                value={dataPerPage}
-                className="form-select"
-              >
-                <option value="10">Show 10</option>
-                <option value="20">Show 20</option>
-                <option value="30">Show 30</option>
-                <option value="40">Show 40</option>
-              </select>
-            </div>
-          </div>
-        </header>
-        <div className="card-body">
-          <div className="table-responsive-lg">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th>Vehicle</th>
-                  {/* <th>Mileage</th> */}
-                  {/* <th>Work To Be Done</th> */}
-                  <th>Date</th>
-                  <th>Machine Name</th>
-                  {/* <th>Next Service</th> */}
-                  {/* <th>Quantity</th>
-                  <th>Part</th> */}
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {isLoading
-                  ? [...Array(5)]?.map((_, i) => (
-                      <TableLoader key={i} count={5} />
-                    ))
-                  : currentData?.map((d, index) => (
-                      <tr key={index}>
-                        <td>{d.jobcard_plate.number_plate}</td>
-                        {/* <td>{d.}</td> */}
-                        {/* <td>{d.repair_request.description}</td> */}
-                        <td>{new Date(d.date_of_jobcard).toDateString()}</td>
-                        <td>{d.machine_name}</td>
-                        {/* <td>{new Date(d.date).toDateString()}</td> */}
-                        {/* <td>{d.parts_needed}</td>
-                        <td>Part</td> */}
-                        <td>{d.status}</td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <div className="pagination-area mt-30 mb-50">
-        <nav aria-label="Page navigation example">
-          <Pagination
-            totalData={filteredData?.length}
-            dataPerPage={dataPerPage}
-            paginate={paginate}
-            currentPage={currentPage}
-          />
-        </nav>
-      </div>
-    </Layout>
-  );
-};
-
-export default JobCard;
-
-
-import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { fuelSchema, jobCardSchema } from "../util/validations";
@@ -212,13 +11,13 @@ import { useGetVehichlesQuery } from "../features/vehichle/vehicleApiSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { useAddJobcardMutation } from "../features/jobcard/jobcardApiSlice";
-
+import DynamicTable from "../components/DynamicTable";
 
 const AddJobCard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState(null);
-  
+
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(jobCardSchema),
@@ -229,14 +28,14 @@ const AddJobCard = () => {
   const { ids, entities } = data || {};
   const vehichlesArray = ids?.map((id) => entities[id]);
 
-  const [addJobcard, { isLoading ,isSuccess }] = useAddJobcardMutation();
+  const [addJobcard, { isLoading, isSuccess }] = useAddJobcardMutation();
 
 
   const handleAddJobcard = async (data) => {
     setAppError(null);
     try {
       const res = await addJobcard({
-        
+
         vehichle: data.jobcard_plate,
         machine_name: data.machine_name,
         // maintenance: data.repair_request,
@@ -261,9 +60,9 @@ const AddJobCard = () => {
 
   //const { watch } = useForm();
 
- 
+
   const handleAddPart = () => {
-   
+
     // const vehicleId = watch('vehicle_id');
     // console.log('vehicleId:', vehicleId);
     // const quantity = watch('quantity');
@@ -394,7 +193,7 @@ const AddJobCard = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Requester Signature</label>
@@ -428,37 +227,43 @@ const AddJobCard = () => {
                   </div> */}
                   <div className="col-lg-4">
                     <div className="mb-4">
+                      <label className="form-label">Parts</label>
+                      <DynamicTable />
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
                       {/* <label className="form-label">Quantity</label> */}
                       <div className="row gx-2">
                         <div className="col-5">
-                        {/* <input
+                          {/* <input
                           placeholder="5"
                           type="number"
                           className={`form-control ${errors.quantity ? "is-invalid" : ""
                             }`}
                           {...register("quantity")}
                         /> */}
-                        {errors.quantity && (
-                          <div className="invalid-feedback">
-                            {errors.quantity?.message}
-                          </div>
-                        )}
+                          {errors.quantity && (
+                            <div className="invalid-feedback">
+                              {errors.quantity?.message}
+                            </div>
+                          )}
                         </div>
                         <div className="col-7">
                           <div className="vehicle-box">
-                          {/* <input
+                            {/* <input
                           placeholder="Part Needed"
                           type="text"
                           className={`form-control ${errors.part ? "is-invalid" : ""
                             }`}
                           {...register("part")}
                         /> */}
-                        {errors.part && (
-                          <div className="invalid-feedback">
-                            {errors.part?.message}
-                          </div>
-                        )}
-                          {/* <select
+                            {errors.part && (
+                              <div className="invalid-feedback">
+                                {errors.part?.message}
+                              </div>
+                            )}
+                            {/* <select
                             className="form-control"
                             {...register("part")}
                           >
@@ -487,9 +292,9 @@ const AddJobCard = () => {
                            */}
                           </div>
 
-                          
 
-                          
+
+
                         </div>
                       </div>
                     </div>
