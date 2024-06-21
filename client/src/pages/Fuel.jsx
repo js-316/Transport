@@ -56,7 +56,7 @@ const Fuel = () => {
   const fuelArray = ids
     ?.map((id) => entities[id])
     .reverse()
-    .reverse();
+    
 
   const [approveFuel, { isLoading: isApproving }] = useApproveFuelMutation();
   const [rejectFuel, { isLoading: isRejecting }] = useRejectFuelMutation();

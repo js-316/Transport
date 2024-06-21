@@ -7,7 +7,9 @@ from rest_framework import permissions
 from django.db.models import Q
 from django.contrib import messages
 from .models import User, Driver, Vehichle, Maintenance, Fuel, Engineer
+from .models import Jobcard
 from .serializers import UserSerializer, DriverSerializer, VehichleSerializer, MaintenanceSerializer,FuelSerializer, EngineerSerializer
+from .serializers import JobcardSerializer
 from django import forms
 from datetime import datetime
 # from .management.permissions import create_permissions
@@ -89,7 +91,7 @@ class DriverListView(generics.ListAPIView):
     queryset = Driver.objects.all()
     serializer_class = DriverSerializer
     permission_classes = (permissions.IsAuthenticated,)
-    # permission_classes = [IsAdmin]
+   
 
 class DriverDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Driver.objects.all()
@@ -101,7 +103,7 @@ class DriverCreateView(generics.CreateAPIView):
     queryset = Driver.objects.all()
     serializer_class = DriverSerializer
     permission_classes = (permissions.IsAuthenticated,)
-    # queryset = Driver.objects.all()
+    
     # check the data and create a new driver
     def post(self, request, *args, **kwargs):
         data = request.data
@@ -387,22 +389,55 @@ class FuelDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = FuelSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    # def patch(self, request, *args, **kwargs):
-    #     fuel = self.get_object()
-    #     if 'approve' in request.data:
-    #         fuel.status = 'Approved'
-    #         fuel.save()
-    #         return Response({'message': 'Fuel approved successfully'})
-    #     elif 'reject' in request.data:
-    #         fuel.status = 'Rejected'
-    #         fuel.save()
-    #         return Response({'message': 'Fuel rejected successfully'})
-    #     return Response({'error': 'Invalid request'})
 
 class FuelEditView(APIView):
     def put(self, request, pk):
         fuel = Fuel.objects.get(pk=pk)
         serializer = FuelSerializer(fuel, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+# Jobcard Views
+
+class JobcardCreateView(generics.CreateAPIView):
+    queryset = Jobcard.objects.all()
+    serializer_class = JobcardSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        
+        jobcard = Jobcard.objects.create(
+            jobcard_plate = Vehichle.objects.get(id=data['vehichle']),
+            date_of_jobcard =data['date_of_jobcard'],
+            machine_name=data['machine_name'],
+            parts_needed=data['parts_needed'],
+            # status = data['status'],
+        )
+        return Response({
+            'jobcard': JobcardSerializer(jobcard, context=self.get_serializer_context()).data,
+            'message': 'Jobcard record created successfully'
+        })
+
+
+class JobcardListView(generics.ListAPIView):
+    queryset = Jobcard.objects.all()
+    serializer_class = JobcardSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+class JobcardDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Jobcard.objects.all()
+    serializer_class = JobcardSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    
+
+class JobcardEditView(APIView):
+    def put(self, request, pk):
+        jobcard = Jobcard.objects.get(pk=pk)
+        serializer = JobcardSerializer(jobcard, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.contrib.auth.models import PermissionsMixin, UserManager as BaseUserManager
-from django.contrib.auth.models import Group
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
@@ -103,7 +102,7 @@ class Maintenance(models.Model, ExtraMixin):
 
 class Fuel(models.Model, ExtraMixin):
     fuel_type = models.CharField(max_length=20, default ="Petrol")
-    fuel_plate= models.ForeignKey('Vehichle', on_delete=models.CASCADE, related_name='Fuel')
+    fuel_plate= models.ForeignKey('Vehichle', on_delete=models.CASCADE, related_name='fuel')
     date_of_fueling = models.DateField()
     amount = models.FloatField()
     mileage = models.FloatField(default=0)
@@ -122,6 +121,19 @@ class Engineer(models.Model, ExtraMixin):
 
     def __str__(self):
         return self.name
+
+
+class Jobcard(models.Model, ExtraMixin):
+    jobcard_plate= models.ForeignKey('Vehichle', on_delete=models.CASCADE, related_name='jobcard')
+    machine_name = models.CharField(max_length=20)
+    date_of_jobcard = models.DateField()
+    # repair_request= models.ForeignKey('Maintenance', on_delete=models.CASCADE, related_name='repair_request')
+    parts_needed = models.CharField(max_length=50)
+    status = models.CharField(max_length=20, default="Pending")
+    
+
+    def __str__(self):
+        return self.status
 
 
 

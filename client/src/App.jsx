@@ -53,6 +53,7 @@ import EngineerDashboard from "./pages/User/EngineerDashboard"
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/auth/authSlice";
 import AddJobCard from "./pages/AddJobCard";
+import JobCard from "./pages/JobCard";
 
 
 function App() {
@@ -171,7 +172,7 @@ function App() {
         },
         {
           path: "maintenance/work_order",
-          element: <WorkOrder />,
+          element: <JobCard />,
         },
         {
           path: "maintenance/work_order/add",
