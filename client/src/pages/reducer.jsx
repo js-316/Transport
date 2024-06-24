@@ -38,13 +38,13 @@ const AddJobCard = () => {
 
         vehichle: data.jobcard_plate,
         machine_name: data.machine_name,
-        maintenance: data.repair,
+        // maintenance: data.repair_request,
         date_of_jobcard: data.date_of_jobcard,
-        //parts_needed: data.quantity + " " + data.part,
+        parts_needed: data.quantity + " " + data.part,
         //status: data.status,
       }).unwrap();
       if (res.jobcard) {
-        navigate("/dashboard/maintenance/job_card");
+        navigate("/dashboard/maintenance/work_order");
       }
     } catch (err) {
       if (parseInt(err.status) !== err.status) {
@@ -58,9 +58,24 @@ const AddJobCard = () => {
 
   const { errors } = formState;
 
+  //const { watch } = useForm();
 
 
-  
+  const handleAddPart = () => {
+
+    // const vehicleId = watch('vehicle_id');
+    // console.log('vehicleId:', vehicleId);
+    // const quantity = watch('quantity');
+    // const vehicle = vehichlesArray.find((vehicle) => vehicle.id === vehicleId);
+    // console.log('Vehicles',vehicle)
+    // if (vehicle) {
+    //   const newVehicle = { name: vehicle.number_plate, quantity: parseInt(quantity) };
+    //   setAddedVehicles((prevVehicles) => [...prevVehicles, newVehicle]);
+    // } else {
+    //   console.error(`Vehicle with ID ${vehicleId} not found`);
+    // }
+  };
+
   return (
     <Layout>
       <div className="row">
@@ -68,7 +83,7 @@ const AddJobCard = () => {
           <div className="content-header">
             <div>
               <div>
-                <Link to="/dashboard/maintenance/job_card">
+                <Link to="/dashboard/maintenance/work_order">
                   <FontAwesomeIcon icon={faArrowCircleLeft} />Job Cards
                 </Link>
               </div>
@@ -118,25 +133,25 @@ const AddJobCard = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-4">
+                  {/* <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Repair Request</label>
                       <div className="row gx-2">
                         <input
                           placeholder="Repair Request"
                           type="text"
-                          className={`form-control ${errors.repair ? "is-invalid" : ""
+                          className={`form-control ${errors.repair_request ? "is-invalid" : ""
                             }`}
-                          {...register("repair")}
+                          {...register("repair_request")}
                         />
-                        {errors.repair && (
+                        {errors.repair_request && (
                           <div className="invalid-feedback">
-                            {errors.repair?.message}
+                            {errors.repair_request?.message}
                           </div>
                         )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Machine Name</label>
@@ -156,7 +171,7 @@ const AddJobCard = () => {
                       </div>
                     </div>
                   </div>
-                  
+
 
                   <div className="col-lg-4">
                     <div className="mb-4">
@@ -176,12 +191,6 @@ const AddJobCard = () => {
                           </div>
                         )}
                       </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Parts</label>
-                      <DynamicTable />
                     </div>
                   </div>
 
@@ -216,9 +225,80 @@ const AddJobCard = () => {
                       </div>
                     </div>
                   </div> */}
-                  
-                  
-                  
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Parts</label>
+                      <DynamicTable />
+                    </div>
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      {/* <label className="form-label">Quantity</label> */}
+                      <div className="row gx-2">
+                        <div className="col-5">
+                          {/* <input
+                          placeholder="5"
+                          type="number"
+                          className={`form-control ${errors.quantity ? "is-invalid" : ""
+                            }`}
+                          {...register("quantity")}
+                        /> */}
+                          {errors.quantity && (
+                            <div className="invalid-feedback">
+                              {errors.quantity?.message}
+                            </div>
+                          )}
+                        </div>
+                        <div className="col-7">
+                          <div className="vehicle-box">
+                            {/* <input
+                          placeholder="Part Needed"
+                          type="text"
+                          className={`form-control ${errors.part ? "is-invalid" : ""
+                            }`}
+                          {...register("part")}
+                        /> */}
+                            {errors.part && (
+                              <div className="invalid-feedback">
+                                {errors.part?.message}
+                              </div>
+                            )}
+                            {/* <select
+                            className="form-control"
+                            {...register("part")}
+                          >
+                            <option value="">Select Part</option>
+                            {vehichlesArray?.map((d, index) => (
+                              <option key={index} value={d.id}>{d.number_plate}</option>
+                            ))}
+                          </select> */}
+
+                            {/* <button
+                              className="material-icons md-plus btn btn-primary btn-sm mt-1"
+                              type="button"
+                              onClick={() => handleAddPart()}
+                              style={{
+                                position: 'absolute',
+                                
+                                right: '5px',
+                                padding: '5px 10px',
+                                fontSize: '10px',
+                                borderRadius: '5px',
+                                margin: '10px'
+                              }}
+                            >
+                              Add Part
+                            </button>
+                           */}
+                          </div>
+
+
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <button class="btn btn-primary" type="submit">

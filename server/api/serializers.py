@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Vehichle, Driver, Maintenance, User, Fuel, Engineer
+from .models import Vehichle, Driver, Maintenance, User, Fuel, Engineer 
+from .models import Jobcard
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.validators import UniqueValidator
@@ -44,6 +45,15 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email', 'is_staff','is_driver', 'is_engineer')
 
 class EngineerSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Engineer
+        fields = '__all__'
+
+class JobcardSerializer(serializers.ModelSerializer):
+    jobcard_plate = VehichleSerializer(read_only=True)
+    repair = MaintenanceSerializer(read_only=True)
+
+    class Meta:
+        model = Jobcard
         fields = '__all__'

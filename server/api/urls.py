@@ -24,7 +24,9 @@ from .views import (
     FuelListView,
     FuelDetailView,
     FuelEditView,
-    DriverDashboardView,
+   JobcardCreateView,
+   JobcardListView,
+   JobcardDetailView,
     
 
 )
@@ -58,6 +60,11 @@ urlpatterns = [
     path('fuel/<int:pk>/' ,FuelDetailView.as_view(), name ='fuel-detail'),
     path('fuel/create/', FuelCreateView.as_view(), name='fuel-create'),
     path('fuel/edit/<int:pk>', FuelEditView.as_view(), name='fuel-edit'),
+    path('jobcards/',JobcardListView.as_view(), name='jobcards'),
+    path('jobcard/<int:pk>/' ,JobcardDetailView.as_view(), name ='jobcard-detail'),
+    path('jobcard/create/', JobcardCreateView.as_view(), name='jobcard-create'),
+    path('jobcard/edit/<int:pk>', JobcardDetailView.as_view(), name='jobcard-edit'),
+   
    
 
     

@@ -209,6 +209,8 @@ const Maintenance = () => {
       return { color: "green", fontWeight: "bold" };
     } else if (st === "Approved") {
       return { color: "#176B87", fontWeight: "bold" };
+    } else if (st === "Pending") {
+        return { color: "#FFA500", fontWeight: "bold" };
     } else {
       return { color: "red", fontWeight: "bold" };
     }
@@ -307,8 +309,9 @@ const Maintenance = () => {
               </div>
               <div className="col-lg-0 col-md-2  col-sm-3 col-4">
                 <button
+
                   onClick={() => handleFilterStatus("pending")}
-                  className="btn btn-sm rounded btn-danger  d-flex"
+                  className="btn btn-sm rounded btn-orange  d-flex"
                   style={{ marginBottom: 0 }}
                 >
                   <span style={{ marginRight: "10px" }}>Pending</span>
@@ -329,7 +332,7 @@ const Maintenance = () => {
 
               <div className="col-lg-0 col-md-2 col-4">
                 <button
-                  onClick={() => handleFilterStatus("Completed")}
+                  onClick={() => handleFilterStatus("completed")}
                   className="btn btn-sm rounded btn-success d-flex"
                   style={{ marginRight: "10px" }}
                 >

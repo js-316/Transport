@@ -1390,6 +1390,10 @@ textarea.form-control {
   background-color: #007bff; /* Blue color */
   /* color: #ffffff; White text color */
 }
+.btn-orange {
+  background-color: #ff8800; 
+  /* color: #ffffff; White text color */
+}
 .btn-all {
   margin-right: -10px;
 }

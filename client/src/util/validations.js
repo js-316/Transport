@@ -49,4 +49,11 @@ const fuelSchema = yup.object().shape({
   amount: yup.number().required("Amount is required").min(1, "Amount must be greater than 1"),
 });
 
-export { loginSchema, driverSchema, vehichleSchema, maintenanceSchema, fuelSchema, };
+const jobCardSchema = yup.object().shape({
+ 
+  date_of_jobcard: yup.string().required("Date is required"),
+  //quantity: yup.number().required("Quantity is required").min(1, "Quantity must be greater than 1"),
+  //part: yup.string().required("Part is required"),
+
+})
+export { loginSchema, driverSchema, vehichleSchema, maintenanceSchema, fuelSchema, jobCardSchema };
