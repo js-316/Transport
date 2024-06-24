@@ -124,7 +124,7 @@ function MaintenanceModal({ id, title }) {
                       onChange={(e) => {
                         setAssignedEngineer(e.target.value)
                         const selectedEngineer = usersArray.find((user) => user.id === e.target.value);
-                        setAssignedEngineer(selectedEngineer);
+                        setAssignedEngineer(selectedEngineer.id);
                       }}
                     >
 
