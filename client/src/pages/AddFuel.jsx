@@ -42,6 +42,8 @@ const AddFuel = () => {
         date_of_fueling: data.date_of_fueling,
         fuel_type: data.fuel_type,
         mileage: data.mileage,
+        project: data.project,
+        // user: data.user,
       }).unwrap();
       if (res.fuel) {
         navigate("/dashboard/fuel");
@@ -174,10 +176,23 @@ const AddFuel = () => {
                     <div className="mb-4">
                       <label className="form-label">Project Name</label>
                       <div className="row gx-2">
-                        <select
+                      <input
+                          placeholder="CSQUARED"
+                          type="text"
+                          className={`form-control ${
+                            errors.project ? "is-invalid" : ""
+                          }`}
+                          {...register("project")}
+                        />
+                        {errors.project && (
+                          <div className="invalid-feedback">
+                            {errors.project?.message}
+                          </div>
+                        )}
+                        {/* <select
                           placeholder="Project"
                           className={`form-control ${
-                            errors.fuel_station ? "is-invalid" : ""
+                            errors.project ? "is-invalid" : ""
                           }`}
                           {...register("project")}
                         >
@@ -188,11 +203,11 @@ const AddFuel = () => {
                             </option>
                           ))}
                         </select>
-                        {errors.fuel_station && (
+                        {errors.project && (
                           <div className="invalid-feedback">
-                            {errors.fuel_plate?.message}
+                            {errors.project?.message}
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>

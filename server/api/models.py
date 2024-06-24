@@ -95,6 +95,7 @@ class Maintenance(models.Model, ExtraMixin):
     date = models.DateField()
     cost = models.FloatField()
     status = models.CharField(max_length=20, default='Pending')
+    assigned_engineer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     
     def __str__(self):
         return self.description
@@ -105,11 +106,13 @@ class Fuel(models.Model, ExtraMixin):
     fuel_plate= models.ForeignKey('Vehichle', on_delete=models.CASCADE, related_name='fuel')
     date_of_fueling = models.DateField()
     amount = models.FloatField()
-    mileage = models.FloatField(default=0)
+    mileage = models.FloatField()
+    project = models.CharField(max_length=25, default='CSQUARED')
     status = models.CharField(max_length=20, default='Pending')
+    user = models.ForeignKey('User',on_delete=models.CASCADE, related_name='userfuel')
 
     def __str__(self):
-        return self.status
+        return self.fuel_type
     
 class Engineer(models.Model, ExtraMixin):
     vehichle_attached = models.ForeignKey('Vehichle', on_delete=models.CASCADE, related_name='engineers')

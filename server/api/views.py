@@ -35,7 +35,6 @@ from django.http import HttpResponse
 
 class UserCreateView(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
-    # permission_classes = [IsAdmin,IsDriver,IsEngineer]
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -46,9 +45,6 @@ class PermissionMixin(UserPassesTestMixin):
         print(f"Checking permissions: {permissions}")
         return any(permission in permissions for permission in self.required_permissions)
     
-class DriverDashboardView(PermissionMixin, TemplateView):
-    template_name = 'driver_dashboard.html'
-    required_permissions = ['view_dashboard', 'view_drivers']
 
 class StaffCreateView(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
@@ -86,6 +82,10 @@ class CustomAuthToken(ObtainAuthToken):
             }
         })
 
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (permissions.AllowAny,)
 
 class DriverListView(generics.ListAPIView):
     queryset = Driver.objects.all()
@@ -277,28 +277,11 @@ class ImportVehichle(generics.CreateAPIView):
         return Response({'message': 'Vehicles imported successfully'})
     
 
-
-class MaintenanceListView(generics.ListAPIView):
-    queryset = Maintenance.objects.all()
-    serializer_class = MaintenanceSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-    
-
-
-class MaintenanceDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Maintenance.objects.all()
-    serializer_class = MaintenanceSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-    
-
-
 class MaintenanceCreateView(generics.CreateAPIView):
     queryset = Maintenance.objects.all()
     serializer_class = MaintenanceSerializer
     permission_classes = (permissions.IsAuthenticated,)
-    # queryset = Maintenance.objects.all()
 
-    # check the data and create a new maintenance
     def post(self, request, *args, **kwargs):
         data = request.data
         
@@ -307,12 +290,29 @@ class MaintenanceCreateView(generics.CreateAPIView):
             date=data['date'],
             description=data['description'],
             cost=data['cost'],
+            
         )
         return Response({
             'maintenance': MaintenanceSerializer(maintenance, context=self.get_serializer_context()).data,
             'message': 'Maintenance created successfully'
         })
 
+class MaintenanceDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Maintenance.objects.all()
+    serializer_class = MaintenanceSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+class MaintenanceListView(generics.ListAPIView):
+    queryset = Maintenance.objects.all()
+    serializer_class = MaintenanceSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_engineer:
+            return Maintenance.objects.filter(assigned_engineer=user)
+        else:
+            return Maintenance.objects.all()
 
 class SearchVehichle(generics.ListAPIView):
     serializer_class = VehichleSerializer
@@ -368,8 +368,12 @@ class FuelCreateView(generics.CreateAPIView):
         fuel = Fuel.objects.create(
             fuel_plate = Vehichle.objects.get(id=data['vehichle']),
             date_of_fueling =data['date_of_fueling'],
+            mileage = data['mileage'],
             amount=data['amount'],
-            fuel_type=data['fuel_type']
+            fuel_type=data['fuel_type'],
+            project = data['project'],
+            # user = User.objects.get(id=data['user']),
+            user = request.user,
         )
         return Response({
             'fuel': FuelSerializer(fuel, context=self.get_serializer_context()).data,

@@ -1394,6 +1394,9 @@ textarea.form-control {
   background-color: #ff8800; 
   /* color: #ffffff; White text color */
 }
+.btn-purple {
+  background-color: #BB8FCE  ;
+}
 .btn-all {
   margin-right: -10px;
 }
