@@ -11,14 +11,19 @@ import { useGetMaintenanceQuery } from "../features/maintenance/maintenanceApiSl
 import TableLoader from "../components/TableLoader";
 import errorParser from "../util/errorParser";
 import Pagination from "../components/Pagination";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import jsPDF from "jspdf";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPencil, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPencil,
+  faSearch,
+  faTrash,
+  faCheckCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { useGetFuelQuery } from "../features/fuel/fuelApiSlice";
 import VehicleModal from "../components/VehicleModal";
 import { VehichlelistColumns } from "../data/data";
-
 
 const Vehichles = () => {
   const [importError, setImportError] = useState(null);
@@ -35,8 +40,8 @@ const Vehichles = () => {
   const [importVehichles, { isLoading: isImporting }] =
     useImportVehichlesMutation();
 
-  const { data: maintenanceData } = useGetMaintenanceQuery()
-  const { data: fuelData } = useGetFuelQuery()
+  const { data: maintenanceData } = useGetMaintenanceQuery();
+  const { data: fuelData } = useGetFuelQuery();
 
   const navigate = useNavigate();
   const [AppError, setAppError] = useState(null);
@@ -44,34 +49,34 @@ const Vehichles = () => {
   const [dataPerPage, setDataPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const [startDate, setStartDate] = useState(null)
-  const [endDate, setEndDate] = useState(null)
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const uploadRef = useRef(null);
 
-  const [deleteVehichle, { isLoading: isDeleting }] = useDeleteVehichleMutation();
+  const [deleteVehichle, { isLoading: isDeleting }] =
+    useDeleteVehichleMutation();
 
   const handleDeleteVehichle = async (id) => {
     setAppError(null);
     try {
       const result = await Swal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
       });
       if (result.isConfirmed) {
         console.log("Deleting Vehichle with ID:", id);
         const res = await deleteVehichle(id).unwrap();
 
         refetch();
-
       }
     } catch (err) {
       console.error("Error deleting Vehichle:", err);
@@ -86,33 +91,33 @@ const Vehichles = () => {
 
   const handleDateRange = (dateRange) => {
     if (dateRange) {
-        setStartDate([dateRange(0)]);
-        setEndDate([dateRange(1)]);
+      setStartDate([dateRange(0)]);
+      setEndDate([dateRange(1)]);
     } else {
-        setStartDate(null);
-        setEndDate(null);
+      setStartDate(null);
+      setEndDate(null);
     }
-};
+  };
 
   const filteredData = vehichlesArray?.filter((vehichle) => {
     const number_plate = vehichle.number_plate.toLowerCase();
     const driver = vehichle.driver.name.toLowerCase();
-    const mileage = vehichle.mileage
-    const vehichle_type = vehichle.vehichle_type.toLowerCase()
-    const manufacturer = vehichle.manufacturer.toLowerCase()
-    const date = vehichle.date_of_purchase.toLowerCase()
+    const mileage = vehichle.mileage;
+    const vehichle_type = vehichle.vehichle_type.toLowerCase();
+    const manufacturer = vehichle.manufacturer.toLowerCase();
+    const date = vehichle.date_of_purchase.toLowerCase();
     const search = searchQuery.toLowerCase();
 
     if (search) {
       return (
         (startDate === null || startDate <= date) &&
         (endDate === null || date <= endDate) &&
-        ((number_plate.includes(search) ||
+        (number_plate.includes(search) ||
           driver.includes(search) ||
-          (mileage && mileage.toString().includes(search)) || 
+          (mileage && mileage.toString().includes(search)) ||
           vehichle_type.includes(search) ||
           (date && date.toString().includes(search)) ||
-          manufacturer.includes(search)))
+          manufacturer.includes(search))
       );
     } else {
       return (
@@ -120,11 +125,8 @@ const Vehichles = () => {
         (endDate === null || date <= endDate)
       );
     }
-
-    
   });
 
-  
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
@@ -132,7 +134,6 @@ const Vehichles = () => {
   const handleDataPerPage = (e) => {
     setDataPerPage(parseInt(e.target.value));
   };
-
 
   // listen to click on uploadRef and the open file upload for only csv files
   const handleFileUpload = async (e) => {
@@ -181,16 +182,23 @@ const Vehichles = () => {
       ]);
     });
     doc.autoTable({
-      head: [["Number Plate", "Driver", "Mileage", "Vehichle Type", "Manufacturer", "Total Maintenance", "Date of Purchase"]],
+      head: [
+        [
+          "Number Plate",
+          "Driver",
+          "Mileage",
+          "Vehichle Type",
+          "Manufacturer",
+          "Total Maintenance",
+          "Date of Purchase",
+        ],
+      ],
       body: tableData,
     });
     doc.save("vehicles.pdf");
   };
 
-
   console.log(maintenanceData);
-
-
 
   const costsPerVehicle = {};
   if (maintenanceData) {
@@ -220,11 +228,10 @@ const Vehichles = () => {
     console.log("fuelData is undefined");
   }
 
-
   return (
     <Layout>
       <div className="content-header">
-        <h2 className="content-title">Vehicles</h2>
+        <h2 className="content-title">FLEETS</h2>
         <div>
           <Link
             onClick={() => uploadRef.current.click()}
@@ -270,25 +277,25 @@ const Vehichles = () => {
               </div>
             </div>
             <div className="col-lg-2 col-md-3 col-6">
-                <input
-                  type="date"
-                  value={startDate}
-                  className="form-control"
-                  onChange={(e) => {
-                    setStartDate(e.target.value);
-                  }}
-                />
-              </div>
-              <div className="col-lg-2 col-md-3 col-6">
-                <input
-                  type="date"
-                  value={endDate}
-                  className="form-control"
-                  onChange={(e) => {
-                    setEndDate(e.target.value);
-                  }}
-                />
-              </div>
+              <input
+                type="date"
+                value={startDate}
+                className="form-control"
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                }}
+              />
+            </div>
+            <div className="col-lg-2 col-md-3 col-6">
+              <input
+                type="date"
+                value={endDate}
+                className="form-control"
+                onChange={(e) => {
+                  setEndDate(e.target.value);
+                }}
+              />
+            </div>
             <div className="col-lg-2 col-md-3 col-6">
               <select
                 onChange={handleDataPerPage}
@@ -309,15 +316,15 @@ const Vehichles = () => {
               <thead>
                 <tr>
                   <th>Vehicle</th>
-                  {/* <th>Driver</th> */}
+                  <th>Driver</th>
                   {/* <th>Year</th> */}
                   <th>Manufacturer</th>
                   <th>Type</th>
                   <th>Mileage</th>
                   {/* <th>Total Service</th>
                   <th>Total Fuel</th> */}
-                  {/* <th>Status</th>
-                  <th>Group</th>
+                  <th>Status</th>
+                  {/*<th>Group</th>
                   <th>Watchers</th> */}
                   <th className="text-center"> Action </th>
                 </tr>
@@ -330,11 +337,20 @@ const Vehichles = () => {
                   : currentData?.map((d, index) => (
                       <tr key={index}>
                         <td>{d.number_plate}</td>
-                        {/* <td>{d.driver.name}</td> */}
+                        <td>{d.driver.name}</td>
                         {/* <td>{new Date(d.date_of_purchase).toDateString()}</td> */}
                         <td>{d.manufacturer}</td>
                         <td>{d.vehichle_type}</td>
                         <td>{d.mileage}</td>
+                        <td>
+                          <button className="btn btn-outline-success" disabled>
+                            <FontAwesomeIcon
+                              icon={faCheckCircle}
+                              title="Active"
+                            />
+                            <span className="">Active</span>
+                          </button>
+                        </td>
                         {/* <td>
                           <Link to={`costs_view/${d.id}`}>
                             {costsPerVehicle[d.number_plate] || 0}
@@ -348,18 +364,32 @@ const Vehichles = () => {
                         {/* <td>Status</td>
                         <td>Group</td>
                         <td>Watchers</td> */}
-                        <td
-                          className="action-column text-center"
-                          
-                      >
-                
-                        <VehicleModal id={d.id} columns={["Number Plate", "Driver", "Maker","Car Type","Fuel Type","Year","Total Repair Expense","Total Fuel Cost","Photo"]} title="Vehicle Details" />
-                        
+                        <td className="action-column text-center">
+                          <VehicleModal
+                            id={d.id}
+                            columns={[
+                              "Number Plate",
+                              "Driver",
+                              "Maker",
+                              "Car Type",
+                              "Fuel Type",
+                              "Year",
+                              "Total Repair Expense",
+                              "Total Fuel Cost",
+                              "Photo",
+                            ]}
+                            title="Vehicle Details"
+                          />
+
                           <Link
                             to={`edit/${d.id}`}
                             className="btn btn-sm rounded btn-brand mx-1"
                           >
-                            <FontAwesomeIcon icon={faPencil} title="Edit" icon-size="sm"  />
+                            <FontAwesomeIcon
+                              icon={faPencil}
+                              title="Edit"
+                              icon-size="sm"
+                            />
                             {/* <i className="material-icons md-edit"></i>
                             Edit */}
                           </Link>
@@ -367,9 +397,12 @@ const Vehichles = () => {
                             onClick={() => handleDeleteVehichle(d.id)}
                             className="btn btn-sm rounded btn-danger"
                           >
-                            <FontAwesomeIcon icon={faTrash} title="Delete" icon-size="sm"  />
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              title="Delete"
+                              icon-size="sm"
+                            />
                             {/* <i className="material-icons md-delete"></i> */}
-                           
                           </button>
                         </td>
                       </tr>
@@ -394,4 +427,3 @@ const Vehichles = () => {
 };
 
 export default Vehichles;
-
