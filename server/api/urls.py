@@ -27,6 +27,7 @@ from .views import (
    JobcardCreateView,
    JobcardListView,
    JobcardDetailView,
+   UserListView
     
 
 )
@@ -64,6 +65,8 @@ urlpatterns = [
     path('jobcard/<int:pk>/' ,JobcardDetailView.as_view(), name ='jobcard-detail'),
     path('jobcard/create/', JobcardCreateView.as_view(), name='jobcard-create'),
     path('jobcard/edit/<int:pk>', JobcardDetailView.as_view(), name='jobcard-edit'),
+    path('users/', UserListView.as_view(), name='user'),
+    
    
    
 

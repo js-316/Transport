@@ -184,7 +184,13 @@ const Fuel = () => {
   //     }
   //   }
   // });
+  const userData = JSON.parse(localStorage.getItem('user'));
+  // // console.log('User data:', userData);
+  // // console.log('Fuel array:', fuelArray);
+
   const filteredData = fuelArray?.filter((fuel) => {
+    //console.log('Fuel user:', fuel.user.id, 'Current user:', userData.user_id);
+  
     const fuel_type = fuel.fuel_type.toLowerCase();
     const fuel_plate = fuel.fuel_plate.number_plate.toLowerCase();
     const mileage = fuel.mileage;
@@ -193,7 +199,7 @@ const Fuel = () => {
     const status = fuel.status.toLowerCase();
     const search = searchQuery.toLowerCase();
   
-    if (user?.is_driver) {
+    if (user.is_driver) {
       if (selectedStatus !== "All") {
         if (search) {
           return (
@@ -206,14 +212,14 @@ const Fuel = () => {
               (date_of_fueling && date_of_fueling.toString().includes(search)) ||
               status.includes(search)) &&
             status === selectedStatus &&
-            fuel.driver === user.is_driver
+            fuel.user.id === userData.user_id
           );
         } else {
           return (
             (startDate === null || startDate <= date_of_fueling) &&
             (endDate === null || date_of_fueling <= endDate) &&
             status === selectedStatus &&
-            fuel.driver === user.is_driver
+            fuel.user.id === userData.user_id
           );
         }
       } else {
@@ -227,13 +233,13 @@ const Fuel = () => {
               (amount && amount.toString().includes(search)) ||
               (date_of_fueling && date_of_fueling.toString().includes(search)) ||
               status.includes(search)) &&
-            fuel.driver === user.is_driver
+            fuel.user.id === userData.user_id
           );
         } else {
           return (
             (startDate === null || startDate <= date_of_fueling) &&
             (endDate === null || date_of_fueling <= endDate) &&
-            fuel.driver === user.is_driver
+            fuel.user.id === userData.user_id
           );
         }
       }
@@ -518,7 +524,7 @@ const Fuel = () => {
                         {user?.is_staff ? (
                           <>
                             <td className="text-center action-column">
-                            <FuelModal id={d.id} columns={["Vehicle","Driver","Fuel Station","Fuel Type","Mileage","Amount","Date","Status","Action"]} title="Fuel Details"/>
+                            <FuelModal id={d.id} columns={["Vehicle","Driver Requesting","Fuel Station","Fuel Type","Mileage","Amount","Date","Status","Action"]} title="Fuel Details"/>
                               <Link
                                 to={`edit/${d.id}`}
                                 className="btn btn-sm rounded btn-brand mx-1"

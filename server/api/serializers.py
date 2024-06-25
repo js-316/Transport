@@ -8,6 +8,11 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 # create serializers
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'is_staff','is_driver', 'is_engineer')
+
 class DriverSerializer(serializers.ModelSerializer):
     class Meta:
         model = Driver
@@ -22,10 +27,10 @@ class VehichleSerializer(serializers.ModelSerializer):
         model = Vehichle
         fields = '__all__'
 
-
 class MaintenanceSerializer(serializers.ModelSerializer):
 
     fleet = VehichleSerializer(read_only=True)
+    assigned_engineer = UserSerializer(read_only=True)
     
     class Meta:
         model = Maintenance
@@ -34,15 +39,11 @@ class MaintenanceSerializer(serializers.ModelSerializer):
 class FuelSerializer(serializers.ModelSerializer):
 
     fuel_plate = VehichleSerializer(read_only = True)
+    user = UserSerializer(read_only = True)
 
     class Meta:
         model = Fuel
         fields = '__all__'
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'email', 'is_staff','is_driver', 'is_engineer')
 
 class EngineerSerializer(serializers.ModelSerializer):
 

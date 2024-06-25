@@ -97,6 +97,9 @@ const Maintenance = () => {
     const status = maintenance.status.toLowerCase();
     const search = searchQuery.toLowerCase();
 
+    console.log("User is engineer",user?.is_engineer)
+    console.log("Assigned engineer ID",maintenance.assignedEngineer)
+    console.log("user ID",user?.user_id)
     if (selectedStatus !== "All") {
       if (search) {
         return (
@@ -107,13 +110,15 @@ const Maintenance = () => {
             description.includes(search) ||
             status.includes(search) ||
             (date && date.toString().includes(search))) &&
-          status === selectedStatus
+          status === selectedStatus &&
+          (user?.is_engineer ? maintenance.assignedEngineer === user?.user_id : true)
         );
       } else {
         return (
           (startDate === null || startDate <= date) &&
           (endDate === null || date <= endDate) &&
-          status === selectedStatus
+          status === selectedStatus &&
+          (user?.is_engineer ? maintenance.assignedEngineer === user?.id : true)
         );
       }
     } else {
@@ -125,12 +130,15 @@ const Maintenance = () => {
             (cost && cost.toString().includes(search)) ||
             description.includes(search) ||
             status.includes(search) ||
-            (date && date.toString().includes(search)))
+            (date && date.toString().includes(search)) &&
+            (user?.is_engineer ? maintenance.assignedEngineer === user?.id : true)
+          )
         );
       } else {
         return (
           (startDate === null || startDate <= date) &&
-          (endDate === null || date <= endDate)
+          (endDate === null || date <= endDate) &&
+          (user?.is_engineer ? maintenance.assignedEngineer === user?.id : true)
         );
       }
     }
@@ -139,7 +147,7 @@ const Maintenance = () => {
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
-  console.log("Filtered Maintenance Data:", maintenancesArray);
+  //console.log("Filtered Maintenance Data:", maintenancesArray);
 
   const handleDataPerPage = (e) => {
     setDataPerPage(parseInt(e.target.value));
@@ -206,11 +214,13 @@ const Maintenance = () => {
     } else if (st === "Ongoing") {
       return { color: "blue", fontWeight: "bold" };
     } else if (st === "Completed") {
-      return { color: "green", fontWeight: "bold" };
+      return { color: "#2ECC71", fontWeight: "bold" };
     } else if (st === "Approved") {
       return { color: "#176B87", fontWeight: "bold" };
     } else if (st === "Pending") {
         return { color: "#FFA500", fontWeight: "bold" };
+      } else if (st === "Assigned") {
+        return { color: "#BB8FCE", fontWeight: "bold" };
     } else {
       return { color: "red", fontWeight: "bold" };
     }
@@ -318,6 +328,18 @@ const Maintenance = () => {
                   <span className={`badge bg-white text-black`}>4</span>
                 </button>
               </div>
+              <div className="col-lg-0 col-md-2  col-sm-3 col-4">
+                <button
+
+                  onClick={() => handleFilterStatus("assigned")}
+                  className="btn btn-sm rounded btn-purple  d-flex"
+                  style={{ marginBottom: 0 }}
+                >
+                  <span style={{ marginRight: "10px" }}>Assigned</span>
+                  <span className={`badge bg-white text-black`}>4</span>
+                </button>
+              </div>
+
 
               <div className="col-lg-0 col-md-2  col-4 ">
                 <button

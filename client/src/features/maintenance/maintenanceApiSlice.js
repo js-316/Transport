@@ -94,6 +94,14 @@ export const maintenanceApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Maintenance"],
     }),
+    assignRepair: builder.mutation({
+      query: ({id, engineerId}) => ({
+        url: `/maintenance/${id}/`,
+        method: "PATCH",
+        body: { assigned_engineer: engineerId, status: 'Assigned'}, // Send the updated status
+      }),
+      invalidatesTags: ["Maintenance"],
+    }),
   }),
 });
 
@@ -103,8 +111,9 @@ export const {
   useEditMaintenanceMutation,
   useGetMaintenanceByIdQuery,
   useDeleteMaintenanceMutation,
-useApproveRepairMutation,
+  useApproveRepairMutation,
   useOngoingRepairMutation,
   useDoneRepairMutation,
   useCompletedRepairMutation,
+  useAssignRepairMutation,
 } = maintenanceApiSlice;
