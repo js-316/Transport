@@ -245,7 +245,7 @@ const JobCard = () => {
           </button> */}
         </div>
       </div>
-      
+
       <div className="card mb-4">
         <header className="card-header">
           <div className="row gx-3">
@@ -313,7 +313,7 @@ const JobCard = () => {
               <div className="col-lg-0 col-md-2  col-sm-3 col-4">
                 <button
                   onClick={() => handleFilterStatus("pending")}
-                  className="btn btn-sm rounded btn-orange  d-flex"
+                  className="btn btn-sm rounded btn-orange d-flex"
                   style={{ marginBottom: 0 }}
                 >
                   <span style={{ marginRight: "10px" }}>Pending</span>
@@ -387,22 +387,18 @@ const JobCard = () => {
                   ))} */}
                 {Loading
                   ? [...Array(5)]?.map((_, i) => (
-                    <TableLoader key={i} count={5} />
-                  ))
+                      <TableLoader key={i} count={5} />
+                    ))
                   : currentData?.map((d, index) => (
-                    <tr key={index}>
-                      <td>{d.jobcard_plate.number_plate}</td>
-                      <td>{d.machine_name}</td>
-                      <td>{d.repair.description}</td>
-                      <td>{new Date(d.date_of_jobcard).toDateString()}</td>
-                      <td>{d.parts_needed}</td>
-                      <td style={getStatusStyle(d.status)}>{d.status}</td>
-
-
-
-                    </tr>
-                  ))}
-
+                      <tr key={index}>
+                        <td>{d.jobcard_plate.number_plate}</td>
+                        <td>{d.machine_name}</td>
+                        <td>{d.repair.description}</td>
+                        <td>{new Date(d.date_of_jobcard).toDateString()}</td>
+                        <td>{d.parts_needed}</td>
+                        <td style={getStatusStyle(d.status)}>{d.status}</td>
+                      </tr>
+                    ))}
               </tbody>
             </table>
           </div>

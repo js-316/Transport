@@ -17,7 +17,8 @@ const AddJobCard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState(null);
-
+  // Initialize the current date
+  const [currentDate] = useState(new Date().toISOString().split("T")[0]);
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(jobCardSchema),
@@ -30,12 +31,10 @@ const AddJobCard = () => {
 
   const [addJobcard, { isLoading, isSuccess }] = useAddJobcardMutation();
 
-
   const handleAddJobcard = async (data) => {
     setAppError(null);
     try {
       const res = await addJobcard({
-
         vehichle: data.jobcard_plate,
         machine_name: data.machine_name,
         maintenance: data.repair,
@@ -58,9 +57,6 @@ const AddJobCard = () => {
 
   const { errors } = formState;
 
-
-
-  
   return (
     <Layout>
       <div className="row">
@@ -69,13 +65,12 @@ const AddJobCard = () => {
             <div>
               <div>
                 <Link to="/dashboard/maintenance/job_card">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Job Cards
+                  <FontAwesomeIcon icon={faArrowCircleLeft} />
+                  Job Cards
                 </Link>
               </div>
-              <h2 className="content-title">
-                New Job Card</h2>
+              <h2 className="content-title">New Job Card</h2>
             </div>
-
           </div>
         </div>
         <div className="col-lg-12">
@@ -98,8 +93,9 @@ const AddJobCard = () => {
                       <div className="row gx-2">
                         <select
                           placeholder="Select Vehichle"
-                          className={`form-control ${errors.jobcard_plate ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.jobcard_plate ? "is-invalid" : ""
+                          }`}
                           {...register("jobcard_plate")}
                         >
                           <option>Select Vehicle</option>
@@ -111,7 +107,6 @@ const AddJobCard = () => {
                         </select>
                         {errors.jobcard_plate && (
                           <div className="invalid-feedback">
-
                             {errors.jobcard_plate?.message}
                           </div>
                         )}
@@ -125,8 +120,9 @@ const AddJobCard = () => {
                         <input
                           placeholder="Repair Request"
                           type="text"
-                          className={`form-control ${errors.repair ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.repair ? "is-invalid" : ""
+                          }`}
                           {...register("repair")}
                         />
                         {errors.repair && (
@@ -144,8 +140,9 @@ const AddJobCard = () => {
                         <input
                           placeholder="Machine Name"
                           type="text"
-                          className={`form-control ${errors.machine_name ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.machine_name ? "is-invalid" : ""
+                          }`}
                           {...register("machine_name")}
                         />
                         {errors.mileage && (
@@ -156,7 +153,6 @@ const AddJobCard = () => {
                       </div>
                     </div>
                   </div>
-                  
 
                   <div className="col-lg-4">
                     <div className="mb-4">
@@ -166,9 +162,11 @@ const AddJobCard = () => {
                           placeholder="2022-02-02"
                           type="date"
                           max={new Date().toISOString().split("T")[0]}
-                          className={`form-control ${errors.date_of_jobcard ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${
+                            errors.date_of_jobcard ? "is-invalid" : ""
+                          }`}
                           {...register("date_of_jobcard")}
+                          defaultValue={currentDate}
                         />
                         {errors.date_of_jobcard && (
                           <div className="invalid-feedback">
@@ -216,9 +214,6 @@ const AddJobCard = () => {
                       </div>
                     </div>
                   </div> */}
-                  
-                  
-                  
                 </div>
 
                 <button class="btn btn-primary" type="submit">
@@ -228,8 +223,8 @@ const AddJobCard = () => {
             </div>
           </div>
         </div>
-      </div >
-    </Layout >
+      </div>
+    </Layout>
   );
 };
 
