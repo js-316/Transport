@@ -1380,22 +1380,31 @@ textarea.form-control {
 }
 .btn-blue {
   background-color: #0066ff; /* VSCode logo blue */
-  color: #fff; /* white text */
+  color: #618fd4; /* white text */
 }
 .btn-gray {
-  background-color: #6d5d27; /* VSCode logo blue */
-  color: #fff; /* white text */
+  background-color: #776015; /* VSCode logo blue */
+  color: #040404; /* white text */
+}
+.btn-gray:hover {
+  background-color: #e8d9aa !important; /* Adjust the hover color as needed */
+  cursor: pointer;
 }
 .btn-blues {
   background-color: #007bff; /* Blue color */
   /* color: #ffffff; White text color */
 }
+.btn-blues:hover {
+  background-color: #aac3e8 !important; /* Adjust the hover color as needed */
+  cursor: pointer;
+}
 .btn-orange {
   background-color: #ff8800; 
   /* color: #ffffff; White text color */
 }
-.btn-purple {
-  background-color: #BB8FCE  ;
+.btn-orange:hover {
+  background-color: #e9cdac !important; /* Adjust the hover color as needed */
+  cursor: pointer;
 }
 .btn-all {
   margin-right: -10px;

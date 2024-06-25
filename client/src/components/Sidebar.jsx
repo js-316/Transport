@@ -5,15 +5,12 @@ import Dropdown from "react-bootstrap/Dropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { selectUser } from "../features/auth/authSlice";
 
-
 const Sidebar = () => {
- 
   const location = useLocation();
   const [toggleMenu, setToggleMenu] = useState(false);
 
   const user = useSelector(selectUser);
- 
-  
+
   const [menuLinks, setMenuLinks] = useState(
     [
       user?.is_staff
@@ -205,7 +202,6 @@ const Sidebar = () => {
     ].filter(Boolean)
   );
 
-
   const [currentMenuItem, setCurrentMenuItem] = useState(null);
 
   const toggleAside = () => {
@@ -237,6 +233,7 @@ const Sidebar = () => {
       id="offcanvas_aside"
     >
       <div className="aside-top">
+        <img src="/logo.svg" className="w-25" />
         <Link to="/dashboard" className="brand-wrap">
           Fleet Management
         </Link>

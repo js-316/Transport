@@ -142,7 +142,7 @@ const Maintenance = () => {
     setDataPerPage(parseInt(e.target.value));
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = () => { 
     const doc = new jsPDF();
 
     // Add logo

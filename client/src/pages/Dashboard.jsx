@@ -39,6 +39,7 @@ const Dashboard = () => {
   const { ids: fuelIds, entities: fuelEntities } = fuelData || {};
 
   const vehichlesArray = ids?.map((id) => entities?.[id]);
+  console.log("Vehicles", vehichlesArray);
   const driversArray = driverIds?.map((id) => driverEntities?.[id]);
   const maintenancesArray = maintenanceIds?.map(
     (id) => maintenancesEntities?.[id]
@@ -145,12 +146,7 @@ const Dashboard = () => {
 
       <div className="card mb-4">
         <header className="card-header" data-select2-id="11">
-          <h4 className="card-title">Latest Fleet</h4>
-          <div className="row align-items-center" data-select2-id="10">
-            <div className="col-md-2 col-6">
-              <input type="date" value="02.05.2022" className="form-control" />
-            </div>
-          </div>
+          <h4 className="card-title">Drivers Fleet Summary</h4>
         </header>
 
         <div className="card-body">
@@ -161,12 +157,11 @@ const Dashboard = () => {
             >
               <thead>
                 <tr>
-                  <th>Number Plate</th>
                   <th>Drivers</th>
+                  <th>Number Plate</th>
+                  <th>Fuel consumed</th>
                   <th>Mileage</th>
-                  <th>Manufacturer</th>
-                  <th>Date of Purchase</th>
-                  <th className="text-center"> Action </th>
+                  <th>Fuel Expenditure</th>
                 </tr>
               </thead>
               <tbody>
@@ -176,24 +171,11 @@ const Dashboard = () => {
                     ))
                   : vehichlesArray?.map((v, index) => (
                       <tr key={index}>
-                        <td>{v.number_plate}</td>
                         <td>{v.driver.name}</td>
+                        <th>{v.number_plate}</th>
+                        <td>Fuel Consumed</td>
                         <td>{v.mileage}</td>
-                        <td>{v.manufacturer}</td>
-                        <td>{v.date_of_purchase}</td>
-                        <td className="text-center">
-                          <Link
-                            to={`/vehichles/${v.id}`}
-                            className="btn btn-sm font-sm rounded btn-brand mx-4"
-                          >
-                            <i className="material-icons md-edit"></i>
-                            Edit
-                          </Link>
-                          <button className="btn btn-sm font-sm rounded btn-danger">
-                            <i className="material-icons md-delete"></i>
-                            Delete
-                          </button>
-                        </td>
+                        <td>Fuel Expenditure</td>
                       </tr>
                     ))}
               </tbody>
