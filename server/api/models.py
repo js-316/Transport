@@ -95,7 +95,7 @@ class Maintenance(models.Model, ExtraMixin):
     date = models.DateField()
     cost = models.FloatField()
     status = models.CharField(max_length=20, default='Pending')
-    assigned_engineer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    assigned_engineer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assignedEngineer')
     
     def __str__(self):
         return self.description

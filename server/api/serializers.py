@@ -30,7 +30,7 @@ class VehichleSerializer(serializers.ModelSerializer):
 class MaintenanceSerializer(serializers.ModelSerializer):
 
     fleet = VehichleSerializer(read_only=True)
-    assigned_engineer = UserSerializer(read_only=True)
+    assigned_engineer = UserSerializer()
     
     class Meta:
         model = Maintenance

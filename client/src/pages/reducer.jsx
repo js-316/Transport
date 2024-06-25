@@ -1,52 +1,72 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
-import { fuelSchema, jobCardSchema } from "../util/validations";
-import { yupResolver } from "@hookform/resolvers/yup";
 import Layout from "../components/Layout";
-import { useForm } from "react-hook-form";
-import { useAddFuelMutation } from "../features/fuel/fuelApiSlice";
+import {
+  useGetMaintenanceQuery,
+  useDeleteMaintenanceMutation,
+  useCompletedRepairMutation,
+  useOngoingRepairMutation,
+} from "../features/maintenance/maintenanceApiSlice";
+import { Link, useNavigate } from "react-router-dom";
+import TableLoader from "../components/TableLoader";
+import Pagination from "../components/Pagination";
 import errorParser from "../util/errorParser";
-import { useGetVehichlesQuery } from "../features/vehichle/vehicleApiSlice";
+import Swal from "sweetalert2";
+import jsPDF from "jspdf";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
-import { useAddJobcardMutation } from "../features/jobcard/jobcardApiSlice";
-import DynamicTable from "../components/DynamicTable";
+import {
+  faCheckCircle,
+  faEye,
+  faPencil,
+  faSearch,
+  faTimesCircle,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+import logo from "../assets/soliton.png";
+import { useSelector } from "react-redux";
+import { selectUser } from "../features/auth/authSlice";
+import MaintenanceModal from "../components/MaintenanceModal";
 
-const AddJobCard = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [appError, setAppError] = useState(null);
+const Maintenance = () => {
+  const user = useSelector(selectUser);
+  const { isLoading, data, refetch } = useGetMaintenanceQuery();
+  const [dataPerPage, setDataPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const [selectedStatus, setSelectedStatus] = useState("All");
 
-  const { register, handleSubmit, formState } = useForm({
-    resolver: yupResolver(jobCardSchema),
-  });
+  const [deleteMaintenance, { isLoading: isDeleting }] =
+    useDeleteMaintenanceMutation();
 
-  const { isLoading: loading, data, refetch } = useGetVehichlesQuery();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const { ids, entities } = data || {};
-  const vehichlesArray = ids?.map((id) => entities[id]);
+  const maintenancesArray = ids?.map((id) => entities[id]).reverse();
 
-  const [addJobcard, { isLoading, isSuccess }] = useAddJobcardMutation();
-
-
-  const handleAddJobcard = async (data) => {
+ 
+  const handleDeleteMaintenance = async (id) => {
     setAppError(null);
     try {
-      const res = await addJobcard({
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      });
+      if (result.isConfirmed) {
+        const res = await deleteMaintenance(id).unwrap();
 
-        vehichle: data.jobcard_plate,
-        machine_name: data.machine_name,
-        // maintenance: data.repair_request,
-        date_of_jobcard: data.date_of_jobcard,
-        parts_needed: data.quantity + " " + data.part,
-        //status: data.status,
-      }).unwrap();
-      if (res.jobcard) {
-        navigate("/dashboard/maintenance/work_order");
+        refetch();
       }
     } catch (err) {
+      console.error("Error deleting Maintenance:", err);
       if (parseInt(err.status) !== err.status) {
         setAppError("Network Error");
       } else {
@@ -56,262 +76,497 @@ const AddJobCard = () => {
     }
   };
 
-  const { errors } = formState;
+  const handleDateRange = (dateRange) => {
+    if (dateRange) {
+      setStartDate([dateRange(0)]);
+      setEndDate([dateRange(1)]);
+    } else {
+      setStartDate(null);
+      setEndDate(null);
+    }
+  };
 
-  //const { watch } = useForm();
+  const handleFilterStatus = (status) => {
+    setSelectedStatus(status);
+  };
+  // const filteredData = maintenancesArray?.filter((maintenance) => {
+  //   const fleet = maintenance.fleet.number_plate.toLowerCase();
+  //   const cost = maintenance.cost;
+  //   const description = maintenance.description.toLowerCase();
+  //   const date = maintenance.date.toLowerCase();
+  //   const status = maintenance.status.toLowerCase();
+  //   const search = searchQuery.toLowerCase();
 
+  //   console.log("User is engineer",user?.is_engineer)
+  //   console.log("Assigned engineer ID",maintenance?.assignedEngineer_id)
+  //   console.log("user ID",user?.user_id)
+  //   if (selectedStatus !== "All") {
+  //     if (search) {
+  //       return (
+  //         (startDate === null || startDate <= date) &&
+  //         (endDate === null || date <= endDate) &&
+  //         (fleet.includes(search) ||
+  //           (cost && cost.toString().includes(search)) ||
+  //           description.includes(search) ||
+  //           status.includes(search) ||
+  //           (date && date.toString().includes(search))) &&
+  //         status === selectedStatus &&
+  //         (user?.is_engineer ? maintenance.assignedEngineer === user?.user_id : true)
+  //       );
+  //     } else {
+  //       return (
+  //         (startDate === null || startDate <= date) &&
+  //         (endDate === null || date <= endDate) &&
+  //         status === selectedStatus &&
+  //         (user?.is_engineer ? maintenance.assignedEngineer === user?.id : true)
+  //       );
+  //     }
+  //   } else {
+  //     if (search) {
+  //       return (
+  //         (startDate === null || startDate <= date) &&
+  //         (endDate === null || date <= endDate) &&
+  //         (fleet.includes(search) ||
+  //           (cost && cost.toString().includes(search)) ||
+  //           description.includes(search) ||
+  //           status.includes(search) ||
+  //           (date && date.toString().includes(search)) &&
+  //           (user?.is_engineer ? maintenance.assignedEngineer === user?.id : true)
+  //         )
+  //       );
+  //     } else {
+  //       return (
+  //         (startDate === null || startDate <= date) &&
+  //         (endDate === null || date <= endDate) &&
+  //         (user?.is_engineer ? maintenance.assignedEngineer === user?.id : true)
+  //       );
+  //     }
+  //   }
+  // });
 
-  const handleAddPart = () => {
+  // const filteredData = maintenancesArray?.filter((maintenance) => {
+  //   const fleet = maintenance.fleet.number_plate.toLowerCase();
+  //   const cost = maintenance.cost;
+  //   const description = maintenance.description.toLowerCase();
+  //   const date = maintenance.date.toLowerCase();
+  //   const status = maintenance.status.toLowerCase();
+    
+  //   const search = searchQuery.toLowerCase();
+  
+  //   console.log("User is engineer",user?.is_engineer)
+  //   console.log("Assigned engineer ID",maintenance.assigned_engineer.id)
+  //   //console.log("Assigned Engineer ",mai)
+  //   console.log("user ID",user.user_id)
+  //   if (selectedStatus !== "All") {
+  //     if (search) {
+  //       return (
+  //         (startDate === null || startDate <= date) &&
+  //         (endDate === null || date <= endDate) &&
+  //         (fleet.includes(search) ||
+  //           (cost && cost.toString().includes(search)) ||
+  //           description.includes(search) ||
+  //           status.includes(search) ||
+  //           (date && date.toString().includes(search))) &&
+  //         status === selectedStatus &&
+  //         (user?.is_engineer ? maintenance?.assigned_engineer.id === user?.user_id : true)
+  //       );
+  //     } else {
+  //       return (
+  //         (startDate === null || startDate <= date) &&
+  //         (endDate === null || date <= endDate) &&
+  //         status === selectedStatus &&
+  //         (user?.is_engineer ? maintenance?.assigned_engineer.id === user?.user_id : true)
+  //       );
+  //     }
+  //   } else {
+  //     if (search) {
+  //       return (
+  //         (startDate === null || startDate <= date) &&
+  //         (endDate === null || date <= endDate) &&
+  //         (fleet.includes(search) ||
+  //           (cost && cost.toString().includes(search)) ||
+  //           description.includes(search) ||
+  //           status.includes(search) ||
+  //           (date && date.toString().includes(search)) &&
+  //           (user?.is_engineer ? maintenance?.assigned_engineer.id === user?.user_id : true)
+  //         )
+  //       );
+  //     } else {
+  //       return (
+  //         (startDate === null || startDate <= date) &&
+  //         (endDate === null || date <= endDate) &&
+  //         (user?.is_engineer ? maintenance?.assigned_engineer.id === user?.user_id : true)
+  //       );
+  //     }
+  //   }
+  // });
 
-    // const vehicleId = watch('vehicle_id');
-    // console.log('vehicleId:', vehicleId);
-    // const quantity = watch('quantity');
-    // const vehicle = vehichlesArray.find((vehicle) => vehicle.id === vehicleId);
-    // console.log('Vehicles',vehicle)
-    // if (vehicle) {
-    //   const newVehicle = { name: vehicle.number_plate, quantity: parseInt(quantity) };
-    //   setAddedVehicles((prevVehicles) => [...prevVehicles, newVehicle]);
-    // } else {
-    //   console.error(`Vehicle with ID ${vehicleId} not found`);
-    // }
+  // 
+  const filteredData = maintenancesArray?.filter((maintenance) => {
+    const fleet = maintenance.fleet.number_plate.toLowerCase();
+    const cost = maintenance.cost;
+    const description = maintenance.description.toLowerCase();
+    const date = maintenance.date.toLowerCase();
+    const status = maintenance.status.toLowerCase();
+    
+    const search = searchQuery.toLowerCase();
+    
+    if (user?.is_engineer) {
+      return (
+        (fleet.includes(search) ||
+          (cost && cost.toString().includes(search)) ||
+          description.includes(search) ||
+          status.includes(search) ||
+          (date && date.toString().includes(search))) &&
+        maintenance.status === "Assigned" &&
+        maintenance.assigned_engineer.id === user.user_id &&
+        (selectedStatus === "All" || maintenance.status === selectedStatus.toLowerCase()) &&
+        (startDate === null || startDate <= maintenance.date) &&
+        (endDate === null || maintenance.date <= endDate)
+      );
+    } else if (user?.is_staff) {
+      return (
+        (fleet.includes(search) ||
+          (cost && cost.toString().includes(search)) ||
+          description.includes(search) ||
+          status.includes(search) ||
+          (date && date.toString().includes(search))) &&
+        (selectedStatus === "All" || maintenance.status === selectedStatus.toLowerCase()) &&
+        (startDate === null || startDate <= maintenance.date) &&
+        (endDate === null || maintenance.date <= endDate)
+      );
+    } else {
+      return (
+        (fleet.includes(search) ||
+          (cost && cost.toString().includes(search)) ||
+          description.includes(search) ||
+          status.includes(search) ||
+          (date && date.toString().includes(search))) &&
+        (selectedStatus === "All" || maintenance.status === selectedStatus.toLowerCase()) &&
+        (startDate === null || startDate <= maintenance.date) &&
+        (endDate === null || maintenance.date <= endDate)
+      );
+    }
+  });
+  const indexOfLastData = currentPage * dataPerPage;
+  const indexOfFirstData = indexOfLastData - dataPerPage;
+  const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
+  //console.log("Filtered Maintenance Data:", maintenancesArray);
+
+  const handleDataPerPage = (e) => {
+    setDataPerPage(parseInt(e.target.value));
+  };
+
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+
+    // Add logo
+    doc.addImage(logo, "PNG", 10, 10, 20, 20);
+
+    // Add header text
+    doc.text(`Soliton Telmec`, 40, 15);
+    doc.text(`Address: Bugolobi Plot 10, Mizindalo Road`, 40, 20);
+    doc.text(`Phone: +256 700 777 003`, 40, 25);
+    doc.text(`Email: info@soliton.co.ug`, 40, 30);
+
+    // Add a newline
+    doc.text(`\n`, 10, 35);
+
+    doc.text("Service History", 10, 40);
+    const tableData = [];
+    filteredData.forEach((record) => {
+      tableData.push([
+        record.fleet.number_plate,
+        record.description,
+        record.cost,
+        record.date,
+        record.driver,
+        record.repair_priority_class,
+        record.meter,
+        record.meter_unit,
+        record.work_order_number,
+        record.labels,
+      ]);
+    });
+    doc.autoTable({
+      head: [
+        [
+          "Vehicle",
+          "Description",
+          "Cost",
+          "Date",
+          "Driver",
+          "Repair Priority Class",
+          "Meter",
+          "Meter Unit",
+          "Work Order Number",
+          "Labels",
+        ],
+      ],
+      body: tableData,
+      startY: 50,
+    });
+
+    doc.save("maintenance.pdf");
+  };
+
+  
+
+  const getStatusStyle = (st) => {
+    if (st === "pending") {
+      return { color: "gray", fontWeight: "bold" };
+    } else if (st === "Ongoing") {
+      return { color: "blue", fontWeight: "bold" };
+    } else if (st === "Completed") {
+      return { color: "#2ECC71", fontWeight: "bold" };
+    } else if (st === "Approved") {
+      return { color: "#176B87", fontWeight: "bold" };
+    } else if (st === "Pending") {
+        return { color: "#FFA500", fontWeight: "bold" };
+      } else if (st === "Assigned") {
+        return { color: "#BB8FCE", fontWeight: "bold" };
+    } else {
+      return { color: "red", fontWeight: "bold" };
+    }
   };
 
   return (
     <Layout>
-      <div className="row">
-        <div className="col-9">
-          <div className="content-header">
-            <div>
+      <div className="content-header">
+        <h2 className="content-title">Repair Requests</h2>
+        <div>
+          {user?.is_staff || user?.is_driver ? (
+            <>
               <div>
-                <Link to="/dashboard/maintenance/work_order">
-                  <FontAwesomeIcon icon={faArrowCircleLeft} />Job Cards
+                <Link to="add" className="btn btn-primary">
+                  <i className="material-icons md-plus"></i> Request Repair
                 </Link>
+
+                {user?.is_staff ? (
+                  <>
+                    <button
+                      onClick={exportToPDF}
+                      className="btn btn-success mx-2"
+                    >
+                      Export to PDF
+                    </button>
+                  </>
+                ) : null}
               </div>
-              <h2 className="content-title">
-                New Job Card</h2>
-            </div>
-
-          </div>
+            </>
+          ) : null}
         </div>
-        <div className="col-lg-12">
-          <div className="card mb-4">
-            <div className="card-header">
-              <h4>Job Card Information</h4>
+      </div>
+      <div className="card mb-4">
+        <header className="card-header">
+          <div className="row gx-3 mb-3">
+            <div className="col-lg-4 col-md-6 me-auto">
+              <div className="input-group">
+                <span className="input-group-text">
+                  <FontAwesomeIcon icon={faSearch} />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="form-control"
+                />
+              </div>
             </div>
-            <div className="card-body">
-              {appError && (
-                <div className="alert alert-danger" role="alert">
-                  {appError}
-                </div>
-              )}
-
-              <form id="jobcard_form" onSubmit={handleSubmit(handleAddJobcard)}>
-                <div className="row">
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Vehicle</label>
-                      <div className="row gx-2">
-                        <select
-                          placeholder="Select Vehichle"
-                          className={`form-control ${errors.jobcard_plate ? "is-invalid" : ""
-                            }`}
-                          {...register("jobcard_plate")}
-                        >
-                          <option>Select Vehicle</option>
-                          {vehichlesArray?.map((d, index) => (
-                            <option key={index} value={d.id}>
-                              {d.number_plate}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.jobcard_plate && (
-                          <div className="invalid-feedback">
-
-                            {errors.jobcard_plate?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  {/* <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Repair Request</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="Repair Request"
-                          type="text"
-                          className={`form-control ${errors.repair_request ? "is-invalid" : ""
-                            }`}
-                          {...register("repair_request")}
-                        />
-                        {errors.repair_request && (
-                          <div className="invalid-feedback">
-                            {errors.repair_request?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div> */}
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Machine Name</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="Machine Name"
-                          type="text"
-                          className={`form-control ${errors.machine_name ? "is-invalid" : ""
-                            }`}
-                          {...register("machine_name")}
-                        />
-                        {errors.mileage && (
-                          <div className="invalid-feedback">
-                            {errors.mileage?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Date</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="2022-02-02"
-                          type="date"
-                          max={new Date().toISOString().split("T")[0]}
-                          className={`form-control ${errors.date_of_jobcard ? "is-invalid" : ""
-                            }`}
-                          {...register("date_of_jobcard")}
-                        />
-                        {errors.date_of_jobcard && (
-                          <div className="invalid-feedback">
-                            {errors.date_of_jobcard?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Requester Signature</label>
-                      <input
-                        type="text"
-                        placeholder="Sign with name e.g dean"
-                        className="form-control"
-                        {...register("requester_signature")}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Comments</label>
-                      <div className="row gx-2">
-                        <input
-                          placeholder="Add Optional comment here"
-                          type="text"
-                          className={`form-control ${errors.comments ? "is-invalid" : ""
-                            }`}
-                          {...register("comments")}
-                        />
-                        {errors.comments && (
-                          <div className="invalid-feedback">
-                            {errors.comments?.message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div> */}
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label">Parts</label>
-                      <DynamicTable />
-                    </div>
-                  </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      {/* <label className="form-label">Quantity</label> */}
-                      <div className="row gx-2">
-                        <div className="col-5">
-                          {/* <input
-                          placeholder="5"
-                          type="number"
-                          className={`form-control ${errors.quantity ? "is-invalid" : ""
-                            }`}
-                          {...register("quantity")}
-                        /> */}
-                          {errors.quantity && (
-                            <div className="invalid-feedback">
-                              {errors.quantity?.message}
-                            </div>
-                          )}
-                        </div>
-                        <div className="col-7">
-                          <div className="vehicle-box">
-                            {/* <input
-                          placeholder="Part Needed"
-                          type="text"
-                          className={`form-control ${errors.part ? "is-invalid" : ""
-                            }`}
-                          {...register("part")}
-                        /> */}
-                            {errors.part && (
-                              <div className="invalid-feedback">
-                                {errors.part?.message}
-                              </div>
-                            )}
-                            {/* <select
-                            className="form-control"
-                            {...register("part")}
-                          >
-                            <option value="">Select Part</option>
-                            {vehichlesArray?.map((d, index) => (
-                              <option key={index} value={d.id}>{d.number_plate}</option>
-                            ))}
-                          </select> */}
-
-                            {/* <button
-                              className="material-icons md-plus btn btn-primary btn-sm mt-1"
-                              type="button"
-                              onClick={() => handleAddPart()}
-                              style={{
-                                position: 'absolute',
-                                
-                                right: '5px',
-                                padding: '5px 10px',
-                                fontSize: '10px',
-                                borderRadius: '5px',
-                                margin: '10px'
-                              }}
-                            >
-                              Add Part
-                            </button>
-                           */}
-                          </div>
-
-
-
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <button class="btn btn-primary" type="submit">
-                  {isLoading ? "Adding..." : "Save Job Card"}
+            <div className="col-lg-2 col-md-3 col-6 ">
+              <input
+                type="date"
+                value={startDate}
+                className="form-control"
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                }}
+              />
+            </div>
+            <div className="col-lg-2 col-md-3 col-6">
+              <input
+                type="date"
+                value={endDate}
+                className="form-control"
+                onChange={(e) => {
+                  setEndDate(e.target.value);
+                }}
+              />
+            </div>
+            <div className="col-lg-2 col-md-3 col-6">
+              <select
+                onChange={handleDataPerPage}
+                value={dataPerPage}
+                className="form-select"
+              >
+                <option value="10">Show 10</option>
+                <option value="20">Show 20</option>
+                <option value="30">Show 30</option>
+                <option value="40">Show 40</option>
+              </select>
+            </div>
+          </div>
+          <div className="row gx-4  mb-7 mt-6 me-3">
+            <div
+              className="row gx-4 justify-content-between mb-2"
+              style={{ height: 14 }}
+            >
+              <div className="col-lg-0 col-md-1 col-2">
+                <button
+                  onClick={() => handleFilterStatus("All")}
+                  className="btn btn-sm rounded btn-gray btn-all d-flex"
+                  style={{ marginRight: "5px" }}
+                >
+                  <span style={{ marginRight: "10px" }}>All</span>
+                  <span className={`badge bg-white text-black`}>4</span>
                 </button>
-              </form>
+              </div>
+              <div className="col-lg-0 col-md-2  col-sm-3 col-4">
+                <button
+
+                  onClick={() => handleFilterStatus("pending")}
+                  className="btn btn-sm rounded btn-orange  d-flex"
+                  style={{ marginBottom: 0 }}
+                >
+                  <span style={{ marginRight: "10px" }}>Pending</span>
+                  <span className={`badge bg-white text-black`}>4</span>
+                </button>
+              </div>
+              <div className="col-lg-0 col-md-2  col-sm-3 col-4">
+                <button
+
+                  onClick={() => handleFilterStatus("assigned")}
+                  className="btn btn-sm rounded btn-purple  d-flex"
+                  style={{ marginBottom: 0 }}
+                >
+                  <span style={{ marginRight: "10px" }}>Assigned</span>
+                  <span className={`badge bg-white text-black`}>4</span>
+                </button>
+              </div>
+
+
+              <div className="col-lg-0 col-md-2  col-4 ">
+                <button
+                  onClick={() => handleFilterStatus("ongoing")}
+                  className="btn btn-sm rounded btn-blues mx-0  d-flex"
+                  style={{ marginBottom: 0 }}
+                >
+                  <span style={{ marginRight: "10px" }}>Ongoing</span>
+                  <span className="badge bg-white text-black">4</span>
+                </button>
+              </div>
+
+              <div className="col-lg-0 col-md-2 col-4">
+                <button
+                  onClick={() => handleFilterStatus("completed")}
+                  className="btn btn-sm rounded btn-success d-flex"
+                  style={{ marginRight: "10px" }}
+                >
+                  <span style={{ marginRight: "10px" }}>Completed</span>
+                  <span className="badge bg-white text-black">4</span>
+                </button>
+              </div>
             </div>
           </div>
+        </header>
+        <div className="card-body">
+          <div className="table-responsive-lg">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Vehichle</th>
+                  <th>Repair Request</th>
+                  {/* <th>Total Cost</th> */}
+                  <th>Request Date</th>
+                  {/* <th>Driver</th> */}
+                  {/* <th>Repair Priority Class</th> */}
+                  <th>Mileage</th>
+                  <th>Status</th>
+                  {/* <th>Meter Unit</th> */}
+                  {/* <th>Description</th> */}
+                  {/* <th>Issues</th> */}
+                  {/* <th>Work Order Number</th> */}
+                  {user?.is_staff ? (
+                    <>
+                      <th className="text-center"> Action </th>
+                    </>
+                  ) : null}
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading
+                  ? [...Array(5)]?.map((_, i) => (
+                      <TableLoader key={i} count={5} />
+                    ))
+                  : currentData?.map((d, index) => (
+                      <tr key={index}>
+                        <td>{d.fleet.number_plate}</td>
+                        <td>{d.description}</td>
+                        <td>{new Date(d.date).toDateString()}</td>
+                        <td>{d.cost}</td>
+                        <td style={getStatusStyle(d.status)}>{d.status}</td>
+
+                        {user?.is_staff ? (
+                          <>
+                            <td className="text-center action-column">
+                              {/* <Link
+                                to={`view/${d.id}`}
+                                className="btn btn-sm font-sm rounded btn-blue mx-1"
+                              >
+                                <FontAwesomeIcon icon={faEye} title="View" />
+                              </Link> */}
+                              <MaintenanceModal
+                                id={d.id}
+                                columns={[
+                                  "Vehicle",
+                                  "Driver",
+                                  "Repair Request",
+                                  "Description",
+                                  "Date",
+                                  "Status",
+                                  "Photo",
+                                  "Action",
+                                ]}
+                                title="Repair Details"
+                              />
+                              <Link
+                                to={`edit/${d.id}`}
+                                className="btn btn-sm font-sm rounded btn-brand mx-1"
+                              >
+                                <FontAwesomeIcon icon={faPencil} title="Edit" />
+                              </Link>
+                              <button
+                                onClick={() => handleDeleteMaintenance(d.id)}
+                                className="btn btn-sm font-sm rounded btn-danger"
+                              >
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  title="Delete"
+                                />
+                              </button>
+                              
+                            </td>
+                          </>
+                        ) : null}
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div >
-    </Layout >
+      </div>
+      <div className="pagination-area mt-30 mb-50">
+        <nav aria-label="Page navigation example">
+          <Pagination
+            totalData={filteredData?.length}
+            dataPerPage={dataPerPage}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
+        </nav>
+      </div>
+    </Layout>
   );
 };
 
-export default AddJobCard;
-
+export default Maintenance;
