@@ -37,6 +37,7 @@
     "react-select": "^5.7.0",
     "reactstrap": "^9.2.2",
     "sweetalert2": "^11.6.13",
+    "twilio": "^5.2.0",
     "yup": "^1.0.0"
   },
   "devDependencies": {
