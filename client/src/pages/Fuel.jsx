@@ -144,6 +144,7 @@ const Fuel = () => {
 
   
   
+  
   //   if (selectedStatus !== "All") {
   //     if (search) {
   //       return (
@@ -316,7 +317,7 @@ const Fuel = () => {
 
   const getStatusStyle = (st) => {
     if (st === "pending") {
-      return { color: "gray", fontWeight: "bold" };
+      return { color: "orange", fontWeight: "bold" };
     } else if (st === "Ongoing") {
       return { color: "blue", fontWeight: "bold" };
     } else if (st === "Completed") {
