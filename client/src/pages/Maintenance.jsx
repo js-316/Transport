@@ -103,7 +103,8 @@ const Maintenance = () => {
           description.includes(search) ||
           status.includes(search) ||
           (date && date.toString().includes(search))) &&
-        maintenance.status === "Assigned" &&
+        maintenance.status === "Assigned" ||
+        maintenance.status === "Completed" &&
         maintenance.assigned_engineer.id === user.user_id &&
         (selectedStatus === "All" || maintenance.status === selectedStatus.toLowerCase()) &&
         (startDate === null || startDate <= maintenance.date) &&
@@ -374,7 +375,7 @@ const Maintenance = () => {
                   {/* <th>Description</th> */}
                   {/* <th>Issues</th> */}
                   {/* <th>Work Order Number</th> */}
-                  {user?.is_staff ? (
+                  {user?.is_staff || user?.is_engineer ? (
                     <>
                       <th className="text-center"> Action </th>
                     </>
@@ -394,15 +395,11 @@ const Maintenance = () => {
                         <td>{d.cost}</td>
                         <td style={getStatusStyle(d.status)}>{d.status}</td>
 
-                        {user?.is_staff ? (
+                        {user?.is_staff || user?.is_engineer ? (
                           <>
                             <td className="text-center action-column">
-                              {/* <Link
-                                to={`view/${d.id}`}
-                                className="btn btn-sm font-sm rounded btn-blue mx-1"
-                              >
-                                <FontAwesomeIcon icon={faEye} title="View" />
-                              </Link> */}
+                              
+                             
                               <MaintenanceModal
                                 id={d.id}
                                 columns={[
@@ -417,7 +414,9 @@ const Maintenance = () => {
                                 ]}
                                 title="Repair Details"
                               />
-                              <Link
+                              { user?.is_staff ? (
+                                  <>
+                                  <Link
                                 to={`edit/${d.id}`}
                                 className="btn btn-sm font-sm rounded btn-brand mx-1"
                               >
@@ -432,6 +431,11 @@ const Maintenance = () => {
                                   title="Delete"
                                 />
                               </button>
+                              
+                                  </>
+                              ) : null
+
+                              }
                               
                             </td>
                           </>

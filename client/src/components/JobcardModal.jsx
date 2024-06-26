@@ -18,7 +18,7 @@ import { useGetUsersQuery } from "../features/user/userApiSlice";
 import { Link } from "react-router-dom";
 
 
-function MaintenanceModal({ id, title }) {
+function JobcardModal({ id, title }) {
   const { data: maintenanceData, refetch } = useGetMaintenanceQuery();
   const { data: repair } = useGetMaintenanceByIdQuery(id);
 
@@ -215,4 +215,4 @@ function MaintenanceModal({ id, title }) {
   );
 }
 
-export default MaintenanceModal;
+export default JobcardModal;
