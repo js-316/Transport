@@ -11,7 +11,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'is_staff','is_driver', 'is_engineer')
+        fields = ('id', 'username', 'email', 'is_staff','is_driver', 'is_engineer','is_chief_transport_officer','is_human_resource_manager','is_procurement_manager','is_chief_executive_officer')
 
 class DriverSerializer(serializers.ModelSerializer):
     class Meta:

@@ -85,58 +85,7 @@ const Maintenance = () => {
     }
   };
 
-  
-  
-  const filteredData = maintenancesArray?.filter((maintenance) => {
-    const fleet = maintenance.fleet.number_plate.toLowerCase();
-    const cost = maintenance.cost;
-    const description = maintenance.description.toLowerCase();
-    const date = maintenance.date.toLowerCase();
-    const status = maintenance.status.toLowerCase();
-    
-    const search = searchQuery.toLowerCase();
-    
-    if (user?.is_engineer) {
-      return (
-        (fleet.includes(search) ||
-          (cost && cost.toString().includes(search)) ||
-          description.includes(search) ||
-          status.includes(search) ||
-          (date && date.toString().includes(search))) &&
-        maintenance.status === "Assigned" ||
-        maintenance.status === "Completed" &&
-        maintenance.assigned_engineer.id === user.user_id &&
-        (selectedStatus === "All" || maintenance.status === selectedStatus.toLowerCase()) &&
-        (startDate === null || startDate <= maintenance.date) &&
-        (endDate === null || maintenance.date <= endDate)
-      );
-    } else if (user?.is_staff) {
-      return (
-        (fleet.includes(search) ||
-          (cost && cost.toString().includes(search)) ||
-          description.includes(search) ||
-          status.includes(search) ||
-          (date && date.toString().includes(search))) &&
-        (selectedStatus === "All" || maintenance.status === selectedStatus.toLowerCase()) &&
-        (startDate === null || startDate <= maintenance.date) &&
-        (endDate === null || maintenance.date <= endDate)
-      );
-    } else {
-      return (
-        (fleet.includes(search) ||
-          (cost && cost.toString().includes(search)) ||
-          description.includes(search) ||
-          status.includes(search) ||
-          (date && date.toString().includes(search))) &&
-        (selectedStatus === "All" || maintenance.status === selectedStatus.toLowerCase()) &&
-        (startDate === null || startDate <= maintenance.date) &&
-        (endDate === null || maintenance.date <= endDate)
-      );
-    }
-  });
-  const indexOfLastData = currentPage * dataPerPage;
-  const indexOfFirstData = indexOfLastData - dataPerPage;
-  const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
+ 
   //console.log("Filtered Maintenance Data:", maintenancesArray);
 
   const handleDataPerPage = (e) => {
@@ -215,10 +164,70 @@ const Maintenance = () => {
       return { color: "red", fontWeight: "bold" };
     }
   };
+  
+
+  const filteredData = maintenancesArray?.filter((maintenance) => {
+    const fleet = maintenance.fleet.number_plate.toLowerCase();
+    const cost = maintenance.cost;
+    const description = maintenance.description.toLowerCase();
+    const date = maintenance.date.toLowerCase();
+    const status = maintenance.status.toLowerCase();
+    
+    const search = searchQuery.toLowerCase();
+    
+    if (user?.is_engineer) {
+      return (
+        maintenance.status === "Completed" ||
+        maintenance.assigned_engineer.id === user.user_id &&
+        
+        (selectedStatus === "All" || selectedStatus===status) &&
+        (startDate === null || startDate <= maintenance.date) &&
+        (endDate === null || maintenance.date <= endDate) &&
+        maintenance.status ==="Assigned"
+        || maintenance.status==="Ongoing" 
+        &&
+
+        (fleet.includes(search) ||
+          (cost && cost.toString().includes(search)) ||
+          description.includes(search) ||
+          status.includes(search) ||
+          (date && date.toString().includes(search))) 
+          
+      );
+    } else if (user?.is_staff) {
+      return (
+        (fleet.includes(search) ||
+          (cost && cost.toString().includes(search)) ||
+          description.includes(search) ||
+          status.includes(search) ||
+          (date && date.toString().includes(search))) &&
+       
+        (startDate === null || startDate <= maintenance.date) &&
+        (endDate === null || maintenance.date <= endDate) &&
+        (selectedStatus === "All" || selectedStatus===status) 
+      );
+    } else {
+      return (
+        (fleet.includes(search) ||
+          (cost && cost.toString().includes(search)) ||
+          description.includes(search) ||
+          status.includes(search) ||
+          (date && date.toString().includes(search))) &&
+        
+        (startDate === null || startDate <= maintenance.date) &&
+        (endDate === null || maintenance.date <= endDate) &&
+        (selectedStatus === "All" ||  selectedStatus=== status) 
+      );
+    }
+  });
+
   const handleFilterStatus = (status) => {
     setSelectedStatus(status);
   };
   
+  const indexOfLastData = currentPage * dataPerPage;
+  const indexOfFirstData = indexOfLastData - dataPerPage;
+  const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
   return (
     <Layout>
       <div className="content-header">
@@ -310,7 +319,9 @@ const Maintenance = () => {
                   <span className={`badge bg-white text-black`}>4</span>
                 </button>
               </div>
-              <div className="col-lg-0 col-md-2  col-sm-3 col-4">
+              { user?.is_driver || user?.is_staff ? (
+                <>
+                <div className="col-lg-0 col-md-2  col-sm-3 col-4">
                 <button
 
                   onClick={() => handleFilterStatus("pending")}
@@ -321,6 +332,9 @@ const Maintenance = () => {
                   <span className={`badge bg-white text-black`}>4</span>
                 </button>
               </div>
+                </>
+              ):null}
+              
               <div className="col-lg-0 col-md-2  col-sm-3 col-4">
                 <button
 
@@ -333,7 +347,10 @@ const Maintenance = () => {
                 </button>
               </div>
 
-
+              { user?.is_staff || user?.is_driver ? (
+                <>
+                </>
+              ):null}
               <div className="col-lg-0 col-md-2  col-4 ">
                 <button
                   onClick={() => handleFilterStatus("ongoing")}
