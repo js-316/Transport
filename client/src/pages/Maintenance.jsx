@@ -49,7 +49,6 @@ const Maintenance = () => {
 
  
   const handleDeleteMaintenance = async (id) => {
-    setAppError(null);
     try {
       const result = await Swal.fire({
         title: "Are you sure?",
@@ -86,64 +85,54 @@ const Maintenance = () => {
     }
   };
 
-  const handleFilterStatus = (status) => {
-    setSelectedStatus(status);
-  };
+  
+  
   const filteredData = maintenancesArray?.filter((maintenance) => {
     const fleet = maintenance.fleet.number_plate.toLowerCase();
     const cost = maintenance.cost;
     const description = maintenance.description.toLowerCase();
     const date = maintenance.date.toLowerCase();
     const status = maintenance.status.toLowerCase();
+    
     const search = searchQuery.toLowerCase();
-
-    console.log("User is engineer",user?.is_engineer)
-    console.log("Assigned engineer ID",maintenance.assignedEngineer)
-    console.log("user ID",user?.user_id)
-    if (selectedStatus !== "All") {
-      if (search) {
-        return (
-          (startDate === null || startDate <= date) &&
-          (endDate === null || date <= endDate) &&
-          (fleet.includes(search) ||
-            (cost && cost.toString().includes(search)) ||
-            description.includes(search) ||
-            status.includes(search) ||
-            (date && date.toString().includes(search))) &&
-          status === selectedStatus &&
-          (user?.is_engineer ? maintenance.assignedEngineer === user?.user_id : true)
-        );
-      } else {
-        return (
-          (startDate === null || startDate <= date) &&
-          (endDate === null || date <= endDate) &&
-          status === selectedStatus &&
-          (user?.is_engineer ? maintenance.assignedEngineer === user?.id : true)
-        );
-      }
+    
+    if (user?.is_engineer) {
+      return (
+        (fleet.includes(search) ||
+          (cost && cost.toString().includes(search)) ||
+          description.includes(search) ||
+          status.includes(search) ||
+          (date && date.toString().includes(search))) &&
+        maintenance.status === "Assigned" &&
+        maintenance.assigned_engineer.id === user.user_id &&
+        (selectedStatus === "All" || maintenance.status === selectedStatus.toLowerCase()) &&
+        (startDate === null || startDate <= maintenance.date) &&
+        (endDate === null || maintenance.date <= endDate)
+      );
+    } else if (user?.is_staff) {
+      return (
+        (fleet.includes(search) ||
+          (cost && cost.toString().includes(search)) ||
+          description.includes(search) ||
+          status.includes(search) ||
+          (date && date.toString().includes(search))) &&
+        (selectedStatus === "All" || maintenance.status === selectedStatus.toLowerCase()) &&
+        (startDate === null || startDate <= maintenance.date) &&
+        (endDate === null || maintenance.date <= endDate)
+      );
     } else {
-      if (search) {
-        return (
-          (startDate === null || startDate <= date) &&
-          (endDate === null || date <= endDate) &&
-          (fleet.includes(search) ||
-            (cost && cost.toString().includes(search)) ||
-            description.includes(search) ||
-            status.includes(search) ||
-            (date && date.toString().includes(search)) &&
-            (user?.is_engineer ? maintenance.assignedEngineer === user?.id : true)
-          )
-        );
-      } else {
-        return (
-          (startDate === null || startDate <= date) &&
-          (endDate === null || date <= endDate) &&
-          (user?.is_engineer ? maintenance.assignedEngineer === user?.id : true)
-        );
-      }
+      return (
+        (fleet.includes(search) ||
+          (cost && cost.toString().includes(search)) ||
+          description.includes(search) ||
+          status.includes(search) ||
+          (date && date.toString().includes(search))) &&
+        (selectedStatus === "All" || maintenance.status === selectedStatus.toLowerCase()) &&
+        (startDate === null || startDate <= maintenance.date) &&
+        (endDate === null || maintenance.date <= endDate)
+      );
     }
   });
-
   const indexOfLastData = currentPage * dataPerPage;
   const indexOfFirstData = indexOfLastData - dataPerPage;
   const currentData = filteredData?.slice(indexOfFirstData, indexOfLastData);
@@ -153,7 +142,7 @@ const Maintenance = () => {
     setDataPerPage(parseInt(e.target.value));
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = () => { 
     const doc = new jsPDF();
 
     // Add logo
@@ -225,7 +214,10 @@ const Maintenance = () => {
       return { color: "red", fontWeight: "bold" };
     }
   };
-
+  const handleFilterStatus = (status) => {
+    setSelectedStatus(status);
+  };
+  
   return (
     <Layout>
       <div className="content-header">

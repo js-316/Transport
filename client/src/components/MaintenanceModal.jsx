@@ -37,7 +37,7 @@ function MaintenanceModal({ id, title }) {
 
   const [assignRepair, { isLoading: isAssigning }] = useAssignRepairMutation();
 
-  const [assignedEngineer, setAssignedEngineer] = useState("")
+  const [assignedEngineer, setAssignedEngineer] = useState(null)
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -69,7 +69,7 @@ function MaintenanceModal({ id, title }) {
       console.error("Error assigning repair:", error);
     }
   };
-  
+
 
   return (
 
@@ -120,16 +120,15 @@ function MaintenanceModal({ id, title }) {
                   <th>Assign Engineer</th>
                   <td>
                     <select
-                      value={assignedEngineer}
+                      value={assignedEngineer?.id}
                       onChange={(e) => {
                         setAssignedEngineer(e.target.value)
                         const selectedEngineer = usersArray.find((user) => user.id === e.target.value);
                         setAssignedEngineer(selectedEngineer.id);
                       }}
                     >
-
                       <option value="">Select Engineer</option>
-                      {usersArray.map((user) => (
+                      {usersArray?.map((user) => (
                         <option key={user.id} value={user.id}>
                           {user.username}
                         </option>
@@ -167,6 +166,8 @@ function MaintenanceModal({ id, title }) {
                       className="btn btn-sm rounded btn-primary mx-1"
                     >
                       <FontAwesomeIcon icon={faThumbsUp} title="Assign To" />
+                      
+                      {isAssigning ? "Assigning To..." : "Assign To"}
                     </button>
                   </td>
                 </tr>
@@ -185,3 +186,9 @@ function MaintenanceModal({ id, title }) {
 }
 
 export default MaintenanceModal;
+// value={assignedEngineer}
+// onChange={(e) => {
+// setAssignedEngineer(e.target.value)
+// const selectedEngineer = usersArray.find((user) => user.id === e.target.value);
+// setAssignedEngineer(selectedEngineer.id);
+// }}

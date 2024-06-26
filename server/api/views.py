@@ -284,13 +284,23 @@ class MaintenanceCreateView(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
+
+        
+        
+        # assigned_engineer_id = data.get('assigned_engineer', None)
+        # if assigned_engineer_id:
+        #     assigned_engineer = User.objects.get(id=assigned_engineer_id)
+        # else:
+        #     assigned_engineer = None
+
         
         maintenance = Maintenance.objects.create(
             fleet=Vehichle.objects.get(id=data['vehichle']),
             date=data['date'],
             description=data['description'],
             cost=data['cost'],
-            
+            assigned_engineer = request.assigned_engineer
+            # assigned_engineer=User.objects.get(id=data['assigned_engineer']),
         )
         return Response({
             'maintenance': MaintenanceSerializer(maintenance, context=self.get_serializer_context()).data,
@@ -313,6 +323,21 @@ class MaintenanceListView(generics.ListAPIView):
             return Maintenance.objects.filter(assigned_engineer=user)
         else:
             return Maintenance.objects.all()
+        
+class AssignEngineerView(generics.UpdateAPIView):
+    queryset = Maintenance.objects.all()
+    serializer_class = MaintenanceSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def update(self, request, *args, **kwargs):
+        maintenance = self.get_object()
+        assigned_engineer_id = request.data.get('assigned_engineer_id')
+        engineer = User.objects.get(id=assigned_engineer_id)
+        maintenance.assigned_engineer = engineer
+        maintenance.status = 'Assigned'
+        maintenance.save()
+        return Response({'message': 'Engineer assigned successfully'})
+    
 
 class SearchVehichle(generics.ListAPIView):
     serializer_class = VehichleSerializer
