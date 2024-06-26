@@ -16,6 +16,8 @@ import ButtonBudges from "../components/ButtonBudges";
 import { statuses } from "../data/chartData";
 import { useGetJobcardQuery } from "../features/jobcard/jobcardApiSlice";
 import { useGetVehichlesQuery } from "../features/vehichle/vehicleApiSlice";
+import JobcardModal from "../components/JobcardModal";
+
 
 const JobCard = () => {
   //const { isLoading, data, refetch } = useGetMaintenanceQuery();
@@ -236,9 +238,7 @@ const JobCard = () => {
       <div className="content-header">
         <h2 className="content-title">Job Cards</h2>
         <div>
-          <Link to="add" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Create Job Card
-          </Link>
+          
 
           {/* <button onClick={exportToPDF} className="btn btn-success mx-2">
             Export to PDF
@@ -366,6 +366,7 @@ const JobCard = () => {
                   <th>Date</th>
                   <th>Parts Needed</th>
                   <th>Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -397,6 +398,9 @@ const JobCard = () => {
                         <td>{new Date(d.date_of_jobcard).toDateString()}</td>
                         <td>{d.parts_needed}</td>
                         <td style={getStatusStyle(d.status)}>{d.status}</td>
+                        <td>
+                          <JobcardModal />
+                        </td>
                       </tr>
                     ))}
               </tbody>

@@ -852,7 +852,9 @@ _submenu {
   border: none;
   background-color: #088178;
   border-radius: 4px;
+  
 }
+
 
 .btn.btn-primary i {
   color: #fff !important;
@@ -4622,7 +4624,9 @@ body.dark .btn-light {
 body.dark .itemlist:hover {
   background-color: rgba(88, 151, 251, 0.075);
 }
-
+.btn-purple{
+  background-color:orchid;
+}
 /* body.dark .table-hover > tbody > tr:hover {
   --bs-table-accent-bg: rgba(88, 151, 251, 0.075);
   color: var(--bs-table-hover-color);
