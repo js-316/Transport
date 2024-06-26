@@ -56,7 +56,8 @@ const EditVehichle = () => {
         <div className="content-header">
           <div>
             <Link to="/dashboard/vehichles">
-            <FontAwesomeIcon icon={faArrowCircleLeft} />Vehicles
+              <FontAwesomeIcon icon={faArrowCircleLeft} />
+              Vehicles
             </Link>
             <h2 className="content-title">Edit Vehicle</h2>
           </div>
@@ -78,7 +79,11 @@ const EditVehichle = () => {
                   <div className="mb-4">
                     <label className="form-label">Vehicle Number Plate</label>
                     <div className="row-gx-2">
-                      <input className="form-control" defaultValue={vehichle.number_plate} {...register("number_plate")}></input>
+                      <input
+                        className="form-control"
+                        defaultValue={vehichle.number_plate}
+                        {...register("number_plate")}
+                      ></input>
                     </div>
                   </div>
                 </div>
@@ -86,18 +91,14 @@ const EditVehichle = () => {
                   <div className="mb-4">
                     <label className="form-label">Driver</label>
                     <div className="row-gx-2">
-                      <select
-                          className="form-control"
-                          {...register("driver")}
-                          
-                        >
-                          <option>{ vehichle.driver.name}</option>
-                          {drivers?.map((d, index) => (
-                            <option key={index} value={d.id}>
-                              {d.name}
-                            </option>
-                          ))}
-                        </select>
+                      <select className="form-control" {...register("driver")}>
+                        <option>{vehichle.driver.name}</option>
+                        {drivers?.map((d, index) => (
+                          <option key={index} value={d.id}>
+                            {d.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -105,7 +106,12 @@ const EditVehichle = () => {
                   <div className="mb-4">
                     <label className="form-label">Mileage</label>
                     <div className="row-gx-2">
-                      <input type="number" className="form-control" defaultValue={vehichle.mileage} {...register("mileage")}></input>
+                      <input
+                        type="number"
+                        className="form-control"
+                        defaultValue={vehichle.mileage}
+                        {...register("mileage")}
+                      ></input>
                     </div>
                   </div>
                 </div>
@@ -113,7 +119,12 @@ const EditVehichle = () => {
                   <div className="mb-4">
                     <label className="form-label">Vehichle Type</label>
                     <div className="row-gx-2">
-                    <input type="text" className="form-control" defaultValue={vehichle.vehichle_type} {...register("vehichle_type")}></input>
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={vehichle.vehichle_type}
+                        {...register("vehichle_type")}
+                      ></input>
                     </div>
                   </div>
                 </div>
@@ -121,7 +132,12 @@ const EditVehichle = () => {
                   <div className="mb-4">
                     <label className="form-label">Manufacturer</label>
                     <div className="row-gx-2">
-                    <input type="text" className="form-control" defaultValue={vehichle.manufacturer} {...register("manufacturer")}></input>
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={vehichle.manufacturer}
+                        {...register("manufacturer")}
+                      ></input>
                     </div>
                   </div>
                 </div>
@@ -129,14 +145,39 @@ const EditVehichle = () => {
                   <div className="mb-4">
                     <label className="form-label">Date Of Purchase</label>
                     <div className="row-gx-2">
-                    <input type="date" className="form-control" defaultValue={vehichle.date_of_purchase} {...register("date_of_purchase")}></input>
+                      <input
+                        type="date"
+                        className="form-control"
+                        defaultValue={vehichle.date_of_purchase}
+                        {...register("date_of_purchase")}
+                      ></input>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-4 ">
+                  <div className="mb-4 align-items-end">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="termsCheck"
+                        {...register("terms")}
+                      />
+                      <label className="form-check-label" htmlFor="termsCheck">
+                        Active
+                      </label>
+                      {errors.terms && (
+                        <div className="invalid-feedback d-block">
+                          {errors.terms?.message}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
               {errors && <span>{errors.message}</span>}
               <button className="btn btn-primary" type="submit">
-                {isEditingVehichle  ? "Updating..." : "Update Vehicle"}
+                {isEditingVehichle ? "Updating..." : "Update Vehicle"}
               </button>
             </form>
           </div>
