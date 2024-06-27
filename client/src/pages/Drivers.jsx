@@ -14,6 +14,7 @@ import "jspdf-autotable";
 import jsPDF from "jspdf";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPencil, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
+import DriverModal from "../components/DriverModal";
 
 
 
@@ -287,9 +288,10 @@ const Drivers = () => {
                         <td
                           className="action-column text-center"
                         >
-                        <Link to={`view/${d.id}`} className="btn btn-sm rounded btn-blue mx-1">
+                        {/* <Link to={`view/${d.id}`} className="btn btn-sm rounded btn-blue mx-1">
                           <FontAwesomeIcon icon={faEye} title="View" icon-size="sm" />
-                        </Link>
+                        </Link> */}
+                          <DriverModal id={d.id} title = "Driver Details"/>
                           <Link
                             to={`edit/${d.id}`}
                             className="btn btn-sm rounded btn-brand mx-1"

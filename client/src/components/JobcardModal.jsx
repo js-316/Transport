@@ -1,206 +1,98 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faEye, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
-import {
-  useApproveRepairMutation,
-  useGetMaintenanceByIdQuery,
-  useGetMaintenanceQuery,
-  useCompletedRepairMutation,
-  useAssignRepairMutation,
-} from "../features/maintenance/maintenanceApiSlice";
-import { useGetVehichlesQuery } from "../features/vehichle/vehicleApiSlice";
-import logo from "../assets/soliton.png";
-import { useSelector } from "react-redux";
-import { selectUser } from "../features/auth/authSlice";
-import { useGetUsersQuery } from "../features/user/userApiSlice";
-import { Link } from "react-router-dom";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { useGetJobcardByIdQuery } from "../features/jobcard/jobcardApiSlice";
 
-
-function JobcardModal({ id, title }) {
-  const { data: maintenanceData, refetch } = useGetMaintenanceQuery();
-  const { data: repair } = useGetMaintenanceByIdQuery(id);
-
-  const user = useSelector(selectUser)
-
-  const { data: users } = useGetUsersQuery()
-
-  const { ids, entities } = users || {};
-  const usersArray = ids?.map((id) => entities[id]).filter((user) => user.is_engineer);
-
-  const { data: vehichle } = useGetVehichlesQuery();
-
-
+function JobcardModal({ id }) {
   const [show, setShow] = useState(false);
-  // const [approveRepair, { isLoading: isApproving }] = useApproveRepairMutation();
-  // const [CompleteRepair, { isLoading: isCompleteing }] = useCompletedRepairMutation();
-
-  const [assignRepair, { isLoading: isAssigning }] = useAssignRepairMutation();
-  const [completeRepair, { isLoading: isCompleteing }] = useCompletedRepairMutation()
-
-  const [assignedEngineer, setAssignedEngineer] = useState(null)
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const handleApprove = async (id) => {
-    try {
-      const result = await approveRepair(id).unwrap();
-      refetch();
-    } catch (error) {
-      console.error("Error approving repair:", error);
-    }
-  };
-
-  const handleComplete = async (id) => {
-    try {
-      const result = await completeRepair(id).unwrap();
-      refetch();
-    } catch (error) {
-      console.error("Error Completed repair:", error);
-    }
-  };
-
-
-  const handleAssign = async () => {
-    try {
-      console.log("Assigning repair to engineer:", assignedEngineer);
-      const result = await assignRepair({ id, engineerId: assignedEngineer }).unwrap();
-      console.log("Assign result:", result);
-    } catch (error) {
-      console.error("Error assigning repair:", error);
-    }
-  };
-
+  const { data: jobcard, isLoading: JobcardLoading } =
+    useGetJobcardByIdQuery(id);
 
   return (
-
     <>
       <button onClick={handleShow} className="btn btn-sm rounded btn-blue mx-1">
-        <FontAwesomeIcon icon={faEye} title="View" iconSize="sm" />
+        <FontAwesomeIcon icon={faEye} title="View" icon-size="sm" />
       </button>
 
-      <Modal show={show} onHide={handleClose} size="md">
+      <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
+          <Modal.Title>Job Card</Modal.Title>
+          <button className="btn btn-success mx-2 ml-4">Export to PDF</button>
         </Modal.Header>
         <Modal.Body>
-          {repair && (
-            <table className="table table-striped">
+          {jobcard && (
+            <table className="table table-striped table-bordered table-hover">
               <tbody>
                 <tr>
-                  <th style={{ fontWeight: "bold" }}>Number Plate</th>
-                  <td>{repair.fleet.number_plate}</td>
+                  <th>Machine Name</th>
+                  <td>{jobcard.machine_name}</td>
                 </tr>
                 <tr>
-                  <th style={{ fontWeight: "bold" }}>Driver</th>
-                  <td>{repair.driver}</td>
+                  <th>Operator</th>
+                  <td>{jobcard.jobcard_plate.driver.name}</td>
                 </tr>
                 <tr>
-                  <th style={{ fontWeight: "bold" }}>Description</th>
-                  <td>{repair.description}</td>
+                  <th>Issued By</th>
+                  <td>{jobcard.repair.assigned_engineer.username}</td>
                 </tr>
                 <tr>
-                  <th style={{ fontWeight: "bold" }}>Describe</th>
-                  <td>{repair.describe}</td>
+                  <th>Number Plate</th>
+                  <td>{jobcard.jobcard_plate.number_plate}</td>
                 </tr>
                 <tr>
-                  <th style={{ fontWeight: "bold" }}>Date</th>
-                  <td>{repair.date}</td>
+                  <th>Mileage</th>
+                  <td>{jobcard.jobcard_plate.mileage}</td>
                 </tr>
                 <tr>
-                  <th style={{ fontWeight: "bold" }}>Status</th>
-                  <td>{repair.status}</td>
+                  <th>Date Created</th>
+                  <td>{jobcard.date_of_jobcard}</td>
                 </tr>
                 <tr>
-                  <th style={{ fontWeight: "bold" }}>Logo</th>
-                  <td>
-                    <img src={logo} alt="Logo" className="logo-image" />
+                  <th>Needed Parts</th>
+                  <td>{}</td>
+                </tr>
+                <tr>
+                  <th>Remarks</th>
+                  <td>Urgent</td>
+                </tr>
+                <tr>
+                  <td colSpan={2}>
+                    <div className="d-flex justify-content-between ">
+                      <div>
+                        <input type="checkbox" className="mb-2" />
+                        <label htmlFor="check1" className="mr-4">
+                          C.T.O
+                        </label>
+                      </div>
+                      <div>
+                        <input type="checkbox" className="mb-2" />
+                        <label htmlFor="check1" className="mr-4">
+                          H.R
+                        </label>
+                      </div>
+                      <div>
+                        <input type="checkbox" id="" className="mb-2" />
+                        <label htmlFor="check1" className="mr-4"></label>
+                      </div>
+                      <div>
+                        <input type="checkbox" className="mb-2" />
+                        <label htmlFor="check1" className="mr-4">
+                          Label 1
+                        </label>
+                        <div></div>
+                        <input type="checkbox" className="mb-2" />
+                        <label htmlFor="check1" className="mr-4">
+                          Label 1
+                        </label>
+                      </div>
+                    </div>
                   </td>
                 </tr>
-                {user?.is_staff ?
-                  (
-                    <>
-                      <tr>
-                        <th>Assign Engineer</th>
-                        <td>
-                          <select
-                            value={assignedEngineer?.id}
-                            onChange={(e) => {
-                              setAssignedEngineer(e.target.value)
-                              const selectedEngineer = usersArray.find((user) => user.id === e.target.value);
-                              setAssignedEngineer(selectedEngineer.id);
-                            }}
-                          >
-                            <option value="">Select Engineer</option>
-                            {usersArray?.map((user) => (
-                              <option key={user.id} value={user.id}>
-                                {user.username}
-                              </option>
-                            ))}
-                          </select>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Assigned Engineer</th>
-                        <td>
-                          {assignedEngineer ? (
-                            <span>{assignedEngineer}</span>
-                          ) : (
-                            <span>No engineer assigned</span>
-                          )}
-                        </td>
-                      </tr>
-                    </>
-                  ) : null
-                }
-                {user?.is_staff || user?.is_engineer ? (
-                  <>
-                    <tr>
-                      <th>Actions</th>
-                      {user?.is_staff ? (
-                        <>
-                          <td>
-
-                            <button
-                              onClick={() => handleAssign(repair.id)}
-                              className="btn btn-sm rounded btn-primary mx-1"
-                            >
-                              <FontAwesomeIcon icon={faThumbsUp} title="Assign To" />
-
-                              {isCompleteing ? "Assigning To..." : "Assign To"}
-                            </button>
-                          </td>
-                        </>
-                      ) : null}
-                      {user?.is_engineer ? (
-                        <>
-
-                          <td>
-                            
-                              <div className="mb-2">
-                              <Link to="/dashboard/maintenance/add" className="btn btn-primary">
-                                <i className="material-icons md-plus"></i> Create Job Card
-                              </Link>
-                            
-                              </div>
-
-                            <button
-                              onClick={() => handleComplete(repair.id, assignedEngineer)}
-                              className="btn btn-sm rounded btn-primary mx-1"
-                            >
-                              <FontAwesomeIcon icon={faCheckCircle} title="Mark Completed" />
-
-                              {isCompleteing ? "Completing..." : "Repair Done"}
-                            </button>
-                          </td>
-                        </>
-                      ) : null}
-
-                    </tr>
-                  </>
-                ) : null}
-
               </tbody>
             </table>
           )}

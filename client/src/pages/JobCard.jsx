@@ -399,7 +399,7 @@ const JobCard = () => {
                         <td>{d.parts_needed}</td>
                         <td style={getStatusStyle(d.status)}>{d.status}</td>
                         <td>
-                          <JobcardModal />
+                          <JobcardModal id={d.id}/>
                         </td>
                       </tr>
                     ))}

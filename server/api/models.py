@@ -133,7 +133,6 @@ class Jobcard(models.Model, ExtraMixin):
     repair= models.ForeignKey('Maintenance', on_delete=models.CASCADE, related_name='repair',default=55)
     parts_needed = models.CharField(max_length=50)
     status = models.CharField(max_length=20, default="Pending")
-    
 
     def __str__(self):
         return self.status

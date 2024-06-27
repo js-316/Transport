@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "react-bootstrap/Modal";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
@@ -10,16 +10,16 @@ import { useGetFuelQuery } from "../features/fuel/fuelApiSlice";
 import { useGetMaintenanceQuery } from "../features/maintenance/maintenanceApiSlice";
 import logo from "../assets/soliton.png";
 
-function VehicleModal({ id, columns, title }) {
+function VehicleModal({ id, title }) {
   const [show, setShow] = useState(false);
 
-  console.log("vehicle id", id)
-  const { data: vehicle, isLoading: vehicleLoading } = useGetVehichleByIdQuery(id);
-  console.log("vehicle data", vehicle)
-  const { data: driver} = useGetDriversQuery()
-
-  const { data: maintenanceData } = useGetMaintenanceQuery()
-  const { data: fuelData } = useGetFuelQuery()
+  console.log("vehicle id", id);
+  const { data: vehicle, isLoading: vehicleLoading } =
+    useGetVehichleByIdQuery(id);
+  console.log("vehicle data", vehicle);
+  const { data: driver } = useGetDriversQuery();
+  const { data: maintenanceData } = useGetMaintenanceQuery();
+  const { data: fuelData } = useGetFuelQuery();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -52,13 +52,9 @@ function VehicleModal({ id, columns, title }) {
     console.log("fuelData is undefined");
   }
 
-
   return (
     <>
-      <button
-        onClick={handleShow}
-        className="btn btn-sm rounded btn-blue mx-1"
-      >
+      <button onClick={handleShow} className="btn btn-sm rounded btn-blue mx-1">
         <FontAwesomeIcon icon={faEye} title="View" icon-size="sm" />
       </button>
 
@@ -68,34 +64,53 @@ function VehicleModal({ id, columns, title }) {
         </Modal.Header>
         <Modal.Body>
           {vehicle && (
-            <table className="table striped bordered hover">
-              <thead className="table-dark">
-                <tr>
-                  {columns.map((column, index) => (
-                    <th key={index}>{column}</th>
-                  ))}
-                </tr>
-              </thead>
+            <table className="table table-striped table-bordered table-hover">
               <tbody>
                 <tr>
+                  <th>Number Plate</th>
                   <td>{vehicle.number_plate}</td>
+                </tr>
+                <tr>
+                  <th>Driver</th>
                   <td>{vehicle.driver.name}</td>
+                </tr>
+                <tr>
+                  <th>Manufacturer</th>
                   <td>{vehicle.manufacturer}</td>
+                </tr>
+                <tr>
+                  <th>Vehicle Type</th>
                   <td>{vehicle.vehichle_type}</td>
+                </tr>
+                <tr>
+                  <th>Fuel Type</th>
                   <td>{vehicle.fuel_type}</td>
+                </tr>
+                <tr>
+                  <th>Date of Purchase</th>
                   <td>{vehicle.date_of_purchase}</td>
+                </tr>
+                <tr>
+                  <th>Maintenance Costs</th>
                   <td>
-                          <Link to={`costs_view/${vehicle.id}`}>
-                            {costsPerVehicle[vehicle.number_plate] || 0}
-                          </Link>
-                        </td>
-                        <td>
-                          <Link to={`fuel_view/${vehicle.id}`}>
-                            {fuelPerVehicle[vehicle.number_plate] || 0}
-                          </Link>
-                        </td>
-                        <td><img src={logo} alt="Logo" className="logo-image" /></td>
-                  
+                    <Link to={`costs_view/${vehicle.id}`}>
+                      {costsPerVehicle[vehicle.number_plate] || 0}
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Fuel Amount</th>
+                  <td>
+                    <Link to={`fuel_view/${vehicle.id}`}>
+                      {fuelPerVehicle[vehicle.number_plate] || 0}
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Logo</th>
+                  <td>
+                    <img src={logo} alt="Logo" className="logo-image" />
+                  </td>
                 </tr>
               </tbody>
             </table>

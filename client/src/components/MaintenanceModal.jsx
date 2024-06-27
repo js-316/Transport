@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faEye, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheckCircle,
+  faEye,
+  faThumbsUp,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   useApproveRepairMutation,
   useGetMaintenanceByIdQuery,
@@ -17,29 +21,30 @@ import { selectUser } from "../features/auth/authSlice";
 import { useGetUsersQuery } from "../features/user/userApiSlice";
 import { Link } from "react-router-dom";
 
-
 function MaintenanceModal({ id, title }) {
   const { data: maintenanceData, refetch } = useGetMaintenanceQuery();
   const { data: repair } = useGetMaintenanceByIdQuery(id);
 
-  const user = useSelector(selectUser)
+  const user = useSelector(selectUser);
 
-  const { data: users } = useGetUsersQuery()
-
+  const { data: users } = useGetUsersQuery();
+  console.log(users);
   const { ids, entities } = users || {};
-  const usersArray = ids?.map((id) => entities[id]).filter((user) => user.is_engineer);
+  const usersArray = ids
+    ?.map((id) => entities[id])
+    .filter((user) => user.is_engineer);
 
   const { data: vehichle } = useGetVehichlesQuery();
-
 
   const [show, setShow] = useState(false);
   // const [approveRepair, { isLoading: isApproving }] = useApproveRepairMutation();
   // const [CompleteRepair, { isLoading: isCompleteing }] = useCompletedRepairMutation();
 
   const [assignRepair, { isLoading: isAssigning }] = useAssignRepairMutation();
-  const [completeRepair, { isLoading: isCompleteing }] = useCompletedRepairMutation()
+  const [completeRepair, { isLoading: isCompleteing }] =
+    useCompletedRepairMutation();
 
-  const [assignedEngineer, setAssignedEngineer] = useState(null)
+  const [assignedEngineer, setAssignedEngineer] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -61,20 +66,20 @@ function MaintenanceModal({ id, title }) {
     }
   };
 
-
   const handleAssign = async () => {
     try {
       console.log("Assigning repair to engineer:", assignedEngineer);
-      const result = await assignRepair({ id, engineerId: assignedEngineer }).unwrap();
+      const result = await assignRepair({
+        id,
+        engineerId: assignedEngineer,
+      }).unwrap();
       console.log("Assign result:", result);
     } catch (error) {
       console.error("Error assigning repair:", error);
     }
   };
 
-
   return (
-
     <>
       <button onClick={handleShow} className="btn btn-sm rounded btn-blue mx-1">
         <FontAwesomeIcon icon={faEye} title="View" iconSize="sm" />
@@ -118,42 +123,42 @@ function MaintenanceModal({ id, title }) {
                     <img src={logo} alt="Logo" className="logo-image" />
                   </td>
                 </tr>
-                {user?.is_staff ?
-                  (
-                    <>
-                      <tr>
-                        <th>Assign Engineer</th>
-                        <td>
-                          <select
-                            value={assignedEngineer?.id}
-                            onChange={(e) => {
-                              setAssignedEngineer(e.target.value)
-                              const selectedEngineer = usersArray.find((user) => user.id === e.target.value);
-                              setAssignedEngineer(selectedEngineer.id);
-                            }}
-                          >
-                            <option value="">Select Engineer</option>
-                            {usersArray?.map((user) => (
-                              <option key={user.id} value={user.id}>
-                                {user.username}
-                              </option>
-                            ))}
-                          </select>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Assigned Engineer</th>
-                        <td>
-                          {assignedEngineer ? (
-                            <span>{assignedEngineer}</span>
-                          ) : (
-                            <span>No engineer assigned</span>
-                          )}
-                        </td>
-                      </tr>
-                    </>
-                  ) : null
-                }
+                {user?.is_staff ? (
+                  <>
+                    <tr>
+                      <th>Assign Engineer</th>
+                      <td>
+                        <select
+                          value={assignedEngineer?.id}
+                          onChange={(e) => {
+                            setAssignedEngineer(e.target.value);
+                            const selectedEngineer = usersArray.find(
+                              (user) => user.id === e.target.value
+                            );
+                            setAssignedEngineer(selectedEngineer.id);
+                          }}
+                        >
+                          <option value="">Select Engineer</option>
+                          {usersArray?.map((user) => (
+                            <option key={user.id} value={user.id}>
+                              {user.username}
+                            </option>
+                          ))}
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Assigned Engineer</th>
+                      <td>
+                        {assignedEngineer ? (
+                          <span>{assignedEngineer}</span>
+                        ) : (
+                          <span>No engineer assigned</span>
+                        )}
+                      </td>
+                    </tr>
+                  </>
+                ) : null}
                 {user?.is_staff || user?.is_engineer ? (
                   <>
                     <tr>
@@ -161,12 +166,14 @@ function MaintenanceModal({ id, title }) {
                       {user?.is_staff ? (
                         <>
                           <td>
-
                             <button
                               onClick={() => handleAssign(repair.id)}
                               className="btn btn-sm rounded btn-primary mx-1"
                             >
-                              <FontAwesomeIcon icon={faThumbsUp} title="Assign To" />
+                              <FontAwesomeIcon
+                                icon={faThumbsUp}
+                                title="Assign To"
+                              />
 
                               {isCompleteing ? "Assigning To..." : "Assign To"}
                             </button>
@@ -175,32 +182,36 @@ function MaintenanceModal({ id, title }) {
                       ) : null}
                       {user?.is_engineer ? (
                         <>
-
                           <td>
-                            
-                              <div className="mb-2">
-                              <Link to="/dashboard/maintenance/add" className="btn btn-primary">
-                                <i className="material-icons md-plus"></i> Create Job Card
+                            <div className="mb-2">
+                              <Link
+                                to="/dashboard/maintenance/job_card/add"
+                                className="btn btn-primary"
+                              >
+                                <i className="material-icons md-plus"></i>{" "}
+                                Create Job Card
                               </Link>
-                            
-                              </div>
+                            </div>
 
                             <button
-                              onClick={() => handleComplete(repair.id, assignedEngineer)}
+                              onClick={() =>
+                                handleComplete(repair.id, assignedEngineer)
+                              }
                               className="btn btn-sm rounded btn-primary mx-1"
                             >
-                              <FontAwesomeIcon icon={faCheckCircle} title="Mark Completed" />
+                              <FontAwesomeIcon
+                                icon={faCheckCircle}
+                                title="Mark Completed"
+                              />
 
                               {isCompleteing ? "Completing..." : "Repair Done"}
                             </button>
                           </td>
                         </>
                       ) : null}
-
                     </tr>
                   </>
                 ) : null}
-
               </tbody>
             </table>
           )}

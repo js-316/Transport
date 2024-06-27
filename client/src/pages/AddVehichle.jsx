@@ -103,16 +103,20 @@ const AddVehichle = () => {
                   </div>
                   <div className="col-lg-4">
                     <div className="mb-4">
-                      <label className="form-label">Vehichle Type</label>
+                      <label className="form-label">Vehicle Type</label>
                       <div className="row gx-2">
-                        <input
-                          placeholder="Pickup"
-                          type="text"
+                        <select
                           className={`form-control ${
                             errors.vehichle_type ? "is-invalid" : ""
                           }`}
                           {...register("vehichle_type")}
-                        />
+                        >
+                          <option value="">Select Vehicle Type</option>
+                          <option value="Motor Vehicle">Motor Vehicle</option>
+                          <option value="Motorcycle">Motorcycle</option>
+                          <option value="Truck">Truck</option>
+                          <option value="Machinery">Machinery</option>
+                        </select>
                         {errors.vehichle_type && (
                           <div className="invalid-feedback">
                             {errors.vehichle_type?.message}
