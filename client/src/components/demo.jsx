@@ -7,14 +7,11 @@ import { useGetJobcardByIdQuery } from "../features/jobcard/jobcardApiSlice";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import logo from "../assets/soliton.png";
-import { selectUser } from "../features/auth/authSlice";
-import { useSelector } from "react-redux";
 
 function JobcardModal({ id }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const user = useSelector(selectUser);
 
   const { data: jobcard, isLoading: JobcardLoading } =
     useGetJobcardByIdQuery(id);
@@ -33,30 +30,6 @@ function JobcardModal({ id }) {
     });
   };
 
-  const isDisabledProcurement =
-    user?.is_chief_executive_officer ||
-    user?.is_staff ||
-    user?.is_driver ||
-    user?.is_engineer ||
-    user?.is_human_resource_manager ||
-    user?.is_chief_transport_officer;
-
-    const isDisabledHumanResourceApproval =
-      user?.is_chief_executive_officer ||
-      user?.is_staff ||
-      user?.is_driver ||
-      user?.is_engineer ||
-      user?.is_procurement_manager ||
-      user?.is_chief_transport_officer;
-
-      const isDisabledCTOApproval =
-        user?.is_chief_executive_officer ||
-        user?.is_staff ||
-        user?.is_driver ||
-        user?.is_engineer ||
-        user?.is_procurement_manager ||
-        user?.is_human_resource_manager;
-
   return (
     <>
       <button onClick={handleShow} className="btn btn-sm rounded btn-blue mx-1">
@@ -66,14 +39,32 @@ function JobcardModal({ id }) {
       <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
           <Modal.Title>Job Card</Modal.Title>
-          <button
-            className="btn btn-success mx-2 ml-4 print"
-            onClick={exportToPDF}
-          >
+          <button className="btn btn-success mx-2 ml-4" onClick={exportToPDF}>
             Export to PDF
           </button>
         </Modal.Header>
         <Modal.Body>
+          <style>
+            {`
+              @media print {
+                .approval-row,
+                .checkbox-row {
+                  display: none;
+                }
+              }
+              .approval-row {
+                background-color: #333;
+                color: #fff;
+                text-align: center;
+              }
+              .checkbox-row {
+                padding: 10px;
+              }
+              .checkbox-row label {
+                margin-right: 10px;
+              }
+            `}
+          </style>
           {jobcard && (
             <div
               id="jobcard-content"
@@ -151,7 +142,7 @@ function JobcardModal({ id }) {
                       style={{ border: "1px solid #000", padding: "5px" }}
                     >
                       <div>WORK TO BE DONE:</div>
-                      <div>{jobcard.repair.description || "N/A"}</div>
+                      <div>{"N/A" || "N/A"}</div>
                     </td>
                   </tr>
                   <tr>
@@ -181,58 +172,58 @@ function JobcardModal({ id }) {
                       <div>
                         Name:{" "}
                         {jobcard.repair.assigned_engineer.username || "N/A"}{" "}
+                        Sign: ______ Date: {"Date" || "N/A"}
                       </div>
                     </td>
                   </tr>
-
-                  <tr
-                    className="approval-row"
-                    style={{
-                      backgroundColor: "#333",
-                      color: "#fff",
-                      textAlign: "center",
-                    }}
-                  >
+                  <tr>
+                    <td
+                      colSpan="4"
+                      style={{ border: "1px solid #000", padding: "5px" }}
+                    >
+                      <div>CHECKED BY (TRANSPORT SUPERVISOR):</div>
+                      <div>
+                        Name:
+                        {jobcard.repair.assigned_engineer.username || "N/A"}{" "}
+                        Sign: ______ Date: {"Date" || "N/A"}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      colSpan="4"
+                      style={{ border: "1px solid #000", padding: "5px" }}
+                    >
+                      <div>AUTHORIZED BY (TRANSPORT TEAM LEADER):</div>
+                      <div>
+                        Name:
+                        {jobcard.repair.assigned_engineer.username || "N/A"}{" "}
+                        Sign: ______ Date: {"Date" || "N/A"}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr className="approval-row">
                     <td colSpan="4" style={{ padding: "10px" }}>
-                      APPROVALS
+                      APPROVAL
                     </td>
                   </tr>
                   <tr className="checkbox-row">
                     <td colSpan="4" style={{ padding: "10px" }}>
-                      <div className="d-flex justify-content-between">
-                        <label>
-                          <input
-                            type="checkbox"
-                            id="cto"
-                            disabled={isDisabledCTOApproval}
-                          />
-                          C.T.O
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            id="hr"
-                            disabled={isDisabledHumanResourceApproval}
-                          />{" "}
-                          H.R
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            id="PartlyProcured"
-                            disabled={isDisabledProcurement}
-                          />
-                          Partially Procured
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            id="FullyProcured"
-                            disabled={isDisabledProcurement}
-                          />
-                          Fully Procured
-                        </label>
-                      </div>
+                      <label>
+                        <input type="checkbox" /> Option 1
+                      </label>
+                      <label>
+                        <input type="checkbox" /> Option 2
+                      </label>
+                      <label>
+                        <input type="checkbox" /> Option 3
+                      </label>
+                      <label>
+                        <input type="checkbox" /> Option 4
+                      </label>
+                      <label>
+                        <input type="checkbox" /> Option 5
+                      </label>
                     </td>
                   </tr>
                 </tbody>
