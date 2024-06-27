@@ -23,8 +23,8 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", True)
         return self.create_user(email, password, **extra_fields)
     
-    def create_adminuser(self, email, password, **extra_fields):
-        extra_fields.setdefault("is_admin",True)
+    def create_chief_transport_officeruser(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_chief_transport_officer",True)
         return self.create_user(email, password, **extra_fields)
         
     def create_driveruser(self, email, password, **extra_fields):
@@ -35,6 +35,17 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_engineer",True)
         return self.create_user(email, password, **extra_fields)
     
+    def create_human_resource_manageruser(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_human_resource_manager",True)
+        return self.create_user(email, password, **extra_fields)
+    
+    def create_procurement_manageruser(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_procurement_manager",True)
+        return self.create_user(email, password, **extra_fields)
+    
+    def create_chief_executive_officer(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_chief_executive_officer",True)
+        return self.create_user(email, password, **extra_fields)
 
 class User(AbstractUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
@@ -43,9 +54,12 @@ class User(AbstractUser, PermissionsMixin):
 
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
+    is_chief_transport_officer = models.BooleanField(default=False)
     is_driver = models.BooleanField(default=False)
     is_engineer = models.BooleanField(default=False)
+    is_human_resource_manager = models.BooleanField(default=False)
+    is_procurement_manager = models.BooleanField(default=False)
+    is_chief_executive_officer = models.BooleanField(default=False)
 
     # groups = models.ManyToManyField(Group, related_name='users')
 
@@ -56,8 +70,8 @@ class User(AbstractUser, PermissionsMixin):
     
 
 # is_superuser: Superuser with all permissions
-# is_staff: Staff member with access to the Django admin site
-# is_admin: Custom admin role (not used by Django itself)
+# is_staff: Staff member with access to the Django chief_transport_officer site
+# is_chief_transport_officer: Custom chief_transport_officer role (not used by Django itself)
 # is_driver and is_engineer: Custom roles for drivers and engineers
 # groups: Association with one or more groups for permission assignment
 

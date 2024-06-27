@@ -74,10 +74,13 @@ class CustomAuthToken(ObtainAuthToken):
             'user_id': user.pk,
             'email': user.email,
             'is_superuser': user.is_superuser,
-            'is_admin' : user.is_admin,
+            'is_chief_transport_officer' : user.is_chief_transport_officer,
             'is_staff': user.is_staff,
             'is_driver': user.is_driver,
             'is_engineer': user.is_engineer,
+            'is_human_resource_manager': user.is_human_resource_manager,
+            'is_procurement_manager': user.is_procurement_manager,
+            'is-chief_executive-officer': user.is_chief_executive_officer,
             
             }
         })
