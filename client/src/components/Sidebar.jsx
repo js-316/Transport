@@ -13,7 +13,7 @@ const Sidebar = () => {
 
   const [menuLinks, setMenuLinks] = useState(
     [
-      user?.is_staff
+      user?.is_staff || user?.is_human_resource_manager
         ? {
             name: "Dashboard",
             path: "/dashboard",
@@ -83,7 +83,7 @@ const Sidebar = () => {
           },
         ].filter(Boolean),
       },
-      user?.is_staff || user?.is_engineer
+      user?.is_staff || user?.is_engineer || user?.is_human_resource_manager
         ? {
             name: "Job Cards",
             path: "/dashboard/maintenance/job_card",

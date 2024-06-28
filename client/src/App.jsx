@@ -78,7 +78,7 @@ function App() {
       path: "dashboard",
       element: <RequireAuth />,
       children: [
-        user?.is_staff ?
+        user?.is_staff ||user?.is_human_resource_manager ?
         {
           path: "",
           element: <Dashboard />,

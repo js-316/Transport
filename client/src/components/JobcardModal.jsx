@@ -35,7 +35,6 @@ function JobcardModal({ id }) {
 
   const isDisabledProcurement =
     user?.is_chief_executive_officer ||
-    user?.is_staff ||
     user?.is_driver ||
     user?.is_engineer ||
     user?.is_human_resource_manager ||
@@ -43,7 +42,6 @@ function JobcardModal({ id }) {
 
     const isDisabledHumanResourceApproval =
       user?.is_chief_executive_officer ||
-      user?.is_staff ||
       user?.is_driver ||
       user?.is_engineer ||
       user?.is_procurement_manager ||
@@ -51,7 +49,6 @@ function JobcardModal({ id }) {
 
       const isDisabledCTOApproval =
         user?.is_chief_executive_officer ||
-        user?.is_staff ||
         user?.is_driver ||
         user?.is_engineer ||
         user?.is_procurement_manager ||
