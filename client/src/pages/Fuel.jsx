@@ -41,6 +41,7 @@ const Fuel = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const uploadRef = useRef(null);
+  
 
   const [selectedStatus, setSelectedStatus] = useState("All");
 
@@ -132,62 +133,8 @@ const Fuel = () => {
 
 
   
-  
-  // const filteredData = fuelArray?.filter((fuel) => {
-  //   const fuel_type = fuel.fuel_type.toLowerCase();
-  //   const fuel_plate = fuel.fuel_plate.number_plate.toLowerCase();
-  //   const mileage = fuel.mileage;
-  //   const amount = fuel.amount;
-  //   const date_of_fueling = fuel.date_of_fueling.toLowerCase();
-  //   const status = fuel.status.toLowerCase();
-  //   const search = searchQuery.toLowerCase();
-
-  
-  
-  
-  //   if (selectedStatus !== "All") {
-  //     if (search) {
-  //       return (
-  //         (startDate === null || startDate <= date_of_fueling) &&
-  //         (endDate === null || date_of_fueling <= endDate) &&
-  //         (fuel_type.includes(search) ||
-  //           fuel_plate.includes(search) ||
-  //           (mileage && mileage.toString().includes(search)) ||
-  //           (amount && amount.toString().includes(search)) ||
-  //           (date_of_fueling && date_of_fueling.toString().includes(search)) ||
-  //           status.includes(search)) &&
-  //         status === selectedStatus
-  //       );
-  //     } else {
-  //       return (
-  //         (startDate === null || startDate <= date_of_fueling) &&
-  //         (endDate === null || date_of_fueling <= endDate) &&
-  //         status === selectedStatus
-  //       );
-  //     }
-  //   } else {
-  //     if (search) {
-  //       return (
-  //         (startDate === null || startDate <= date_of_fueling) &&
-  //         (endDate === null || date_of_fueling <= endDate) &&
-  //         (fuel_type.includes(search) ||
-  //           fuel_plate.includes(search) ||
-  //           (mileage && mileage.toString().includes(search)) ||
-  //           (amount && amount.toString().includes(search)) ||
-  //           (date_of_fueling && date_of_fueling.toString().includes(search)) ||
-  //           status.includes(search))
-  //       );
-  //     } else {
-  //       return (
-  //         (startDate === null || startDate <= date_of_fueling) &&
-  //         (endDate === null || date_of_fueling <= endDate)
-  //       );
-  //     }
-  //   }
-  // });
   const userData = JSON.parse(localStorage.getItem('user'));
-  // // console.log('User data:', userData);
-  // // console.log('Fuel array:', fuelArray);
+  
 
   const filteredData = fuelArray?.filter((fuel) => {
     //console.log('Fuel user:', fuel.user.id, 'Current user:', userData.user_id);

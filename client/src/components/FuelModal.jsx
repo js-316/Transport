@@ -80,12 +80,13 @@ function FuelModal({ id, columns, title }) {
                   <td>{fuel.fuel_plate.number_plate}</td>
                 </tr>
                 <tr>
-                  <th>Username</th>
+                  <th>Driver Requesting Fuel</th>
                   <td>{fuel.user.username}</td>
                 </tr>
                 <tr>
                   <th>Fuel Station</th>
-                  <td>{fuel.fuel_station}</td>
+                  {/* <td>{fuel.fuel_station.supplier_name} {fuel.fuel_station.loading_point}</td> */}
+                  
                 </tr>
                 <tr>
                   <th>Fuel Type</th>

@@ -35,9 +35,10 @@ const driverSchema = yup.object().shape({
 });
 
 const maintenanceSchema = yup.object().shape({
-  date: yup.string().required("Date is required"),
+  //date: yup.string().required("Date is required"),
   description: yup.string().required("Description is required"),
-  cost: yup.number().required("Cost is required").min(1, "Cost must be greater than 0"),
+  more_information: yup.string().required("More information is required"),
+  // cost: yup.number().required("Cost is required").min(1, "Cost must be greater than 0"),
   fleet: yup.string().required("Vehicle is required"),
 });
 

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Vehichle, Driver, Maintenance, User, Fuel, Engineer 
+# from .models import Station
 from .models import Jobcard
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -30,16 +31,24 @@ class VehichleSerializer(serializers.ModelSerializer):
 class MaintenanceSerializer(serializers.ModelSerializer):
 
     fleet = VehichleSerializer(read_only=True)
+    user = UserSerializer(read_only = True)
     assigned_engineer = UserSerializer()
     
     class Meta:
         model = Maintenance
         fields = '__all__'
 
+# class StationSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#         model = Station
+#         fields = '__all__'
+
 class FuelSerializer(serializers.ModelSerializer):
 
     fuel_plate = VehichleSerializer(read_only = True)
     user = UserSerializer(read_only = True)
+    # fuel_station = StationSerializer(read_only = True)
 
     class Meta:
         model = Fuel
@@ -58,3 +67,4 @@ class JobcardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jobcard
         fields = '__all__'
+

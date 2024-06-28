@@ -89,20 +89,20 @@ function MaintenanceModal({ id, title }) {
             <table className="table table-striped">
               <tbody>
                 <tr>
-                  <th style={{ fontWeight: "bold" }}>Number Plate</th>
+                  <th style={{ fontWeight: "bold" }}>Registration Number</th>
                   <td>{repair.fleet.number_plate}</td>
                 </tr>
                 <tr>
-                  <th style={{ fontWeight: "bold" }}>Driver</th>
-                  <td>{repair.driver}</td>
+                  <th style={{ fontWeight: "bold" }}>Driver Requesting Repair</th>
+                  <td>{repair.user.username}</td>
                 </tr>
                 <tr>
-                  <th style={{ fontWeight: "bold" }}>Description</th>
+                  <th style={{ fontWeight: "bold" }}>Repair Request</th>
                   <td>{repair.description}</td>
                 </tr>
                 <tr>
-                  <th style={{ fontWeight: "bold" }}>Describe</th>
-                  <td>{repair.describe}</td>
+                  <th style={{ fontWeight: "bold" }}>More Information</th>
+                  <td>{repair.more_information}</td>
                 </tr>
                 <tr>
                   <th style={{ fontWeight: "bold" }}>Date</th>

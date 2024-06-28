@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link} from "react-router-dom";
 import { fuelSchema } from "../util/validations";
@@ -11,6 +11,8 @@ import { useGetVehichlesQuery } from "../features/vehichle/vehicleApiSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { selectUser } from "../features/auth/authSlice";
+import { useGetUsersQuery } from "../features/user/userApiSlice";
+import { useGetFuelstationsQuery } from "../features/fuelstation/fuelstationApiSlice";
 
 
 const AddFuel = () => {
@@ -18,6 +20,17 @@ const AddFuel = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [appError, setAppError] = useState(null);
+  const { data: users } = useGetUsersQuery()
+  const { ids: userIds, entities: userEntities } = users || {};
+  const usersArray = userIds?.map((id) => userEntities[id]).filter((user) => user.is_driver);
+
+  const [curentDriver, setCurrentDriver] = useState(null)
+
+  const { data: fuelstationsData} = useGetFuelstationsQuery()
+  const { ids:fuelstationIds, entities:fuelstationsEntities } = fuelstationsData || {}
+  const fuelstationsArrays = fuelstationIds?.map((id) => fuelstationsEntities[id])
+  
+
   // Initialize the current date
   const [currentDate] = useState(new Date().toISOString().split("T")[0]);
 
@@ -33,6 +46,11 @@ const AddFuel = () => {
 
   const vehichlesArray = ids?.map((id) => entities[id]);
 
+  // useEffect(() => {
+  //   const driverId = user?.id;
+  //   setCurrentDriver(driverId);
+  // }, [user]);
+
   const handleAddFuel = async (data) => {
     setAppError(null);
     try {
@@ -42,8 +60,11 @@ const AddFuel = () => {
         date_of_fueling: data.date_of_fueling,
         fuel_type: data.fuel_type,
         mileage: data.mileage,
+        // fuel_station: data.fuel_station ,
+        // location: data.location,
         project: data.project,
-        // user: data.user,
+        user: data.user,
+        
       }).unwrap();
       if (res.fuel) {
         navigate("/dashboard/fuel");
@@ -125,20 +146,20 @@ const AddFuel = () => {
                             <select
                               placeholder="Select Driver"
                               className={`form-control ${
-                                errors.driver ? "is-invalid" : ""
+                                errors.user ? "is-invalid" : ""
                               }`}
-                              {...register("driver")}
+                              {...register("user")}
                             >
                               <option>Select Driver</option>
-                              {vehichlesArray?.map((d, index) => (
-                                <option key={index} value={d.id}>
-                                  {d.number_plate}
+                              {usersArray?.map((user, index) => (
+                                <option key={index} value={user.id}>
+                                  {user.username}
                                 </option>
                               ))}
                             </select>
-                            {errors.driver && (
+                            {errors.user && (
                               <div className="invalid-feedback">
-                                {errors.driver?.message}
+                                {errors.user?.message}
                               </div>
                             )}
                           </div>
@@ -146,7 +167,7 @@ const AddFuel = () => {
                       </div>
                     </>
                   ) : null}
-                  <div className="col-lg-4">
+                  {/* <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Fuel Station</label>
                       <div className="row gx-2">
@@ -158,20 +179,46 @@ const AddFuel = () => {
                           {...register("fuel_station")}
                         >
                           <option>Select Fuel Station</option>
-                          {vehichlesArray?.map((d, index) => (
+                          {fuelstationsArrays?.map((d, index) => (
                             <option key={index} value={d.id}>
-                              {d.number_plate}
+                              {d.supplier_name}
                             </option>
                           ))}
                         </select>
                         {errors.fuel_station && (
                           <div className="invalid-feedback">
-                            {errors.fuel_plate?.message}
+                            {errors.fuel_station?.message}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
+                  <div className="col-lg-4">
+                    <div className="mb-4">
+                      <label className="form-label">Loading Point</label>
+                      <div className="row gx-2">
+                        <select
+                          placeholder="Location"
+                          className={`form-control ${
+                            errors.location ? "is-invalid" : ""
+                          }`}
+                          {...register("location")}
+                        >
+                          <option>Select Loading Point</option>
+                          {fuelstationsArrays?.map((d, index) => (
+                            <option key={index} value={d.id}>
+                              {d.loading_point}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.location && (
+                          <div className="invalid-feedback">
+                            {errors.location?.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div> */}
                   <div className="col-lg-4">
                     <div className="mb-4">
                       <label className="form-label">Project Name</label>

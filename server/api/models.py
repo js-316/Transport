@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.contrib.auth.models import PermissionsMixin, UserManager as BaseUserManager
+from django.db.models.fields.files import ImageField
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
@@ -54,12 +55,12 @@ class User(AbstractUser, PermissionsMixin):
 
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_chief_transport_officer = models.BooleanField(default=False)
+    # is_chief_transport_officer = models.BooleanField(default=False)
     is_driver = models.BooleanField(default=False)
-    is_engineer = models.BooleanField(default=False)
-    is_human_resource_manager = models.BooleanField(default=False)
-    is_procurement_manager = models.BooleanField(default=False)
-    is_chief_executive_officer = models.BooleanField(default=False)
+    # is_engineer = models.BooleanField(default=False)
+    # is_human_resource_manager = models.BooleanField(default=False)
+    # is_procurement_manager = models.BooleanField(default=False)
+    # is_chief_executive_officer = models.BooleanField(default=False)
 
     # groups = models.ManyToManyField(Group, related_name='users')
 
@@ -86,6 +87,7 @@ class Driver(models.Model, ExtraMixin):
     phone_number = models.CharField(max_length=20)
     age = models.IntegerField()
     date_hired = models.DateField()
+   
 
     def __str__(self):
         return self.name
@@ -107,9 +109,12 @@ class Maintenance(models.Model, ExtraMixin):
     fleet = models.ForeignKey('Vehichle', on_delete=models.CASCADE, related_name='maintenances')
     description = models.CharField(max_length=100)
     date = models.DateField()
-    cost = models.FloatField()
+    cost = models.FloatField(default=20000)
     status = models.CharField(max_length=20, default='Pending')
-    assigned_engineer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assignedEngineer')
+    # more_information = models.CharField(max_length=100, default="Extra information")
+    # user = models.ForeignKey('User',on_delete=models.CASCADE, related_name='driver_request' ,default=4)
+    assigned_engineer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assignedEngineer', default=12)
+    # photo = ImageField(upload_to='maintenance_photos', blank=True, null=True)
     
     def __str__(self):
         return self.description
@@ -121,9 +126,11 @@ class Fuel(models.Model, ExtraMixin):
     date_of_fueling = models.DateField()
     amount = models.FloatField()
     mileage = models.FloatField()
+    # fuel_station = models.ForeignKey('Station', on_delete=models.CASCADE, related_name='fuel_station',default=1)
     project = models.CharField(max_length=25, default='CSQUARED')
     status = models.CharField(max_length=20, default='Pending')
     user = models.ForeignKey('User',on_delete=models.CASCADE, related_name='userfuel')
+    # location = models.CharField(max_length=20, default='Location')
 
     def __str__(self):
         return self.fuel_type
@@ -151,6 +158,13 @@ class Jobcard(models.Model, ExtraMixin):
 
     def __str__(self):
         return self.status
+    
+# class Station(models.Model, ExtraMixin):
+#     supplier_name = models.CharField(max_length=20, default="Hass")
+#     loading_point = models.CharField(max_length=20, default="Mulago")
+
+#     def __str__(self):
+#         return self.supplier_name
 
 
 

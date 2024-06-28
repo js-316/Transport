@@ -165,7 +165,7 @@ const Maintenance = () => {
     }
   };
   
-
+  const userData = JSON.parse(localStorage.getItem('user'));
   const filteredData = maintenancesArray?.filter((maintenance) => {
     const fleet = maintenance.fleet.number_plate.toLowerCase();
     const cost = maintenance.cost;
@@ -206,7 +206,22 @@ const Maintenance = () => {
         (endDate === null || maintenance.date <= endDate) &&
         (selectedStatus === "All" || selectedStatus===status) 
       );
-    } else {
+    } 
+    else if (user?.is_driver) {
+      return (
+        maintenance.user.id === userData.user_id && // Add this condition
+        (fleet.includes(search) ||
+          (cost && cost.toString().includes(search)) ||
+          description.includes(search) ||
+          status.includes(search) ||
+          (date && date.toString().includes(search))) &&
+        
+        (startDate === null || startDate <= maintenance.date) &&
+        (endDate === null || maintenance.date <= endDate) &&
+        (selectedStatus === "All" || selectedStatus===status) 
+      );
+    }
+    else {
       return (
         (fleet.includes(search) ||
           (cost && cost.toString().includes(search)) ||

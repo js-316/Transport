@@ -7,8 +7,10 @@ from rest_framework import permissions
 from django.db.models import Q
 from django.contrib import messages
 from .models import User, Driver, Vehichle, Maintenance, Fuel, Engineer
+# from .models import Station
 from .models import Jobcard
-from .serializers import UserSerializer, DriverSerializer, VehichleSerializer, MaintenanceSerializer,FuelSerializer, EngineerSerializer
+from .serializers import UserSerializer, DriverSerializer, VehichleSerializer, MaintenanceSerializer,FuelSerializer, EngineerSerializer,JobcardSerializer
+# from .serializers import StationSerializer
 from .serializers import JobcardSerializer
 from django import forms
 from datetime import datetime
@@ -301,8 +303,10 @@ class MaintenanceCreateView(generics.CreateAPIView):
             fleet=Vehichle.objects.get(id=data['vehichle']),
             date=data['date'],
             description=data['description'],
-            cost=data['cost'],
-            assigned_engineer = request.assigned_engineer
+            more_information= data['more_information'],
+            # cost=data['cost'],
+            user = request.user,
+            # assigned_engineer = request.assigned_engineer
             # assigned_engineer=User.objects.get(id=data['assigned_engineer']),
         )
         return Response({
@@ -398,18 +402,17 @@ class FuelCreateView(generics.CreateAPIView):
             date_of_fueling =data['date_of_fueling'],
             mileage = data['mileage'],
             amount=data['amount'],
+            fuel_station = Station.objects.get(id=data['fuel_station']),
+            location = data['location'],
             fuel_type=data['fuel_type'],
             project = data['project'],
-            # user = User.objects.get(id=data['user']),
             user = request.user,
+            
         )
         return Response({
             'fuel': FuelSerializer(fuel, context=self.get_serializer_context()).data,
             'message': 'Fuel record created successfully'
         })
-
-
-
 
 class FuelListView(generics.ListAPIView):
     queryset = Fuel.objects.all()
@@ -476,3 +479,30 @@ class JobcardEditView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
+# class StationCreateView(generics.CreateAPIView):
+#     queryset = Station.objects.all()
+#     serializer_class = StationSerializer
+#     permission_classes = (permissions.IsAuthenticated,)
+
+#     def post(self, request, *args, **kwargs):
+#         data = request.data
+        
+#         fuelstation = Station.objects.create(
+#             supplier_name = data['supplier_name'],
+#             loading_point =data['loading_point'],
+            
+#         )
+#         return Response({
+#             'fuel': StationSerializer(fuelstation, context=self.get_serializer_context()).data,
+#             'message': 'Fuel Station record created successfully'
+#         })
+
+# class StationListView(generics.ListAPIView):
+#     queryset = Station.objects.all()
+#     serializer_class = StationSerializer
+#     permission_classes = (permissions.IsAuthenticated,)
+
+# class StationDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Station.objects.all()
+#     serializer_class = StationSerializer
+#     permission_classes = (permissions.IsAuthenticated,)
