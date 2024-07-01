@@ -161,29 +161,41 @@ function MaintenanceModal({ id, title }) {
                 ) : null}
                 {user?.is_staff || user?.is_engineer ? (
                   <>
+                    <tr
+                      style={{
+                        backgroundColor: "#333",
+                        textAlign: "center",
+                      }}
+                    >
+                      <td
+                        colSpan="2"
+                        style={{ padding: "10px", color: "#fff" }}
+                      >
+                        ACTIONS
+                      </td>
+                    </tr>
                     <tr>
-                      <th>Actions</th>
-                      {user?.is_staff ? (
-                        <>
-                          <td>
-                            <button
-                              onClick={() => handleAssign(repair.id)}
-                              className="btn btn-sm rounded btn-primary mx-1"
-                            >
-                              <FontAwesomeIcon
-                                icon={faThumbsUp}
-                                title="Assign To"
-                              />
+                      <td colSpan="2">
+                        <div className="d-flex justify-content-between">
+                          {user?.is_staff ? (
+                            <>
+                              <button
+                                onClick={() => handleAssign(repair.id)}
+                                className="btn btn-sm rounded btn-primary mx-1"
+                              >
+                                <FontAwesomeIcon
+                                  icon={faThumbsUp}
+                                  title="Assign To"
+                                />
 
-                              {isCompleteing ? "Assigning To..." : "Assign To"}
-                            </button>
-                          </td>
-                        </>
-                      ) : null}
-                      {user?.is_engineer ? (
-                        <>
-                          <td>
-                            <div className="mb-2">
+                                {isCompleteing
+                                  ? "Assigning To..."
+                                  : "Assign To"}
+                              </button>
+                            </>
+                          ) : null}
+                          {user?.is_engineer ? (
+                            <>
                               <Link
                                 to="/dashboard/maintenance/job_card/add"
                                 className="btn btn-primary"
@@ -191,24 +203,26 @@ function MaintenanceModal({ id, title }) {
                                 <i className="material-icons md-plus"></i>{" "}
                                 Create Job Card
                               </Link>
-                            </div>
 
-                            <button
-                              onClick={() =>
-                                handleComplete(repair.id, assignedEngineer)
-                              }
-                              className="btn btn-sm rounded btn-primary mx-1"
-                            >
-                              <FontAwesomeIcon
-                                icon={faCheckCircle}
-                                title="Mark Completed"
-                              />
+                              <button
+                                onClick={() =>
+                                  handleComplete(repair.id, assignedEngineer)
+                                }
+                                className="btn btn-sm rounded btn-primary mx-1"
+                              >
+                                <FontAwesomeIcon
+                                  icon={faCheckCircle}
+                                  title="Mark Completed"
+                                />
 
-                              {isCompleteing ? "Completing..." : "Repair Done"}
-                            </button>
-                          </td>
-                        </>
-                      ) : null}
+                                {isCompleteing
+                                  ? "Completing..."
+                                  : "Repair Done"}
+                              </button>
+                            </>
+                          ) : null}
+                        </div>
+                      </td>
                     </tr>
                   </>
                 ) : null}
@@ -217,9 +231,7 @@ function MaintenanceModal({ id, title }) {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
-            Close
-          </Button>
+         
         </Modal.Footer>
       </Modal>
     </>
